@@ -185,7 +185,6 @@ muse-vue-ant-design-dashboard
 │       ├── Dashboard.vue
 │       ├── Layout.vue
 │       ├── Profile.vue
-│       ├── RTL.vue
 │       ├── Sign-In.vue
 │       ├── Sign-Up.vue
 │       └── Tables.vue

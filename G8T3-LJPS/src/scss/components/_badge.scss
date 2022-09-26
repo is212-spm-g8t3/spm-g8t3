@@ -29,16 +29,3 @@
 		}
 	}
 }
-
-.layout-dashboard-rtl {
-	.ant-badge-count, .ant-badge-dot, .ant-badge .ant-scroll-number-custom-component {
-		left: 0;
-		right: auto;
-		transform: translate(-50%, -50%);
-	}
-
-	.ant-badge-status-text {
-		margin-right: 8px;
-		margin-left: 0;
-	}
-}

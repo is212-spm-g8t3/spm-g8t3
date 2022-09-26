@@ -93,7 +93,7 @@
 				sidebarCollapsed: false,
 				
 				// Main sidebar color.
-				sidebarColor: "primary",
+				sidebarColor: "black",
 				
 				// Main sidebar theme : light, white, dark.
 				sidebarTheme: "light",

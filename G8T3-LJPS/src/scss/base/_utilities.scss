@@ -208,31 +208,3 @@ $shadows: (
 	}
 }
 // / Shadows
-
-
-// RTL
-.layout-dashboard-rtl {
-	.text-right {
-		text-align: left;
-	}
-	.text-left {
-		text-align: right;
-	}
-
-	@for $i from 0 through 10 {
-		$j: $i * 5;
-		.ml-#{$j} {
-			margin-right: #{$j}px !important;
-		}
-		.mr-#{$j} {
-			margin-left: #{$j}px !important;
-		}
-		.pl-#{$j} {
-			padding-right: #{$j}px !important;
-		}
-		.pr-#{$j} {
-			padding-left: #{$j}px !important;
-		}
-	}
-}
-// / RTL

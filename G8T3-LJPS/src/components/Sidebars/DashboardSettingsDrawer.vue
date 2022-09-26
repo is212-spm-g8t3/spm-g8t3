@@ -3,8 +3,6 @@
 	<!-- Settings Drawer -->
 	<a-drawer
 		class="settings-drawer"
-		:class="[ rtl ? 'settings-drawer-rtl' : '' ]"
-		:placement="rtl ? 'left' : 'right'"
 		:closable="false"
 		:visible="showSettingsDrawer"
 		width="360"
@@ -108,12 +106,6 @@
 
 			// Header fixed status.
 			navbarFixed: {
-				type: Boolean,
-				default: false,
-			},
-
-			// Drawer direction.
-			rtl: {
 				type: Boolean,
 				default: false,
 			},
