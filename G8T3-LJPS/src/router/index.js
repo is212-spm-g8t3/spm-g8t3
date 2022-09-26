@@ -24,6 +24,15 @@ let routes = [
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
 	},
 	{
+		path: '/dashboard2',
+		name: 'Dashboard2',
+		layout: "dashboard",
+		// route level code-splitting
+		// this generates a separate chunk (about.[hash].js) for this route
+		// which is lazy-loaded when the route is visited.
+		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard2.vue'),
+	},
+	{
 		path: '/layout',
 		name: 'Layout',
 		layout: "dashboard",
