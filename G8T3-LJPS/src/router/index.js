@@ -45,6 +45,18 @@ let routes = [
 		component: () => import('../views/Tables.vue'),
 	},
 	{
+		path: '/roles',
+		name: 'Tables',
+		layout: "dashboard",
+		component: () => import('../views/Roles.vue'),
+	},
+	{
+		path: '/skills',
+		name: 'Tables',
+		layout: "dashboard",
+		component: () => import('../views/Skills.vue'),
+	},
+	{
 		path: '/billing',
 		name: 'Billing',
 		layout: "dashboard",
