@@ -142,9 +142,9 @@ class learning_journey_course(db.Model):
     Reg_ID = db.Column(db.Integer, db.ForeignKey(registration.Reg_ID))
 
 
-
+## Course Related Functions
 @app.route("/courses", methods=['GET'])
-def get_all():
+def get_all_courses():
     catalog = Courses_Catalog.query.all()
     if len(catalog):
         return jsonify(
@@ -185,6 +185,68 @@ def get_farming(course):
             "message": "Course not found."
         }
     )
+
+## Skills Related Functions
+@app.route("/skills", methods=['GET'])
+def get_all_skills():
+    skills = Skill.query.all()
+    if len(skills):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [skill.json() for skill in skills]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no skills."
+        }
+    )
+
+@app.route("/skills/addNewSkill", methods=['POST'])
+def addnNewSkill():
+    # Convert JSON string into JSON object
+    # data = json.loads(request.get_json())
+    
+    data = request.form
+
+    # to verify if Skill_ID is unique
+    if (Skill.query.filter_by(Skill_ID=data['Skill_ID']).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "message": "Skill_ID already exists. Please pick a unique ID."
+            }
+        ), 400 
+    
+    # Initialize Menu class
+    newSkill = Skill(
+        Skill_ID = data['Skill_ID'],
+        Skill_Name = data['Skill_Name'],
+        Skill_Description = data['Skill_Description']
+    )
+    
+    try:
+        db.session.add(newSkill)
+        db.session.commit()
+        
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new skill. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new skill!'
+        }
+    ), 201
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
