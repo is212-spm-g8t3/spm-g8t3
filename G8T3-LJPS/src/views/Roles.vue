@@ -5,13 +5,17 @@
 
 <template>
 	<div>
+		<a-alert v-if="ifSuccessfulCreation" message="New role has been created successfully!" type="success" show-icon class="mb-15" closable/>
+		<a-alert v-if="ifErrorCreation" message="There was an error in the creation of  the role. Please contact IT for help." type="error" show-icon class="mb-15" closable/>
+		
 		<!-- Title -->
 		<a-row :gutter="24">
 			<a-col :span="24" :md="12" class="mb-12">
 				<h3 style="margin-left: 12px">Role Management</h3>
 			</a-col>
 			<a-col :span="24" :md="12" class="mb-12" style="display: flex; align-items: center; justify-content: flex-end">
-				<a-button @click="showModal" type="dark" icon="plus" style="margin-right: 24px">
+				<!-- style="margin-right: 24px" -->
+				<a-button @click="showModal" type="dark" icon="plus">
 					Create
 				</a-button>
 			</a-col>
@@ -42,6 +46,9 @@
 		<template>
 			<div>
 				<a-modal centered v-model="visible" title="Create Role" @cancel="handleCancel">
+
+					<a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/>
+					
 					<template slot="footer">
 						<a-button key="back" @click="handleCancel">
 						Cancel
@@ -52,7 +59,7 @@
 					</template>
 
 					<a-form-model layout="vertical" ref="ruleForm" :model="form" :rules="rules">
-						<a-row gutter="16">
+						<a-row :gutter="16">
 							<a-col :span="12">
 								<a-form-model-item slot="" label="Role Name" prop="name">
 									<a-input v-model="form.name" placeholder="E.g. Software Developer" />
@@ -77,8 +84,8 @@
 									style="width: 100%"
 									placeholder="Select"
 								>
-									<a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-									{{ (i + 9).toString(36) + i }}
+									<a-select-option v-for="(option, index) in skillsOptions" :key="index">
+										{{ option }}
 									</a-select-option>
 								</a-select>
 							</a-form-model-item>
@@ -225,6 +232,9 @@
 				// Associating "Authors" table columns with its corresponding property.
 				table1Columns: table1Columns,
 				titleName: "Roles",
+				ifExistingRole: false,
+				ifSuccessfulCreation: false,
+				ifErrorCreation: false,
 				visible: false,
 				loading: false,
 				modalLayout: "vertical",
@@ -250,7 +260,6 @@
 
 			handleCreate(e) {
 				console.log(e);
-				this.loading = true;
 				// Perform check with database whether role is in database
 				// If not, add to database
 				// this.loading = false and this.visible = false
@@ -258,7 +267,7 @@
 
 				this.$refs.ruleForm.validate(valid => {
 					if (valid) {
-						alert('submit!');
+						this.loading = true;
 						this.visible = false;
 					} else {
 						console.log('error submit!!');
