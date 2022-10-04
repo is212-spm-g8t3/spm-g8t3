@@ -64,7 +64,83 @@ class course_skills(db.Model):
     __tablename__ = 'course_skills'
 
     Skill_ID = db.Column(db.Integer, db.ForeignKey(Skill.Skill_ID), primary_key=True)
-    Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID),primary_key=True)
+    Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID), primary_key=True)
+
+    def __init__(self, Skill_ID, Course_ID):
+        self.Skill_ID = Skill_ID
+        self.Course_ID = Course_ID
+
+class job_role(db.Model):
+    __tablename__ = 'job_role'
+
+    Job_Role_ID = db.Column(db.Integer, primary_key=True)
+    Job_Role_Name = db.Column(db.String(50), nullable=False)
+    Job_Role_Description = db.Column(db.String(255), nullable=False)
+
+
+    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description):
+        self.Job_Role_ID = Job_Role_ID
+        self.Job_Role_Name = Job_Role_Name
+        self.Job_Role_Description = Job_Role_Description
+
+class job_role_skills(db.Model):
+    __tablename__ = 'job_role_skills'
+
+    Job_Role_ID = db.Column(db.String(20), db.ForeignKey(job_role.Job_Role_ID), primary_key=True)
+    Skill_ID = db.Column(db.Integer, db.ForeignKey(Skill.Skill_ID), primary_key=True)
+
+    def __init__(self, Job_Role_ID, Skill_ID):
+        self.Job_Role_ID = Job_Role_ID
+        self.Skill_ID = Skill_ID
+
+class system_role(db.Model):
+    __tablename__ = 'system_role'
+
+    Role_ID = db.Column(db.Integer, primary_key=True)
+    Role_Name = db.Column(db.String(50))
+
+class staff(db.Model):
+    __tablename__ = 'staff'
+
+    Staff_ID = db.Column(db.Integer, primary_key=True)
+    Staff_FName = db.Column(db.String(50))
+    Staff_LName = db.Column(db.String(50)) 
+    Dept = db.Column(db.String(50)) 
+    Email = db.Column(db.String(50)) 
+    System_Role = db.Column(db.Integer, db.ForeignKey(system_role.Role_ID))
+
+class registration(db.Model):
+    __tablename__ = 'registration'
+
+    Reg_ID = db.Column(db.Integer, primary_key=True)
+    Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID))
+    Staff_ID = db.Column(db.Integer, db.ForeignKey(staff.Staff_ID))
+    Reg_Status = db.Column(db.String(20))
+    Completion_Status = db.Column(db.String(20))
+
+class learning_journey(db.Model):
+    __tablename__ = 'learning_journey'
+
+    LJ_ID = db.Column(db.Integer, primary_key=True)
+    Staff_ID = db.Column(db.Integer, db.ForeignKey(staff.Staff_ID), primary_key=True)
+    Job_Role_ID = db.Column(db.Integer, db.ForeignKey(job_role.Job_Role_ID))
+
+class learning_journey_skill(db.Model):
+    __tablename__ = 'learning_journey_skill'
+
+    LJ_ID = db.Column(db.Integer, db.ForeignKey(learning_journey.LJ_ID), primary_key=True)
+    Staff_ID = db.Column(db.Integer, db.ForeignKey(learning_journey.Staff_ID), primary_key=True)
+    Skill_ID = db.Column(db.Integer, db.ForeignKey(Skill.Skill_ID), primary_key=True)
+
+class learning_journey_course(db.Model):
+    __tablename__ = 'learning_journey_course'
+
+    LJ_ID = db.Column(db.Integer, db.ForeignKey(learning_journey_skill.LJ_ID), primary_key=True)
+    Staff_ID = db.Column(db.Integer, db.ForeignKey(learning_journey_skill.Staff_ID), primary_key=True)
+    Skill_ID = db.Column(db.Integer, db.ForeignKey(learning_journey_skill.Skill_ID), primary_key=True)
+    Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID))
+    Reg_ID = db.Column(db.Integer, db.ForeignKey(registration.Reg_ID))
+
 
 
 @app.route("/courses", methods=['GET'])
@@ -86,7 +162,7 @@ def get_all():
         }
     )
 
-@app.route("/getSkills/<course>", methods=['GET'])
+@app.route("/getCourseSkills/<course>", methods=['GET'])
 def get_farming(course):
     query = db.session.query(course_skills, Skill, Courses_Catalog
         ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
