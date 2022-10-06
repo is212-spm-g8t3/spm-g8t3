@@ -25,11 +25,11 @@
 			<a-col :span="24" class="mb-24">
 
 				<!-- Authors Table Card -->
-				<CardRoleTable
+				<CardSkillTable
 					:titleName="titleName"
 					:data="table1Data"
 					:columns="table1Columns"
-				></CardRoleTable>
+				></CardSkillTable>
 				<!-- / Authors Table Card -->
 
 			</a-col>
@@ -56,7 +56,8 @@
 <script>
 
 	// "Authors" table component.
-	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import CardSkillTable from '../components/Cards/CardSkillTable' ;
+	import axios from 'axios';
 	
 	// "Authors" table list of columns and their properties.
 	const table1Columns = [
@@ -168,31 +169,73 @@
 			created: '14/04/17',
 		},
 	];
+
+	const sampleSkill = [{
+					Skill_Description: "Gains the ability to plant rice",
+					Skill_ID: 1,
+					Skill_Name: "Plant Rice"
+				}]
+			
+	
+	const sampleCols = [
+		{
+			title: 'Skill Name',
+			dataIndex: 'Skill_Name',
+			scopedSlots: { customRender: 'Skill_Name' },
+		},
+		{
+			title: 'Skill Description',
+			dataIndex: 'Skill_Description',
+			scopedSlots: { customRender: 'Skill_Description' },
+		},
+	]
 	
 	export default ({
 		components: {
-			CardRoleTable,
+			CardSkillTable,
 		},
 		data() {
 			return {
+
+				
+
+				skillsData: [],
 				// Associating "Authors" table data with its corresponding property.
 				table1Data: table1Data,
 
 				// Associating "Authors" table columns with its corresponding property.
 				table1Columns: table1Columns,
 				visible: false,
-				titleName: "Skills"
+				titleName: "Skills",
+
+				
 			}
 		},
 		methods: {
 			showModal() {
 			this.visible = true;
 			},
+
+			getSkills() {
+			const path = 'http://localhost:5000/skills';
+			axios.get(path)
+				.then((res) => {
+					console.log(res.data.data.skills)
+					this.skillsData = res.data.data.skills;
+				})
+				.catch((error) => {
+				// eslint-disable-next-line
+				console.error(error);
+				});
+			},
 			handleOk(e) {
 			console.log(e);
 			this.visible = false;
 			},
 		},
+	created() {
+    	this.getSkills();
+  	},
 	})
 
 </script>
