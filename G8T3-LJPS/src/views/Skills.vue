@@ -27,7 +27,7 @@
 				<!-- Authors Table Card -->
 				<CardSkillTable
 					:titleName="titleName"
-					:data="table1Data"
+					:data="skillsData"
 					:columns="table1Columns"
 				></CardSkillTable>
 				<!-- / Authors Table Card -->
@@ -41,7 +41,7 @@
 		<!-- / Create Role Modal Pop up -->
 		<template>
 			<div>
-				<a-modal centered v-model="visible" title="Create Role" @ok="handleOk">
+				<a-modal centered v-model="visible" title="Create Skill" @ok="handleOk">
 					<p>Some contents...</p>
 					<p>Some contents...</p>
 					<p>Some contents...</p>
@@ -169,15 +169,9 @@
 			created: '14/04/17',
 		},
 	];
-
-	const sampleSkill = [{
-					Skill_Description: "Gains the ability to plant rice",
-					Skill_ID: 1,
-					Skill_Name: "Plant Rice"
-				}]
 			
 	
-	const sampleCols = [
+	const skillCols = [
 		{
 			title: 'Skill Name',
 			dataIndex: 'Skill_Name',
@@ -189,6 +183,8 @@
 			scopedSlots: { customRender: 'Skill_Description' },
 		},
 	]
+
+
 	
 	export default ({
 		components: {
@@ -199,12 +195,12 @@
 
 				
 
-				skillsData: [],
+				skillsData: [], //initialise skills data table
 				// Associating "Authors" table data with its corresponding property.
-				table1Data: table1Data,
+				//table1Data: skillsData,
 
 				// Associating "Authors" table columns with its corresponding property.
-				table1Columns: table1Columns,
+				table1Columns: skillCols,
 				visible: false,
 				titleName: "Skills",
 
@@ -232,6 +228,10 @@
 			console.log(e);
 			this.visible = false;
 			},
+
+			//TODO: Show skills related to selected role.
+
+			//TODO: Show attained and not attained skills. (show status)
 		},
 	created() {
     	this.getSkills();
