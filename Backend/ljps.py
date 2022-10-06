@@ -83,6 +83,10 @@ class job_role(db.Model):
         self.Job_Role_Name = Job_Role_Name
         self.Job_Role_Description = Job_Role_Description
 
+    def json(self):
+        return {"Role_ID": self.Job_Role_ID, "Role_Name": self.Job_Role_Name, "Role_Description": self.Job_Role_Description}
+
+
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
 
@@ -92,6 +96,9 @@ class job_role_skills(db.Model):
     def __init__(self, Job_Role_ID, Skill_ID):
         self.Job_Role_ID = Job_Role_ID
         self.Skill_ID = Skill_ID
+    
+    def json(self):
+        return {"Role_ID": self.Job_Role_ID, "Skill_ID": self.Skill_ID}
 
 class system_role(db.Model):
     __tablename__ = 'system_role'
