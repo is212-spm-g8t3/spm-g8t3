@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 04, 2022 at 07:29 AM
+-- Generation Time: Oct 06, 2022 at 05:03 AM
 -- Server version: 8.0.21
 -- PHP Version: 7.4.9
 
@@ -610,7 +610,9 @@ CREATE TABLE IF NOT EXISTS `skill` (
 --
 
 INSERT INTO `skill` (`Skill_ID`, `Skill_Name`, `Skill_Description`) VALUES
-(1, 'Plant Rice', 'Gains the ability to plant rice');
+(1, 'Plant Rice', 'Gains the ability to plant rice'),
+(2, 'Doom', 'Inflicts a curse that dispels an enemy Hero and prevents them from casting spells or using items, while taking damage over time'),
+(3, 'Test', 'Test');
 
 -- --------------------------------------------------------
 
