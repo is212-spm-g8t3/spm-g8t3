@@ -26,7 +26,7 @@
 			<a-row type="flex" :gutter="[24,24]" align="stretch" style="padding-left: 7px; padding-right: 7px">
 
 				<!-- Project Column -->
-				<a-col :span="24" :md="6" v-for="index in 7" :key="index">
+				<a-col :span="24" :md="6" v-for="index in courses" :key="index">
 
 					<!-- Project Card -->
 					<a-card class="card-project">
@@ -35,33 +35,13 @@
 						alt="example"
 						src="/images/ux-ui.png"
 						/>
-						<div class="card-tag">Technology</div>
-						<h5>UX/UI Designer</h5>
+						<div class="card-tag">{{index.Course_Category}}</div>
+						<h5>{{index.Course_Name}}</h5>
 						<p>
-							Get a hands-on introduction to the wireframing and prototyping processes using Figma, creating actual deliverables expected of designers using industry-standard tools.
+							{{index.Course_Description}}
 						</p>
 					</a-card>
 					<!-- / Project Card -->
-
-				</a-col>
-				<!-- / Project Column -->
-				<!-- Project Column -->
-				<a-col :span="24" :md="6">
-
-					<!-- Project Card -->
-					<a-card class="card-project">
-						<img
-						slot="cover"
-						alt="example"
-						src="/images/home-decor-2.jpeg"
-						/>
-						<div class="card-tag">Project #2</div>
-						<h5>Scandinavian</h5>
-						<p>
-							Music is something that every person has his or her own specific opinion about.
-						</p>
-					</a-card>
-					<!-- Project Card -->
 
 				</a-col>
 				<!-- / Project Column -->
@@ -76,17 +56,8 @@
 </template>
 
 <script>
-		course_url = "http://localhost:5000/courses"
-		course_result = invoke_http(course_url, method='GET')
-		
+	import axios from 'axios';
 
-
-		"Course_Category": "Farming",
-        "Course_Description": "Agriculture or farming is the practice of cultivating plants and livestock. This course is focused on planting rice",
-        "Course_ID": "AGR001",
-        "Course_Name": "Planting Rice",
-        "Course_Status": "Active",
-        "Course_Type": "External"
 
 	export default ({
 		props: {
@@ -106,6 +77,27 @@
 				projectHeaderBtns: 'all',
 			}
 		},
+
+		methods:{
+			getCourses(){
+				const course_url = "http://localhost:5000/courses"
+				axios.get(course_url)
+					.then((res) => {
+						console.log(res.data.data.courseCatalog)
+						this.courses = res.data.data.courseCatalog;
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			},
+			handleOk(e) {
+			console.log(e);
+			this.visible = false;
+			},
+		},
+		created(){
+			this.getCourses();
+		}
 
 	})
 
