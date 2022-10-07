@@ -27,7 +27,7 @@
 				<!-- Authors Table Card -->
 				<CardRoleTable
 					:titleName="titleName"
-					:data="table1Data"
+					:data="rolesData"
 					:columns="table1Columns"
 				></CardRoleTable>
 				<!-- / Authors Table Card -->
@@ -57,6 +57,7 @@
 
 	// "Authors" table component.
 	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import axios from 'axios';
 	
 	// "Authors" table list of columns and their properties.
 	const table1Columns = [
@@ -168,6 +169,19 @@
 			created: '14/04/17',
 		},
 	];
+
+	const roleCols = [
+		{
+				title: 'Role Name',
+				dataIndex: 'Job_Role_Name',
+				scopedSlots: { customRender: 'Job_Role_Name'}
+		},
+		{
+				title: 'Role Description',
+				dataIndex: 'Job_Role_Description',
+				scopedSlots: { customRender: 'Job_Role_Description'}
+		}
+	]
 	
 	export default ({
 		components: {
@@ -175,11 +189,13 @@
 		},
 		data() {
 			return {
+
+				rolesData: [], //initialise roles data table
 				// Associating "Authors" table data with its corresponding property.
-				table1Data: table1Data,
+				//table1Data: table1Data,
 
 				// Associating "Authors" table columns with its corresponding property.
-				table1Columns: table1Columns,
+				table1Columns: roleCols,
 				visible: false,
 				titleName: "Roles"
 			}
@@ -188,11 +204,26 @@
 			showModal() {
 			this.visible = true;
 			},
+
+			getRoles(){
+				const path = 'http://localhost:5000/roles';
+				axios.get(path)
+					.then((res) => {
+						console.log(res.data.data.roles)
+						this.rolesData = res.data.data.roles;
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			},
 			handleOk(e) {
 			console.log(e);
 			this.visible = false;
 			},
 		},
+	created() {
+		this.getRoles();
+	}
 	})
 
 </script>

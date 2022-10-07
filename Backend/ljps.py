@@ -82,6 +82,9 @@ class job_role(db.Model):
         self.Job_Role_ID = Job_Role_ID
         self.Job_Role_Name = Job_Role_Name
         self.Job_Role_Description = Job_Role_Description
+    
+    def json(self):
+        return {"Job__Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description}
 
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
@@ -185,6 +188,27 @@ def get_farming(course):
             "message": "Course not found."
         }
     )
+
+## Roles Related Functions
+@app.route("/roles", methods=['GET'])
+def get_all_roles():
+    roles = job_role.query.all()
+    if len(roles):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": [role.json() for role in roles]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no roles."
+        }
+    )
+
 
 ## Skills Related Functions
 @app.route("/skills", methods=['GET'])

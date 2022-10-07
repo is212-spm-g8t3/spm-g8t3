@@ -18,11 +18,11 @@
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template slot="roleName" slot-scope="roleName">
+			<template slot="Job_Role_Name" slot-scope="Job_Role_Name">
 				<div class="table-avatar-info">
-					<a-avatar shape="square" :src="roleName.avatar" />
+					<!--<a-avatar shape="square" :src="Job_Role_Name.avatar" />-->
 					<div class="avatar-info" style="margin-top: 7px">
-						<h6>{{ roleName.name }}</h6>
+						<h6>{{ Job_Role_Name }}</h6>
 					</div>
 				</div>
 			</template>
