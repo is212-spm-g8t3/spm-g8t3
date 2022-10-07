@@ -20,6 +20,9 @@
 		</template>
 
 		<template>
+
+
+
 			<a-row type="flex" :gutter="[24,24]" align="stretch" style="padding-left: 7px; padding-right: 7px">
 
 				<!-- Project Column -->
@@ -42,7 +45,6 @@
 
 				</a-col>
 				<!-- / Project Column -->
-
 				<!-- Project Column -->
 				<a-col :span="24" :md="6">
 
@@ -74,6 +76,17 @@
 </template>
 
 <script>
+		course_url = "http://localhost:5000/courses"
+		course_result = invoke_http(course_url, method='GET')
+		
+
+
+		"Course_Category": "Farming",
+        "Course_Description": "Agriculture or farming is the practice of cultivating plants and livestock. This course is focused on planting rice",
+        "Course_ID": "AGR001",
+        "Course_Name": "Planting Rice",
+        "Course_Status": "Active",
+        "Course_Type": "External"
 
 	export default ({
 		props: {
@@ -88,11 +101,12 @@
 		},
 		data() {
 			return {
-
+				courses: [],
 				// Active button for the "Projects" table's card header radio button group.
 				projectHeaderBtns: 'all',
 			}
 		},
+
 	})
 
 </script>
