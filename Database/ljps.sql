@@ -116,7 +116,8 @@ CREATE TABLE IF NOT EXISTS `job_role` (
 --
 
 INSERT INTO `job_role` (`Job_Role_ID`, `Job_Role_Name`, `Job_Role_Description`) VALUES
-(1, 'Farmer', 'A farmer is a person engaged in agriculture, raising living organisms for food or raw materials. The term usually applies to people who do some combination of raising field crops, orchards, vineyards, poultry, or other livestock.');
+(1, 'Farmer', 'A farmer is a person engaged in agriculture, raising living organisms for food or raw materials. The term usually applies to people who do some combination of raising field crops, orchards, vineyards, poultry, or other livestock.'),
+(2, 'UI/UX Designer', 'Gathering and evaluating user requirements, in collaboration with product managers and engineers. Illustrating design ideas using storyboards, process flows and sitemaps. Designing graphic user interface elements, like menus, tabs and widgets.');
 
 -- --------------------------------------------------------
 
