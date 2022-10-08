@@ -20,13 +20,10 @@
 		</template>
 
 		<template>
-
-
-
 			<a-row type="flex" :gutter="[24,24]" align="stretch" style="padding-left: 7px; padding-right: 7px">
 
 				<!-- Project Column -->
-				<a-col :span="24" :md="6" v-for="index in courses" :key="index">
+				<a-col :span="24" :md="6" v-for="index in correctCourseList" :key="index">
 
 					<!-- Project Card -->
 					<a-card class="card-project">
@@ -35,7 +32,7 @@
 						alt="example"
 						src="/images/ux-ui.png"
 						/>
-						<div class="card-tag">{{index.Course_Category}}</div>
+						<div class="card-tag">{{index.Course_Category}} {{index.Course_ID}} </div>
 						<h5>{{index.Course_Name}}</h5>
 						<p>
 							{{index.Course_Description}}
@@ -49,6 +46,8 @@
 			</a-row>
 
 		</template>
+
+
 
 	</a-card>
 	<!-- / Projects Table Card -->
@@ -72,7 +71,9 @@
 		},
 		data() {
 			return {
-				courses: [],
+				correctCourseList: [],
+				allCourse:[],
+				skill: "Core",
 				// Active button for the "Projects" table's card header radio button group.
 				projectHeaderBtns: 'all',
 			}
@@ -83,8 +84,19 @@
 				const course_url = "http://localhost:5000/courses"
 				axios.get(course_url)
 					.then((res) => {
-						console.log(res.data.data.courseCatalog)
-						this.courses = res.data.data.courseCatalog;
+						// console.log(res.data.data.courseCatalog)
+
+						this.allCourse = res.data.data.courseCatalog
+						
+						for(let i=0; i < this.allCourse.length; i++){
+							var course = this.allCourse[i]
+							if(this.skill==course.Course_Category && course.Course_Status == "Active"){
+								this.correctCourseList.push(this.allCourse[i])
+							}
+						}
+						console.log(this.correctCourseList)
+						
+
 					})
 					.catch((error) => {
 						console.error(error);
