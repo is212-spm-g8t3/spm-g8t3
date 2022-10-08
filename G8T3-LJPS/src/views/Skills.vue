@@ -38,7 +38,7 @@
 		</a-row>
 		<!-- / Authors Table -->
 
-		<!-- / Create Role Modal Pop up -->
+		<!-- / Create Skill Modal Pop up -->
 		<template>
 			<div>
 				<a-modal centered v-model="visible" title="Create Skill" @ok="handleOk">
@@ -48,127 +48,16 @@
 				</a-modal>
 			</div>
 		</template>
-		<!-- / Create Role Modal Pop up -->
+		<!-- / Create Skill Modal Pop up -->
 
 	</div>
 </template>
 
 <script>
 
-	// "Authors" table component.
 	import CardSkillTable from '../components/Cards/CardSkillTable' ;
 	import axios from 'axios';
 	
-	// "Authors" table list of columns and their properties.
-	const table1Columns = [
-		{
-			title: 'NAME',
-			dataIndex: 'roleName',
-			scopedSlots: { customRender: 'roleName' },
-		},
-		{
-			title: 'DEPARTMENT',
-			dataIndex: 'func',
-			scopedSlots: { customRender: 'func' },
-		},
-		{
-			title: 'STATUS',
-			dataIndex: 'status',
-			scopedSlots: { customRender: 'status' },
-		},
-		{
-			title: 'CREATED',
-			dataIndex: 'created',
-			class: 'text-muted',
-		},
-		{
-			title: '',
-			scopedSlots: { customRender: 'editBtn' },
-			width: 50,
-		},
-	];
-
-	// "Authors" table list of rows and their properties.
-	const table1Data = [
-		{
-			key: '1',
-			roleName: {
-				avatar: 'images/face-2.jpg',
-				name: 'Agile Software Development',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Design and Architecture',
-			},
-			status: "active",
-			created: '23/04/18',
-		},
-		{
-			key: '2',
-			roleName: {
-				avatar: 'images/face-3.jpg',
-				name: 'Cloud Computing',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Development and Implementation',
-			},
-			status: "inactive",
-			created: '23/12/20',
-		},
-		{
-			key: '3',
-			roleName: {
-				avatar: 'images/face-1.jpg',
-				name: 'Data Analytics',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Business Development',
-			},
-			status: "active",
-			created: '13/04/19',
-		},
-		{
-			key: '4',
-			roleName: {
-				avatar: 'images/face-4.jpg',
-				name: 'Data Visualisation',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Development and Implementation',
-			},
-			status: "active",
-			created: '03/04/21',
-		},
-		{
-			key: '5',
-			roleName: {
-				avatar: 'images/face-5.jpeg',
-				name: 'Software Design',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Design and Architecture',
-			},
-			status: "inactive",
-			created: '23/03/20',
-		},
-		{
-			key: '6',
-			roleName: {
-				avatar: 'images/face-6.jpeg',
-				name: 'Quality Assurance',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Development and Implementation',
-			},
-			status: "active",
-			created: '14/04/17',
-		},
-	];
 			
 	
 	const skillCols = [
@@ -196,10 +85,6 @@
 				
 
 				skillsData: [], //initialise skills data table
-				// Associating "Authors" table data with its corresponding property.
-				//table1Data: skillsData,
-
-				// Associating "Authors" table columns with its corresponding property.
 				table1Columns: skillCols,
 				visible: false,
 				titleName: "Skills",
