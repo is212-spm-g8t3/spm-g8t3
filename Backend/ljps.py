@@ -226,7 +226,7 @@ def get_all_skills():
     )
 
 @app.route("/skills/addNewSkill", methods=['POST'])
-def addnNewSkill():
+def addNewSkill():
     # Convert JSON string into JSON object
     # data = json.loads(request.get_json())
     

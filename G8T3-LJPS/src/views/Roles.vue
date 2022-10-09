@@ -238,7 +238,7 @@
 				visible: false,
 				loading: false,
 				modalLayout: "vertical",
-				skillsOptions: ['Skill 1', 'Skill 2', 'Skill 3'],
+				skillsOptions: ['Skill 1', 'Skill 2', 'Skill 3'], // Make ID tagged to skills
 				form: {
 					name: '',
 					department: '',

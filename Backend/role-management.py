@@ -90,5 +90,54 @@ def create_role():
     data = request.get_json()
     print(data)
 
+    # to verify if Role is unique by checking role name
+    if (job_role.query.filter_by(Job_Role_Name=data['name']).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "message": "Skill_ID already exists. Please pick a unique ID."
+            }
+        ), 400 
+    
+    # Initialize new job_role class
+    newRole = job_role(
+        Job_Role_Name = data['name'],
+        Job_Role_Description = data['description'],
+        Department=data['department']
+    )
+
+
+    
+    try:
+        db.session.add(newRole)
+        db.session.commit()
+
+        newRoleID = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).first()
+        print(newRoleID)
+        
+        newSkills = data['skills']
+        for eachSkill in newSkills:
+            newJobRoleSkill = job_role_skills(
+                Job_Role_ID=newRoleID,
+                Skill_ID=eachSkill
+            )
+
+        # Not done yet - continue here
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new role. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new skill!'
+        }
+    ), 201
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
