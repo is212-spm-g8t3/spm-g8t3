@@ -57,20 +57,42 @@
 
 	import CardSkillTable from '../components/Cards/CardSkillTable' ;
 	import axios from 'axios';
+import { SlowBuffer } from 'buffer';
 	
 			
 	
 	const skillCols = [
 		{
-			title: 'Skill Name',
+			title: 'SKILL NAME',
 			dataIndex: 'Skill_Name',
 			scopedSlots: { customRender: 'Skill_Name' },
 		},
 		{
-			title: 'Skill Description',
+			title: 'SKILL DESCRIPTION',
 			dataIndex: 'Skill_Description',
 			scopedSlots: { customRender: 'Skill_Description' },
 		},
+		{
+			title: 'STATUS',
+			dataIndex: 'status',
+			scopedSlots: { customRender: 'status' },
+		},
+		// if skill is not added, show 'show to cart'
+		{
+			title: '',
+			dataIndex: 'cartDetails',
+			scopedSlots: { customRender: 'cartDetails' },
+		},
+		// {
+		// 	title: 'CREATED',
+		// 	dataIndex: 'created',
+		// 	class: 'text-muted',
+		// },
+		// {
+		// 	title: '',
+		// 	scopedSlots: { customRender: 'editBtn' },
+		// 	width: 50,
+		// },
 	]
 
 
@@ -101,8 +123,14 @@
 			const path = 'http://localhost:5000/skills';
 			axios.get(path)
 				.then((res) => {
-					console.log(res.data.data.skills)
-					this.skillsData = res.data.data.skills;
+					this.skillsData = res.data.data.skills
+					console.log(this.skillsData)
+					for (let skill of this.skillsData){
+						skill.cartDetails = {}
+						skill.cartDetails.skillId = skill.Skill_ID
+						skill.cartDetails.isNotAdded = false
+					}
+					console.log(this.skillsData)
 				})
 				.catch((error) => {
 				// eslint-disable-next-line
