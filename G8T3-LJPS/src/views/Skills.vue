@@ -25,11 +25,11 @@
 			<a-col :span="24" class="mb-24">
 
 				<!-- Authors Table Card -->
-				<CardRoleTable
+				<CardSkillTable
 					:titleName="titleName"
-					:data="table1Data"
+					:data="skillsData"
 					:columns="table1Columns"
-				></CardRoleTable>
+				></CardSkillTable>
 				<!-- / Authors Table Card -->
 
 			</a-col>
@@ -38,7 +38,7 @@
 		</a-row>
 		<!-- / Authors Table -->
 
-		<!-- / Create Role Modal Pop up -->
+		<!-- / Create Skill Modal Pop up -->
 		<template>
 			<div>
 				<a-modal centered v-model="visible" title="Create Skill" @cancel="handleCancel">
@@ -91,44 +91,31 @@
 				</a-modal>
 			</div>
 		</template>
-		<!-- / Create Role Modal Pop up -->
+		<!-- / Create Skill Modal Pop up -->
 
 	</div>
 </template>
 
 <script>
 
-	// "Authors" table component.
-	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import CardSkillTable from '../components/Cards/CardSkillTable' ;
+	import axios from 'axios';
 	
-	// "Authors" table list of columns and their properties.
-	const table1Columns = [
+			
+	
+	const skillCols = [
 		{
-			title: 'NAME',
-			dataIndex: 'roleName',
-			scopedSlots: { customRender: 'roleName' },
+			title: 'Skill Name',
+			dataIndex: 'Skill_Name',
+			scopedSlots: { customRender: 'Skill_Name' },
 		},
 		{
 			title: 'Type',
 			dataIndex: 'func',
 			scopedSlots: { customRender: 'func' },
 		},
-		{
-			title: 'STATUS',
-			dataIndex: 'status',
-			scopedSlots: { customRender: 'status' },
-		},
-		{
-			title: 'CREATED',
-			dataIndex: 'created',
-			class: 'text-muted',
-		},
-		{
-			title: '',
-			scopedSlots: { customRender: 'editBtn' },
-			width: 50,
-		},
-	];
+	]
+
 
 	// "Authors" table list of rows and their properties.
 	const table1Data = [
@@ -214,15 +201,15 @@
 	
 	export default ({
 		components: {
-			CardRoleTable,
+			CardSkillTable,
 		},
 		data() {
 			return {
-				// Associating "Authors" table data with its corresponding property.
-				table1Data: table1Data,
 
-				// Associating "Authors" table columns with its corresponding property.
-				table1Columns: table1Columns,
+				
+
+				skillsData: [], //initialise skills data table
+				table1Columns: skillCols,
 				visible: false,
 				titleName: "Skills",
 				ifExistingRole: false,
@@ -258,6 +245,19 @@
 			showModal() {
 			this.visible = true;
 			},
+
+			getSkills() {
+			const path = 'http://localhost:5000/skills';
+			axios.get(path)
+				.then((res) => {
+					console.log(res.data.data.skills)
+					this.skillsData = res.data.data.skills;
+				})
+				.catch((error) => {
+				// eslint-disable-next-line
+				console.error(error);
+				});
+			},
 			handleOk(e) {
 			console.log(e);
 			this.visible = false;
@@ -290,7 +290,14 @@
 				this.visible = false;
 				this.$refs.ruleForm.resetFields();
 			},
+
+			//TODO: Show skills related to selected role.
+
+			//TODO: Show attained and not attained skills. (show status)
 		},
+	created() {
+    	this.getSkills();
+  	},
 	})
 
 </script>
