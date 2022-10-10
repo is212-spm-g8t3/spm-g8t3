@@ -14,20 +14,20 @@
 		<!-- / Title -->
 
 		<!-- Cards -->
-		<a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">
+		<!-- <a-row :gutter="24" type="flex" align="stretch">
+			<a-col :span="24" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">-->
 
-				<!-- My Learning Information Card 1 -->
+				<!-- My Learning Information Card 1 
 				<CardInfo 
 					:title="stat.title"
 					:description="stat.description"
 					:imageURl="stat.imageURl"
 				></CardInfo>
-				<!-- / My Learning Information Card 1 -->
+				 / My Learning Information Card 1 
 
 			</a-col>
 		</a-row>
-		<!-- / Cards -->
+		< / Cards> -->
 
 		<!-- Title -->
 		<a-row :gutter="24">
