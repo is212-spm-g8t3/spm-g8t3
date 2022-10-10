@@ -43,11 +43,11 @@
 			<a-col :span="24" :lg="24" class="mb-24">
 				
 				<!-- Many Roles Card -->
-				<CardRoleTable
+				<CardRoleTableDB2
 					:titleName="titleName"
 					:data="rolesData"
 					:columns="table1Columns"
-				></CardRoleTable>
+				></CardRoleTableDB2>
 				<!-- / Many Roles Card -->
 				
 			</a-col>
@@ -61,7 +61,7 @@
 <script>
 
 		// "Authors" table component.
-	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import CardRoleTableDB2 from '../components/Cards/CardRoleTableDB2' ;
 	import axios from 'axios';
 
 	// Bar chart for "Active Users" card.
@@ -227,7 +227,7 @@
 			CardOrderHistory,
 			CardInfo,
 			CardInfo2,
-			CardRoleTable,
+			CardRoleTableDB2,
 		},
 		data() {
 			return {
