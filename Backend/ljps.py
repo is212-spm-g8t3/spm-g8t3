@@ -50,15 +50,22 @@ class Skill(db.Model):
     Skill_ID = db.Column(db.Integer, primary_key=True)
     Skill_Name = db.Column(db.String(50), nullable=False)
     Skill_Description = db.Column(db.String(255), nullable=False)
+    Skill_Type = db.Column(db.String(20))
+    Status = db.Column(db.String(20))
+    Created_Date  = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
-    def __init__(self, Skill_ID, Skill_Name, Skill_Description):
+    def __init__(self, Skill_ID, Skill_Name, Skill_Description, Skill_Type, Status, Created_Date):
         self.Skill_ID = Skill_ID
         self.Skill_Name = Skill_Name
         self.Skill_Description = Skill_Description
+        self.Skill_Type = Skill_Type
+        self.Status = Status
+        self.Created_Date = Created_Date
+
 
     def json(self):
-        return {"Skill_ID": self.Skill_ID, "Skill_Name": self.Skill_Name, "Skill_Description": self.Skill_Description}
+        return {"Skill_ID": self.Skill_ID, "Skill_Name": self.Skill_Name, "Skill_Description": self.Skill_Description, "Skill_Type": self.Skill_Type, "Status": self.Status, "Created_Date": self.Created_Date}
 
 class course_skills(db.Model):
     __tablename__ = 'course_skills'
@@ -76,12 +83,16 @@ class job_role(db.Model):
     Job_Role_ID = db.Column(db.Integer, primary_key=True)
     Job_Role_Name = db.Column(db.String(50), nullable=False)
     Job_Role_Description = db.Column(db.String(255), nullable=False)
+    Department = db.Column(db.String(50))
+    Created_Date  = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
-    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description):
+    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description, Department, Created_Date):
         self.Job_Role_ID = Job_Role_ID
         self.Job_Role_Name = Job_Role_Name
         self.Job_Role_Description = Job_Role_Description
+        self.Department = Department
+        self.Created_Date = Created_Date
 
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
@@ -151,7 +162,8 @@ def get_all_courses():
             {
                 "code": 200,
                 "data": {
-                    "courseCatalog": [course.json() for course in catalog]
+                    # "courseCatalog": [course.json() for course in catalog]
+                    "courseCatalog": [dict(row) for row in catalog]
                 }
             }
         )
@@ -210,11 +222,13 @@ def get_all_skills():
 def addnNewSkill():
     # Convert JSON string into JSON object
     # data = json.loads(request.get_json())
-    
-    data = request.form
+
+    # Convert JSON to object
+    data = json.loads(request.get_json()["skillFormData"])
 
     # to verify if Skill_ID is unique
-    if (Skill.query.filter_by(Skill_ID=data['Skill_ID']).first()):
+    if (Skill.query.filter_by(Skill_Name = data["name"].title()).first()):
+        print("Hey exist la")
         return jsonify(
             {
                 "code": 400,
@@ -224,9 +238,12 @@ def addnNewSkill():
     
     # Initialize Menu class
     newSkill = Skill(
-        Skill_ID = data['Skill_ID'],
-        Skill_Name = data['Skill_Name'],
-        Skill_Description = data['Skill_Description']
+        Skill_ID = 0,
+        Skill_Name = data['name'].title(),
+        Skill_Description = data['description'],
+        Skill_Type = data['type'],
+        Status = data['status'],
+        Created_Date = datetime.today().strftime('%Y-%m-%d'),
     )
     
     try:

@@ -208,7 +208,7 @@ const table1Data = [
 			department: 'Technology',
 			job: 'Developer',
 		},
-		status: "active",
+		status: "Active",
 		created: '23/04/18',
 	},
 	{
@@ -221,7 +221,7 @@ const table1Data = [
 			department: 'Technology',
 			job: 'Developer',
 		},
-		status: "inactive",
+		status: "Inactive",
 		created: '23/12/20',
 	},
 	{
@@ -234,7 +234,7 @@ const table1Data = [
 			department: 'Technology',
 			job: 'Analyst',
 		},
-		status: "active",
+		status: "Active",
 		created: '13/04/19',
 	},
 	{
@@ -247,7 +247,7 @@ const table1Data = [
 			department: 'Technology',
 			job: 'Design',
 		},
-		status: "active",
+		status: "Active",
 		created: '03/04/21',
 	},
 	{
@@ -260,7 +260,7 @@ const table1Data = [
 			department: 'Technology',
 			job: 'Analyst',
 		},
-		status: "inactive",
+		status: "Inactive",
 		created: '23/03/20',
 	},
 	{
@@ -273,7 +273,7 @@ const table1Data = [
 			department: 'Technology',
 			job: 'Manager',
 		},
-		status: "active",
+		status: "Active",
 		created: '14/04/17',
 	},
 ];

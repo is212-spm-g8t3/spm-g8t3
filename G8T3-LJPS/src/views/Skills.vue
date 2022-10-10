@@ -41,9 +41,7 @@
 		<!-- / Create Role Modal Pop up -->
 		<template>
 			<div>
-				<a-modal centered v-model="visible" title="Create Skill" @cancel="handleCancel">
-
-					<a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/>
+				<a-modal centered v-model="visible" title="Create Skill" @cancel="handleCancel" >
 					
 					<template slot="footer">
 						<a-button key="back" @click="handleCancel">
@@ -82,11 +80,13 @@
 						<a-row>
 							<a-form-model-item label="Status" prop="status">
 								<a-radio-group v-model:value="form.status">
-									<a-radio-button value="active">Active</a-radio-button>
-									<a-radio-button value="inactive">Inactive</a-radio-button>
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
 								</a-radio-group>
 							</a-form-model-item>
 						</a-row>
+						<a-alert v-if="ifExistingRole" message="The skill that you have entered already exists!" type="error" show-icon />
+
 					</a-form-model>
 				</a-modal>
 			</div>
@@ -100,6 +100,8 @@
 
 	// "Authors" table component.
 	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import axios from 'axios';
+	import { message } from 'ant-design-vue';
 	
 	// "Authors" table list of columns and their properties.
 	const table1Columns = [
@@ -129,88 +131,6 @@
 			width: 50,
 		},
 	];
-
-	// "Authors" table list of rows and their properties.
-	const table1Data = [
-		{
-			key: '1',
-			roleName: {
-				avatar: 'images/face-2.jpg',
-				name: 'Agile Software Development',
-			},
-			func: {
-				skill: 'Technology',
-				job: 'Design and Architecture',
-			},
-			status: "active",
-			created: '23/04/18',
-		},
-		{
-			key: '2',
-			roleName: {
-				avatar: 'images/face-3.jpg',
-				name: 'Cloud Computing',
-			},
-			func: {
-				skill: 'Technology',
-				job: 'Development and Implementation',
-			},
-			status: "inactive",
-			created: '23/12/20',
-		},
-		{
-			key: '3',
-			roleName: {
-				avatar: 'images/face-1.jpg',
-				name: 'Data Analytics',
-			},
-			func: {
-				skill: 'Technology',
-				job: 'Business Development',
-			},
-			status: "active",
-			created: '13/04/19',
-		},
-		{
-			key: '4',
-			roleName: {
-				avatar: 'images/face-4.jpg',
-				name: 'Data Visualisation',
-			},
-			func: {
-				skill: 'Technology',
-				job: 'Development and Implementation',
-			},
-			status: "active",
-			created: '03/04/21',
-		},
-		{
-			key: '5',
-			roleName: {
-				avatar: 'images/face-5.jpeg',
-				name: 'Software Design',
-			},
-			func: {
-				skill: 'Technology',
-				job: 'Design and Architecture',
-			},
-			status: "inactive",
-			created: '23/03/20',
-		},
-		{
-			key: '6',
-			roleName: {
-				avatar: 'images/face-6.jpeg',
-				name: 'Quality Assurance',
-			},
-			func: {
-				skill: 'Technology',
-				job: 'Development and Implementation',
-			},
-			status: "active",
-			created: '14/04/17',
-		},
-	];
 	
 	export default ({
 		components: {
@@ -219,7 +139,7 @@
 		data() {
 			return {
 				// Associating "Authors" table data with its corresponding property.
-				table1Data: table1Data,
+				table1Data: [],
 
 				// Associating "Authors" table columns with its corresponding property.
 				table1Columns: table1Columns,
@@ -255,12 +175,51 @@
 			}
 		},
 		methods: {
+			// Display Skill Table
+			getSkills() {
+				const path = 'http://localhost:5000/skills';
+				axios.get(path)
+					.then((res) => {
+						let response = res.data.data.skills
+						// console.log(response);
+						for (let i=0; i<response.length; i++) {
+							var template = {
+								key: '',
+								roleName: {
+									avatar: 'images/face-6' + '.jpeg',
+									name: '',
+								},
+								description : '',
+								func: {
+									type: '',
+								},
+								status: '',
+								created: '',
+							}
+							let skillData = response[i];
+							template.key = i;
+							template.roleName.name = skillData.Skill_Name;
+							template.roleName.avatar = `images/face-${i}.jpg`;
+							template.description = skillData.Skill_Description;
+							template.func.job = skillData.Skill_Type;
+							template.status = skillData.Status;
+							template.created = new Date(skillData.Created_Date).toLocaleDateString();
+							this.table1Data.push(template);
+						}
+					})
+					.catch((error) => {
+						// eslint-disable-next-line
+						console.error(error);
+					});
+			},
+			// Display Skill Table
+
 			showModal() {
-			this.visible = true;
+				this.visible = true;
 			},
 			handleOk(e) {
-			console.log(e);
-			this.visible = false;
+				console.log(e);
+				this.visible = false;
 			},
 			handleCreate(e) {
 				console.log(e);
@@ -273,9 +232,30 @@
 					// Form validation: Success
 					if (valid) {
 						this.loading = true;
-						this.visible = false;
 
 						console.log(this.form)
+
+						const path = 'http://localhost:5000/skills/addNewSkill';
+
+						let formData = JSON.stringify(this.form);
+
+						axios.post(path, {
+							"skillFormData": formData,
+						})
+							.then((response) => {
+								console.log(response);
+
+								// Happy path, success creation
+								if (response.data.code == 201) {
+									message.success(response.data.message, 10);
+									this.handleCancel();
+								}
+							})
+							.catch((error) => {
+								console.log(error);
+								this.ifExistingRole = true;
+								this.loading = false;
+							});
 					} 
 
 					// Form validation: Fail
@@ -286,11 +266,19 @@
 				});
 			},
 
+			closeModal() {
+				this.visible = false;
+			},
+
 			handleCancel(e) {
 				this.visible = false;
 				this.$refs.ruleForm.resetFields();
 			},
 		},
+		
+		created() {
+    		this.getSkills();
+  		},
 	})
 
 </script>

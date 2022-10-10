@@ -9,9 +9,9 @@
 				</a-col>
 				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 					<a-radio-group v-model="statusRadioBtn" size="small">
-						<a-radio-button value="all">ALL</a-radio-button>
-						<a-radio-button value="active">ACTIVE</a-radio-button>
-						<a-radio-button value="inactive">INACTIVE</a-radio-button>
+						<a-radio-button value="All">ALL</a-radio-button>
+						<a-radio-button value="Active">ACTIVE</a-radio-button>
+						<a-radio-button value="Inactive">INACTIVE</a-radio-button>
 					</a-radio-group>
 				</a-col>
 			</a-row>
@@ -35,8 +35,8 @@
 			</template>
 
 			<template slot="status" slot-scope="status">
-				<a-tag class="tag-status" :class="status == 'active' ? 'ant-tag-success' : 'ant-tag-muted'">
-					{{ status == 'active' ? "ACTIVE" : "INACTIVE" }}
+				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
@@ -72,13 +72,13 @@ export default ({
 	data() {
 		return {
 			// Active button for the "Authors" table's card header radio button group.
-			statusRadioBtn: 'all',
+			statusRadioBtn: 'All',
 		}
 	},
 
 	computed: {
 		dataFilteredStatus: function() {
-			if (this.statusRadioBtn != 'all') {
+			if (this.statusRadioBtn != 'All') {
 				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
 			}
 			return this.data
