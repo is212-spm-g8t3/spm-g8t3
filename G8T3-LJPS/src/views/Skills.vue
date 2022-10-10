@@ -41,10 +41,53 @@
 		<!-- / Create Role Modal Pop up -->
 		<template>
 			<div>
-				<a-modal centered v-model="visible" title="Create Role" @ok="handleOk">
-					<p>Some contents...</p>
-					<p>Some contents...</p>
-					<p>Some contents...</p>
+				<a-modal centered v-model="visible" title="Create Skill" @cancel="handleCancel">
+
+					<a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/>
+					
+					<template slot="footer">
+						<a-button key="back" @click="handleCancel">
+						Cancel
+						</a-button>
+						<a-button key="submit" type="primary" :loading="loading" @click="handleCreate">
+						Create
+						</a-button>
+					</template>
+
+					<a-form-model layout="vertical" ref="ruleForm" :model="form" :rules="rules">
+						<a-row :gutter="16">
+							<a-col :span="12">
+								<a-form-model-item slot="" label="Name" prop="name">
+									<a-input v-model="form.name" placeholder="E.g. Critical Thinking" />
+								</a-form-model-item>
+							</a-col>
+							<a-col :span="12">
+								<a-form-model-item label="Type" prop="type">
+									<a-select
+										v-model:value="form.type"
+										show-search
+										placeholder="Select skill type"
+										:options="options"
+									>
+									</a-select>
+								</a-form-model-item>
+							</a-col>
+						</a-row>
+
+						<a-row>
+							<a-form-model-item label="Description" prop="description">
+								<a-input v-model="form.description" type="textarea" />
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model:value="form.status">
+									<a-radio-button value="active">Active</a-radio-button>
+									<a-radio-button value="inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
+					</a-form-model>
 				</a-modal>
 			</div>
 		</template>
@@ -66,7 +109,7 @@
 			scopedSlots: { customRender: 'roleName' },
 		},
 		{
-			title: 'DEPARTMENT',
+			title: 'Type',
 			dataIndex: 'func',
 			scopedSlots: { customRender: 'func' },
 		},
@@ -96,7 +139,7 @@
 				name: 'Agile Software Development',
 			},
 			func: {
-				department: 'Technology',
+				skill: 'Technology',
 				job: 'Design and Architecture',
 			},
 			status: "active",
@@ -109,7 +152,7 @@
 				name: 'Cloud Computing',
 			},
 			func: {
-				department: 'Technology',
+				skill: 'Technology',
 				job: 'Development and Implementation',
 			},
 			status: "inactive",
@@ -122,7 +165,7 @@
 				name: 'Data Analytics',
 			},
 			func: {
-				department: 'Technology',
+				skill: 'Technology',
 				job: 'Business Development',
 			},
 			status: "active",
@@ -135,7 +178,7 @@
 				name: 'Data Visualisation',
 			},
 			func: {
-				department: 'Technology',
+				skill: 'Technology',
 				job: 'Development and Implementation',
 			},
 			status: "active",
@@ -148,7 +191,7 @@
 				name: 'Software Design',
 			},
 			func: {
-				department: 'Technology',
+				skill: 'Technology',
 				job: 'Design and Architecture',
 			},
 			status: "inactive",
@@ -161,7 +204,7 @@
 				name: 'Quality Assurance',
 			},
 			func: {
-				department: 'Technology',
+				skill: 'Technology',
 				job: 'Development and Implementation',
 			},
 			status: "active",
@@ -181,7 +224,34 @@
 				// Associating "Authors" table columns with its corresponding property.
 				table1Columns: table1Columns,
 				visible: false,
-				titleName: "Skills"
+				titleName: "Skills",
+				ifExistingRole: false,
+				ifSuccessfulCreation: false,
+				ifErrorCreation: false,
+				loading: false,
+				modalLayout: "vertical",
+				form: {
+					name: '',
+					type: '',
+					description: '',
+					status: '',
+				},
+				rules: {
+					name: [{ required: true, message: 'Name is required!'}],
+					type: [{ required: true, message: 'Type is required!'}],
+					description: [{ required: true, message: 'Description is required!'}],
+					status: [{required: true, message: 'Status is required!'}]
+				},
+				options: [
+					{
+						value: 'softskill',
+						label: 'Soft Skill',
+					}, 
+					{
+						value: 'hardskill',
+						label: 'Hard Skill',
+					}, 
+				],
 			}
 		},
 		methods: {
@@ -191,6 +261,34 @@
 			handleOk(e) {
 			console.log(e);
 			this.visible = false;
+			},
+			handleCreate(e) {
+				console.log(e);
+				// Perform check with database whether role is in database
+				// If not, add to database
+				// this.loading = false and this.visible = false
+				// Show green alert bar if added successfully
+
+				this.$refs.ruleForm.validate(valid => {
+					// Form validation: Success
+					if (valid) {
+						this.loading = true;
+						this.visible = false;
+
+						console.log(this.form)
+					} 
+
+					// Form validation: Fail
+					else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+
+			handleCancel(e) {
+				this.visible = false;
+				this.$refs.ruleForm.resetFields();
 			},
 		},
 	})
