@@ -57,17 +57,18 @@
 
 	import CardSkillTable from '../components/Cards/CardSkillTable' ;
 	import axios from 'axios';
+import { SlowBuffer } from 'buffer';
 	
 			
 	
 	const skillCols = [
 		{
-			title: 'Skill Name',
+			title: 'SKILL NAME',
 			dataIndex: 'Skill_Name',
 			scopedSlots: { customRender: 'Skill_Name' },
 		},
 		{
-			title: 'Skill Description',
+			title: 'SKILL DESCRIPTION',
 			dataIndex: 'Skill_Description',
 			scopedSlots: { customRender: 'Skill_Description' },
 		},
@@ -101,8 +102,7 @@
 			const path = 'http://localhost:5000/skills';
 			axios.get(path)
 				.then((res) => {
-					console.log(res.data.data.skills)
-					this.skillsData = res.data.data.skills;
+					this.skillsData = res.data.data.skills
 				})
 				.catch((error) => {
 				// eslint-disable-next-line
@@ -113,10 +113,6 @@
 			console.log(e);
 			this.visible = false;
 			},
-
-			//TODO: Show skills related to selected role.
-
-			//TODO: Show attained and not attained skills. (show status)
 		},
 	created() {
     	this.getSkills();
