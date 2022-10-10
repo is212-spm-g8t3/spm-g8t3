@@ -43,8 +43,9 @@
 
 			<template slot="cartDetails" slot-scope="cartDetails" >
 				<a-button v-on:click="addSkillToCart(cartDetails.skillId)" 
+							:disabled="cartDetails.isNotAdded == true ? true : false"
 							:class="cartDetails.isNotAdded == true ? 'ant-tag-muted' : 'ant-tag-primary'">
-					{{ cartDetails.isNotAdded == true ? "Added" : "Add To Cart" }}
+					{{ cartDetails.isNotAdded == true ? "Added" : "Select" }}
 				</a-button>
 
 			</template>
@@ -93,7 +94,8 @@
 			addSkillToCart(event){
 				console.log(event)
 				console.log("added skill to cart")
-			}
+			},
+
 		},
 
 
@@ -103,8 +105,19 @@
 					return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
 				}
 				return this.data
+			},
+
+			getRoleId: function() {
+
 			}
+		},
+
+		created() {
+			//this.getSkillsByRole()
 		}
+		
+
+
 	})
 
 </script>
