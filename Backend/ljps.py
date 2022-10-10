@@ -95,7 +95,7 @@ class job_role(db.Model):
         self.Created_Date = Created_Date
     
     def json(self):
-        return {"Job__Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description}
+        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description}
 
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
