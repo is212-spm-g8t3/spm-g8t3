@@ -72,27 +72,6 @@ import { SlowBuffer } from 'buffer';
 			dataIndex: 'Skill_Description',
 			scopedSlots: { customRender: 'Skill_Description' },
 		},
-		{
-			title: 'STATUS',
-			dataIndex: 'status',
-			scopedSlots: { customRender: 'status' },
-		},
-		// if skill is not added, show 'show to cart'
-		{
-			title: '',
-			dataIndex: 'cartDetails',
-			scopedSlots: { customRender: 'cartDetails' },
-		},
-		// {
-		// 	title: 'CREATED',
-		// 	dataIndex: 'created',
-		// 	class: 'text-muted',
-		// },
-		// {
-		// 	title: '',
-		// 	scopedSlots: { customRender: 'editBtn' },
-		// 	width: 50,
-		// },
 	]
 
 
@@ -124,13 +103,6 @@ import { SlowBuffer } from 'buffer';
 			axios.get(path)
 				.then((res) => {
 					this.skillsData = res.data.data.skills
-					console.log(this.skillsData)
-					for (let skill of this.skillsData){
-						skill.cartDetails = {}
-						skill.cartDetails.skillId = skill.Skill_ID
-						skill.cartDetails.isNotAdded = false
-					}
-					console.log(this.skillsData)
 				})
 				.catch((error) => {
 				// eslint-disable-next-line
@@ -141,10 +113,6 @@ import { SlowBuffer } from 'buffer';
 			console.log(e);
 			this.visible = false;
 			},
-
-			//TODO: Show skills related to selected role.
-
-			//TODO: Show attained and not attained skills. (show status)
 		},
 	created() {
     	this.getSkills();

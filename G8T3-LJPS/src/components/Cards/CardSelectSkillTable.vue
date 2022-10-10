@@ -7,13 +7,13 @@
 				<a-col :span="24" :md="12">
 					<h5 class="font-semibold m-0">{{titleName}}</h5>
 				</a-col>
-				<!-- <a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
+				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 					<a-radio-group v-model="statusRadioBtn" size="small">
 						<a-radio-button value="all">ALL</a-radio-button>
 						<a-radio-button value="active">ATTAINED</a-radio-button>
 						<a-radio-button value="inactive">NOT ATTAINED</a-radio-button>
 					</a-radio-group>
-				</a-col> -->
+				</a-col>
 			</a-row>
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
