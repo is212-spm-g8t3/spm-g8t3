@@ -14,20 +14,20 @@
 		<!-- / Title -->
 
 		<!-- Cards -->
-		<!-- <a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">-->
+		<a-row :gutter="24" type="flex" align="stretch">
+			<a-col :span="24" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">
 
-				<!-- My Learning Information Card 1 
+				<!-- My Learning Information Card 1 -->
 				<CardInfo 
 					:title="stat.title"
 					:description="stat.description"
 					:imageURl="stat.imageURl"
 				></CardInfo>
-				 / My Learning Information Card 1 
+				<!-- / My Learning Information Card 1 -->
 
 			</a-col>
 		</a-row>
-		< / Cards> -->
+		<!-- / Cards -->
 
 		<!-- Title -->
 		<a-row :gutter="24">
@@ -43,11 +43,7 @@
 			<a-col :span="24" :lg="24" class="mb-24">
 				
 				<!-- Many Roles Card -->
-				<CardRoleTableDB2
-					:titleName="titleName"
-					:data="rolesData"
-					:columns="table1Columns"
-				></CardRoleTableDB2>
+				<CardProjectTable></CardProjectTable>
 				<!-- / Many Roles Card -->
 				
 			</a-col>
@@ -59,10 +55,6 @@
 </template>
 
 <script>
-
-		// "Authors" table component.
-	import CardRoleTableDB2 from '../components/Cards/CardRoleTableDB2' ;
-	import axios from 'axios';
 
 	// Bar chart for "Active Users" card.
 	import CardBarChart from '../components/Cards/CardBarChart' ;
@@ -205,19 +197,6 @@
 		},
 	];
 
-	const roleCols = [
-		{
-				title: 'Role Name',
-				dataIndex: 'JobRoleDetails',
-				scopedSlots: { customRender: 'JobRoleDetails'}
-		},
-		{
-				title: 'Role Description',
-				dataIndex: 'Job_Role_Description',
-				scopedSlots: { customRender: 'Job_Role_Description'}
-		}
-	]
-
 	export default ({
 		components: {
 			CardBarChart,
@@ -227,14 +206,10 @@
 			CardOrderHistory,
 			CardInfo,
 			CardInfo2,
-			CardRoleTableDB2,
 		},
 		data() {
 			return {
-				rolesData: [],
-				table1Columns: roleCols,
-				visible: false,
-				titleName: "Roles",
+
 				// Associating table data with its corresponding property.
 				tableData,
 
@@ -245,36 +220,6 @@
 				stats,
 			}
 		},
-		methods: {
-			showModal() {
-			this.visible = true;
-			},
-
-			getRoles(){
-				const path = 'http://localhost:5000/roles';
-				axios.get(path)
-					.then((res) => {
-						console.log(res.data.data.roles)
-						this.rolesData = res.data.data.roles;
-						for (let role of this.rolesData){
-							role.JobRoleDetails = {}
-							role.JobRoleDetails.roleId = role.Job_Role_ID
-							role.JobRoleDetails.roleName = role.Job_Role_Name
-						}
-					})
-					.catch((error) => {
-						console.error(error);
-					});
-			},
-
-			handleOk(e) {
-			console.log(e);
-			this.visible = false;
-			},
-		},
-	created() {
-		this.getRoles();
-	}
 	})
 
 </script>
