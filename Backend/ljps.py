@@ -93,9 +93,9 @@ class job_role(db.Model):
         self.Job_Role_Description = Job_Role_Description
         self.Department = Department
         self.Created_Date = Created_Date
-    
+
     def json(self):
-        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description}
+        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description, "Department": self.Department, "Created_Date": self.Created_Date}
 
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
@@ -220,6 +220,7 @@ def get_all_roles():
             "message": "There are no roles."
         }
     )
+
 
 
 ## Skills Related Functions

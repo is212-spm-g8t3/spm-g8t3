@@ -3,7 +3,7 @@
 	"./layouts/Dashboard.vue" .
  -->
 
-<template>
+ <template>
 	<div>
 		<!-- Title -->
 		<a-row :gutter="24">
@@ -208,8 +208,8 @@
 	const roleCols = [
 		{
 				title: 'Role Name',
-				dataIndex: 'Job_Role_Name',
-				scopedSlots: { customRender: 'Job_Role_Name'}
+				dataIndex: 'JobRoleDetails',
+				scopedSlots: { customRender: 'JobRoleDetails'}
 		},
 		{
 				title: 'Role Description',
@@ -256,11 +256,17 @@
 					.then((res) => {
 						console.log(res.data.data.roles)
 						this.rolesData = res.data.data.roles;
+						for (let role of this.rolesData){
+							role.JobRoleDetails = {}
+							role.JobRoleDetails.roleId = role.Job_Role_ID
+							role.JobRoleDetails.roleName = role.Job_Role_Name
+						}
 					})
 					.catch((error) => {
 						console.error(error);
 					});
 			},
+
 			handleOk(e) {
 			console.log(e);
 			this.visible = false;

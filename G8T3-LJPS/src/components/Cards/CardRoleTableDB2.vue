@@ -17,16 +17,16 @@
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template slot="Job_Role_Name" slot-scope="Job_Role_Name">
+			<template slot="JobRoleDetails" slot-scope="JobRoleDetails">
 
 				<div class="table-avatar-info">
 					<!--<a-avatar shape="square" :src="Job_Role_Name.avatar" />-->
 
 					<div class="avatar-info" style="margin-top: 7px">
-						<h6>{{ Job_Role_Name }}</h6>
-
+						<a v-on:click="addRoleToCart(JobRoleDetails.roleId)">{{ JobRoleDetails.roleName }}</a>
 					</div>
 				</div>
+
 			</template>
 			<template slot="func" slot-scope="func">
 				<div class="author-info">
@@ -34,11 +34,20 @@
 					<p class="m-0 font-regular text-muted">{{ func.job }}</p>
 				</div>
 			</template>
-			<template slot="status" slot-scope="status">
+			<!-- <template slot="status" slot-scope="status">
 				<a-tag class="tag-status" :class="status == 'active' ? 'ant-tag-success' : 'ant-tag-muted'">
-					{{ status == 'active' ? "ACTIVE" : "INACTIVE" }}
+					{{ status == 'active' ? "Enrolled" : "Not Enrolled" }}
 				</a-tag>
-			</template>
+			</template> -->
+
+			<template slot="cartDetails" slot-scope="cartDetails" >
+        		<a-button v-on:click="addRoleToCart(cartDetails.roleId)" 
+              				:disabled="cartDetails.isNotAdded == true ? true : false"
+              				:class="cartDetails.isNotAdded == true ? 'ant-tag-muted' : 'ant-tag-primary'">
+          			{{ cartDetails.isNotAdded == true ? "Added" : "Select" }}
+        		</a-button>
+
+      		</template>
 
 			<template slot="editBtn" slot-scope="row">
 				<a-button type="link" :data-id="row.key">
@@ -77,6 +86,19 @@
 				statusRadioBtn: 'all',
 			}
 
+		},
+
+		methods: {
+			addRoleToCart(roleId){
+				console.log(roleId);
+				this.$router.push({
+						path: '/select-skills?roleId=' + roleId, 
+						// params: {
+						// 	roleId: roleId, 
+						// }
+					});
+				console.log("added role to cart");
+			}
 		},
 
 		computed: {
