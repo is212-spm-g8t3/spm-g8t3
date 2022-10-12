@@ -289,5 +289,142 @@ def addnNewSkill():
         }
     ), 201
 
+## Learning Journey Related Functions
+@app.route("/learningJourney/viewLearningJourney/<LJ_ID>", methods=['GET'])
+def viewLearningJourney(LJ_ID):
+    learningJourney = learning_journey.query.filter_by(LJ_ID=LJ_ID).first()
+
+    if learningJourney:
+        return jsonify(
+            {
+                "code": 200,
+                "data": learningJourney.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "LJ_ID": LJ_ID
+            },
+            "message": "Learning Journey not found."
+        }
+    ), 404
+
+@app.route("/learningJourney/viewStaffLearningJourneies/<Staff_ID>", methods=['GET'])
+def viewStaffLearningJournies(Staff_ID):
+    learningJournies = learning_journey.query.filter_by(Staff_ID=Staff_ID).all()
+
+    if len(learningJournies):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [journey.json() for journey in learningJournies]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "Staff_ID": Staff_ID
+            },
+            "message": "No Learning Journey found for specified user."
+        }
+    ), 404
+
+@app.route("/learningJourney/createLearningJourney", methods=['POST'])
+def createLearningJourney():
+    data = request.form
+
+    # Initialize LearningJourney class
+    newLearningJourney = learning_journey(
+        LJ_ID = 0,
+        Staff_ID = data['staff_id'],
+        Job_Role_ID = data['job_role_id']
+    )
+    
+    try:
+        db.session.add(newLearningJourney)
+        db.session.commit()
+        
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new learning journey. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        }
+    ), 201
+
+@app.route("/learningJourney/createLearningJourneySkill", methods=['POST'])
+def createLearningJourneySkill():
+    data = request.form
+
+    # Initialize LearningJourney class
+    newLearningJourneySkill = learning_journey_skill(
+        LJ_ID = data['lj_id'],
+        Staff_ID = data['staff_id'],
+        Skill_ID = data['skill_id']
+    )
+    
+    try:
+        db.session.add(learning_journey_skill)
+        db.session.commit()
+        
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new learning journey. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        }
+    ), 201
+
+@app.route("/learningJourney/createLearningJourneyCourse", methods=['POST'])
+def createLearningJourneyCourse():
+    data = request.form
+
+    # Initialize LearningJourney class
+    newLearningJourneyCourse = learning_journey_course(
+        LJ_ID = data['lj_id'],
+        Staff_ID = data['staff_id'],
+        Skill_ID = data['skill_id'],
+        Course_ID = data['course_id'],
+        Reg_ID = data['reg_id']
+    )
+    
+    try:
+        db.session.add(learning_journey_course)
+        db.session.commit()
+        
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new learning journey. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        }
+    ), 201
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
