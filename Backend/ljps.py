@@ -394,6 +394,31 @@ def createLearningJourneySkill():
         }
     ), 201
 
+@app.route("/learningJourney/getLearningJourneySkills/<LJ_ID>", methods=['GET'])
+def getLearningJourneySkill(LJ_ID):
+    learningJourneySkills = db.session.query(learning_journey_skill, Skill
+        ).filter(learning_journey_skill.Skill_ID == Skill.Skill_ID,
+                learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_Name)
+    if learningJourneySkills.count() > 0:
+        return  jsonify(
+            {
+                "code":200,
+                "data": {
+                    "LJ_ID" : LJ_ID,
+                    "Skills" : [dict(row) for row in learningJourneySkills]
+                }
+            }
+        )
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Skills not found."
+        }
+    )
+
+    
+
 @app.route("/learningJourney/createLearningJourneyCourse", methods=['POST'])
 def createLearningJourneyCourse():
     data = request.form
