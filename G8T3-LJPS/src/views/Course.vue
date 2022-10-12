@@ -55,6 +55,7 @@
 </template>
 
 <script>
+	import axios from 'axios';
 
 	// Bar chart for "Active Users" card.
 	import CardBarChart from '../components/Cards/CardBarChart' ;
@@ -230,16 +231,37 @@
 			this.visible = true;
 			},
 
-			getRoles(){
-				const path = 'http://localhost:5000/roles';
-				axios.get(path)
+			getCourses(){
+				const course_url = "http://localhost:5000/courses"
+				axios.get(course_url)
 					.then((res) => {
-						console.log(res.data.data.roles)
-						this.rolesData = res.data.data.roles;
+						// console.log(res.data.data.courseCatalog)
+
+						this.allCourse = res.data.data.courseCatalog
+						
+						for(let i=0; i < this.allCourse.length; i++){
+							var course = this.allCourse[i]
+							if(this.skill==course.Course_Category && course.Course_Status == "Active"){
+								this.correctCourseList.push(this.allCourse[i])
+							}
+						}
+						console.log(this.correctCourseList)
+						
 					})
 					.catch((error) => {
 						console.error(error);
 					});
+			},
+			selectCourse(){
+				console.log("Hello!")
+				let text;
+  				if (confirm("Confirm course selection?") == true) {
+					text = "Selection confirmed!";
+					alert(text)
+				} else {
+					text = "You canceled!";
+					alert(text)
+  				}
 			},
 			handleOk(e) {
 			console.log(e);
@@ -247,7 +269,7 @@
 			},
 		},
 	created() {
-		this.getRoles();
+		this.getCourses();
 	},
 	})
 
