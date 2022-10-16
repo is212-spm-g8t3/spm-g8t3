@@ -165,8 +165,8 @@ def get_all_courses():
             {
                 "code": 200,
                 "data": {
-                    # "courseCatalog": [course.json() for course in catalog]
-                    "courseCatalog": [dict(row) for row in catalog]
+                    "courseCatalog": [course.json() for course in catalog]
+                    # "courseCatalog": [dict(row) for row in catalog]
                 }
             }
         )
