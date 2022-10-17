@@ -95,7 +95,7 @@ def create_role():
         return jsonify(
             {
                 "code": 400,
-                "message": "Skill_ID already exists. Please pick a unique ID."
+                "message": "Role already exists. Please create a unique role."
             }
         ), 400 
     
