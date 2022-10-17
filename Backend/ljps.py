@@ -95,8 +95,9 @@ class job_role(db.Model):
         self.Created_Date = Created_Date
 
     def json(self):
-        return {"Role_ID": self.Job_Role_ID, "Role_Name": self.Job_Role_Name, "Role_Description": self.Job_Role_Description}
+        # return {"Role_ID": self.Job_Role_ID, "Role_Name": self.Job_Role_Name, "Role_Description": self.Job_Role_Description}
 
+        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description, "Department": self.Department, "Created_Date": self.Created_Date}
 
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
@@ -205,11 +206,60 @@ def get_farming(course):
         }
     )
 
+## Roles Related Functions
+@app.route("/roles", methods=['GET'])
+def get_all_roles():
+    roles = job_role.query.all()
+    if len(roles):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": [role.json() for role in roles]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no roles."
+        }
+    )
+
+
+
 ## Skills Related Functions
 @app.route("/skills", methods=['GET'])
 def get_all_skills():
     skills = Skill.query.all()
     if len(skills):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [skill.json() for skill in skills]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no skills."
+        }
+    )
+
+@app.route("/skills-by-role", methods=['GET'])
+def get_skills_by_role():
+    roleId = request.args.get('roleId')
+
+    skills=db.session.query(Skill
+    ).join(job_role_skills
+    ).filter(job_role_skills.Job_Role_ID==roleId
+    ).filter(job_role_skills.Skill_ID==Skill.Skill_ID
+    ).all()
+
+    if len(skills):
+
         return jsonify(
             {
                 "code": 200,

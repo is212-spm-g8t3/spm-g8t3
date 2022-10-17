@@ -1,9 +1,11 @@
+
+
 <!-- 
 	This is the tables page, it uses the dashboard layout in: 
 	"./layouts/Dashboard.vue" .
  -->
 
-<template>
+ <template>
 	<div>
 		<a-alert v-if="ifSuccessfulCreation" message="New role has been created successfully!" type="success" show-icon class="mb-15" closable/>
 		<a-alert v-if="ifErrorCreation" message="There was an error in the creation of  the role. Please contact IT for help." type="error" show-icon class="mb-15" closable/>
