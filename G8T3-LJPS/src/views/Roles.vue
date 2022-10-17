@@ -276,8 +276,20 @@
 
 				this.$refs.ruleForm.validate(valid => {
 					if (valid) {
-						this.loading = true;
-						this.visible = false;
+						// this.loading = true;
+
+						const path = 'http://localhost:5000/createRole';
+						axios.post(path, this.form, 
+							{headers:{"Content-Type" : "application/json"}})
+						.then((res) => {
+							console.log(res)
+						})
+						.catch((error) => {
+							// eslint-disable-next-line
+							console.log(error);
+							console.error(error.response.data);
+						});
+						// this.visible = false;
 					} else {
 						console.log('error submit!!');
 						return false;

@@ -148,7 +148,7 @@ def create_role():
     return jsonify(
         {
             "code": 201,
-            "message": 'Successfully added a new skill!'
+            "message": 'Successfully added a new role!'
         }
     ), 201
 

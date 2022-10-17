@@ -226,6 +226,73 @@ def get_all_roles():
         }
     )
 
+@app.route('/createRole', methods=['POST'])
+def create_role():
+    data = request.get_json()
+    print(data)
+
+    # to verify if Role is unique by checking role name
+    if (job_role.query.filter_by(Job_Role_Name=data['name']).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "message": "Role already exists. Please create another role."
+            }
+        ), 400 
+    
+    # Initialize new job_role class
+    newRole = job_role(
+        Job_Role_ID=4,
+        Job_Role_Name = data['name'],
+        Job_Role_Description = data['description'],
+        Department=data['department'],
+        Created_Date="2022-10-10"
+    )
+
+
+    
+    try:
+        db.session.add(newRole)
+        db.session.commit()
+
+        newRoleID = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).one()
+        print(newRoleID)
+        
+        newSkills = data['skills']
+        print(newSkills)
+        for eachSkill in newSkills:
+            newJobRoleSkill = job_role_skills(
+                Job_Role_ID=newRoleID,
+                Skill_ID=eachSkill
+            )
+
+            try:
+                db.session.add(newJobRoleSkill)
+                db.session.commit()
+
+            except Exception as e:
+                return jsonify(
+                        {
+                            "code": 500,
+                            "message": "An error occurred while creating a new role with skill associated. " + str(e)
+                        }
+                    ), 500
+                
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new role. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new role!'
+        }
+    ), 201
+
 
 
 ## Skills Related Functions
