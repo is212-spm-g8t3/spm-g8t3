@@ -42,7 +42,7 @@
 
 
 			<template slot="cartDetails" slot-scope="cartDetails" >
-				<a-button v-on:click="addSkillToCart(cartDetails.skillId)" 
+				<a-button v-on:click="selectSkill(cartDetails.skillId)" 
 							:disabled="cartDetails.isNotAdded == true ? true : false"
 							:class="cartDetails.isNotAdded == true ? 'ant-tag-muted' : 'ant-tag-primary'">
 					{{ cartDetails.isNotAdded == true ? "Added" : "Select" }}
@@ -91,9 +91,11 @@
 
 
 		methods: {
-			addSkillToCart(event){
-				console.log(event)
-				console.log("added skill to cart")
+			selectSkill(skillId){
+				this.$route.query.roleId
+				this.$router.push({
+						path: '/select-courses?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
+					});
 			},
 
 		},
@@ -113,6 +115,7 @@
 		},
 
 		created() {
+
 			//this.getSkillsByRole()
 		}
 		
