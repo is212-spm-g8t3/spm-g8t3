@@ -82,12 +82,17 @@
 						<a-row>
 							<a-form-model-item label="Skills" prop="skills">
 								<a-select
+									@value="form.skills"
+									show-search
 									mode="multiple"
 									style="width: 100%"
-									placeholder="Select"
+									placeholder="Select Skill"
+									:filter-option="filterOption"
+									
+									@change="handleSkillsChange"
 								>
-									<a-select-option v-for="(option, index) in skillsOptions" :key="index">
-										{{ option }}
+									<a-select-option v-for="(option, index) in skillsData" :key="index" :value="option.Skill_ID">
+										{{ option.Skill_Name }}
 									</a-select-option>
 								</a-select>
 							</a-form-model-item>
@@ -104,9 +109,8 @@
 </template>
 
 <script>
-
-	// "Authors" table component.
 	import Vue from "vue";
+	import axios from 'axios';
 	import CardRoleTable from '../components/Cards/CardRoleTable' ;
 	import { FormModel } from 'ant-design-vue';
 	Vue.use(FormModel);
@@ -240,7 +244,7 @@
 				visible: false,
 				loading: false,
 				modalLayout: "vertical",
-				skillsOptions: ['Skill 1', 'Skill 2', 'Skill 3'], // Make ID tagged to skills
+				skillsData: [], // Make ID tagged to skills
 				form: {
 					name: '',
 					department: '',
@@ -251,9 +255,12 @@
 					name: [{ required: true, message: 'Name is required!'}],
 					department: [{ required: true, message: 'Department is required!'}],
 					description: [{ required: true, message: 'Description is required!'}],
-					skills: [{type:'array', required: true, message: 'Please input at least one skill!'}]
+					skills: [{type:'array', required: true, min: 1, message: 'Please input at least one skill!'}]
 				}
 			}
+		},
+		created(){
+			this.getAllSkills();
 		},
 		methods: {
 			showModal() {
@@ -282,6 +289,32 @@
 				this.visible = false;
       			this.$refs.ruleForm.resetFields();
 			},
+
+			getAllSkills(){
+				const path = 'http://localhost:5000/skills';
+				axios.get(path)
+					.then((res) => {
+						this.skillsData = res.data.data.skills
+						console.log(this.skillsData)
+					})
+					.catch((error) => {
+						// eslint-disable-next-line
+						console.error(error);
+					});
+			
+			},
+
+			filterOption(input, option) {
+				return (
+					option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+				);
+			},
+
+			handleSkillsChange(value){
+				// console.log(`selected ${value}`);
+				console.log(value);
+				this.form.skills = value;
+			}
 		},
 	})
 
