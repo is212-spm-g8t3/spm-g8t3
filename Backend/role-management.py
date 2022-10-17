@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-@app.route('/getRole', methods=['GET'])
+@app.route('/getAllRoles', methods=['GET'])
 def get_role():
     try:
         data = job_role.query.all() 
@@ -116,11 +116,24 @@ def create_role():
         print(newRoleID)
         
         newSkills = data['skills']
-        for eachSkill in newSkills:
-            newJobRoleSkill = job_role_skills(
-                Job_Role_ID=newRoleID,
-                Skill_ID=eachSkill
-            )
+        # for eachSkill in newSkills:
+        #     newJobRoleSkill = job_role_skills(
+        #         Job_Role_ID=newRoleID,
+        #         Skill_ID=eachSkill
+        #     )
+
+        #     try:
+        #         db.session.add(newJobRoleSkill)
+        #         db.session.commit()
+
+        #     except Exception as e:
+        #         return jsonify(
+        #                 {
+        #                     "code": 500,
+        #                     "message": "An error occurred while creating a new role with skill associated. " + str(e)
+        #                 }
+        #             ), 500
+                
 
         # Not done yet - continue here
 
