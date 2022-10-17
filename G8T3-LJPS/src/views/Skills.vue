@@ -102,6 +102,7 @@
 	import CardRoleTable from '../components/Cards/CardRoleTable' ;
 	import axios from 'axios';
 	import { message } from 'ant-design-vue';
+import { SlowBuffer } from 'buffer';
 	
 	// "Authors" table list of columns and their properties.
 	const table1Columns = [

@@ -20,6 +20,9 @@
 		</template>
 
 		<template>
+
+
+
 			<a-row type="flex" :gutter="[24,24]" align="stretch" style="padding-left: 7px; padding-right: 7px">
 
 				<!-- Project Column -->
@@ -88,7 +91,6 @@
 		},
 		data() {
 			return {
-
 				// Active button for the "Projects" table's card header radio button group.
 				projectHeaderBtns: 'all',
 			}
