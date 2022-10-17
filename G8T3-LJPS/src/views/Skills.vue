@@ -249,6 +249,7 @@
 								if (response.data.code == 201) {
 									message.success(response.data.message, 10);
 									this.handleCancel();
+									window.location.reload();
 								}
 							})
 							.catch((error) => {
@@ -272,6 +273,7 @@
 
 			handleCancel(e) {
 				this.visible = false;
+				this.ifExistingRole = false;
 				this.$refs.ruleForm.resetFields();
 			},
 		},
