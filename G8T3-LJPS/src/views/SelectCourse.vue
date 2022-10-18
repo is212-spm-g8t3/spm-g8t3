@@ -5,34 +5,12 @@
 
 <template>
 	<div>
-		<!-- Title -->
-		<a-row :gutter="24">
-			<a-col :span="24" class="mb-12">
-				<h3 style="margin-left: 12px">My Learning</h3>
-			</a-col>
-		</a-row>
-		<!-- / Title -->
 
-		<!-- Cards -->
-		<a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">
-
-				<!-- My Learning Information Card 1 -->
-				<CardInfo 
-					:title="stat.title"
-					:description="stat.description"
-					:imageURl="stat.imageURl"
-				></CardInfo>
-				<!-- / My Learning Information Card 1 -->
-
-			</a-col>
-		</a-row>
-		<!-- / Cards -->
 
 		<!-- Title -->
 		<a-row :gutter="24">
 			<a-col :span="24" class="mb-12">
-				<h4 style="margin-left: 12px">Recommended For You</h4>
+				<h4 style="margin-left: 12px">Courses recommended For You</h4>
 			</a-col>
 		</a-row>
 		<!-- / Title -->
@@ -49,9 +27,10 @@
 				slot="cover"
 				alt="example"
 				src="/images/ux-ui.png"
+				v-on:click="selectCourse()"
 				/>
 				<div class="card-tag">{{index.Course_Category}} {{index.Course_ID}} </div>
-				<h5>{{index.Course_Name}}</h5>
+				<h5 v-on:click="selectCourse()">{{index.Course_Name}} </h5>
 				<p>
 					{{index.Course_Description}}
 				</p>
