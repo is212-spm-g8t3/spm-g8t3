@@ -248,15 +248,14 @@ def create_role():
         Department=data['department'],
         Created_Date="2022-10-10"
     )
-
-
     
     try:
         db.session.add(newRole)
         db.session.commit()
 
         newRoleID = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).one()
-        print(newRoleID)
+        #  Issue here: Need to get the value and not the tuple
+        print(newRoleID) # Prints (4,)
         
         newSkills = data['skills']
         print(newSkills)
@@ -358,7 +357,7 @@ def addNewSkill():
             }
         ), 400 
     
-    # Initialize Menu class
+    # Initialize Skill class
     newSkill = Skill(
         Skill_ID = data['Skill_ID'],
         Skill_Name = data['Skill_Name'],
