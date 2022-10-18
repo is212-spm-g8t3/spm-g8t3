@@ -242,11 +242,11 @@ def create_role():
     
     # Initialize new job_role class
     newRole = job_role(
-        Job_Role_ID=4,
+        Job_Role_ID=0,
         Job_Role_Name = data['name'],
         Job_Role_Description = data['description'],
         Department=data['department'],
-        Created_Date="2022-10-10"
+        Created_Date=datetime.today().strftime('%Y-%m-%d')
     )
     
     try:
