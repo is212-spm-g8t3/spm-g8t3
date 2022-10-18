@@ -93,6 +93,14 @@
 								</a-select>
 							</a-form-model-item>
 						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model:value="form.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
 					</a-form-model>
 				</a-modal>
 			</div>
@@ -141,6 +149,14 @@
 										{{ option }}
 									</a-select-option>
 								</a-select>
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model:value="updateForm.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
 							</a-form-model-item>
 						</a-row>
 					</a-form-model>
@@ -199,11 +215,10 @@ const table1Columns = [
 ];
 
 // "Authors" table list of rows and their properties.
-const table1Data = [
+var table1Data = [
 	{
-		key: '1',
+		key: '0',
 		roleName: {
-			avatar: 'images/face-2.jpg',
 			name: 'Front-End Engineer',
 		},
 		func: {
@@ -214,9 +229,8 @@ const table1Data = [
 		created: '23/04/18',
 	},
 	{
-		key: '2',
+		key: '1',
 		roleName: {
-			avatar: 'images/face-3.jpg',
 			name: 'Back-End Engineer',
 		},
 		func: {
@@ -227,9 +241,8 @@ const table1Data = [
 		created: '23/12/20',
 	},
 	{
-		key: '3',
+		key: '2',
 		roleName: {
-			avatar: 'images/face-1.jpg',
 			name: 'Data Scientist',
 		},
 		func: {
@@ -240,9 +253,8 @@ const table1Data = [
 		created: '13/04/19',
 	},
 	{
-		key: '4',
+		key: '3',
 		roleName: {
-			avatar: 'images/face-4.jpg',
 			name: 'UI/UX Designer',
 		},
 		func: {
@@ -251,11 +263,11 @@ const table1Data = [
 		},
 		status: "Active",
 		created: '03/04/21',
+
 	},
 	{
-		key: '5',
+		key: '4',
 		roleName: {
-			avatar: 'images/face-5.jpeg',
 			name: 'Business Analyst',
 		},
 		func: {
@@ -266,9 +278,8 @@ const table1Data = [
 		created: '23/03/20',
 	},
 	{
-		key: '6',
+		key: '5',
 		roleName: {
-			avatar: 'images/face-6.jpeg',
 			name: 'Project Manager',
 		},
 		func: {
@@ -277,6 +288,7 @@ const table1Data = [
 		},
 		status: "Active",
 		created: '14/04/17',
+
 	},
 ];
 
@@ -304,7 +316,8 @@ export default ({
 				name: '',
 				department: '',
 				description: '',
-				skills: []
+				skills: [],
+				status: '',
 			},
 			rules: {
 				name: [{ required: true, message: 'Name is required!'}],
@@ -319,7 +332,8 @@ export default ({
 				name: '',
 				department: '',
 				description: '',
-				skills: []
+				skills: [],
+				status: '',
 			},
 			skillsList: ['Apples', 'Nails', 'Bananas', 'Helicopters'],
 			// Update Modal Pop up
@@ -361,6 +375,7 @@ export default ({
 			this.updateForm.department = value.func.department;
 			this.updateForm.description = "Insert description, value.xxx.description";
 			this.updateForm.skills = ['Apples', 'Nails'];
+			this.updateForm.status = value.status
 			this.isVisibleUpdate = true;
 		},
 
@@ -376,6 +391,7 @@ export default ({
 		},
 
 		// Update Modal //
+
 	},
 
 	computed: {
@@ -386,7 +402,7 @@ export default ({
 		},
 
 		// Update Modal //
-	}
+	},
 })
 
 </script>

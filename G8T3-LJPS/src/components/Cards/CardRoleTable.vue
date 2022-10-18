@@ -20,7 +20,8 @@
 
 			<template slot="roleName" slot-scope="roleName">
 				<div class="table-avatar-info">
-					<a-avatar shape="square" :src="roleName.avatar" />
+					<a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar>
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
 					<div class="avatar-info" style="margin-top: 7px">
 						<h6>{{ roleName.name }}</h6>
 					</div>
@@ -30,6 +31,7 @@
 			<template slot="func" slot-scope="func">
 				<div class="author-info">
 					<h6 class="m-0">{{ func.department }}</h6>
+					<h6 class="m-0">{{ func.type }}</h6>
 					<p class="m-0 font-regular text-muted">{{ func.job }}</p>
 				</div>
 			</template>
@@ -41,7 +43,7 @@
 			</template>
 
 			<template slot="editBtn" slot-scope="row">
-				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key-1])">
+				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key])">
 					Edit
 				</a-button>
 			</template>
@@ -54,6 +56,7 @@
 
 <script>
 import structuredClone from '@ungap/structured-clone';
+
 export default ({
 	props: {
 		data: {
@@ -73,6 +76,7 @@ export default ({
 		return {
 			// Active button for the "Authors" table's card header radio button group.
 			statusRadioBtn: 'All',
+			colorList: []
 		}
 	},
 
@@ -88,8 +92,8 @@ export default ({
 	methods: {
 		updateRoles(currentRowData) {
 			this.$emit('updateRecord', structuredClone(currentRowData))
-		}
-	}
+		},
+	},
 })
 
 </script>

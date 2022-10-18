@@ -280,7 +280,6 @@ def addnNewSkill():
 
     # to verify if Skill_ID is unique
     if (Skill.query.filter_by(Skill_Name = data["name"].title()).first()):
-        print("Hey exist la")
         return jsonify(
             {
                 "code": 400,
@@ -316,6 +315,67 @@ def addnNewSkill():
             "message": 'Successfully added a new skill!'
         }
     ), 201
+
+@app.route("/skills/updateSkill", methods=['POST'])
+def updateSkill():
+    # Convert JSON string into JSON object
+    # data = json.loads(request.get_json())
+
+    # Convert JSON to object
+    data = json.loads(request.get_json()["skillFormData"])
+    print(data)
+
+    # Get existing data
+    dbSkillData = Skill.query.get(data["id"])
+
+    # If different skill name, check if skill name exists
+    if data['name'] != dbSkillData.Skill_Name:
+        # to verify if Skill_ID is unique
+        if (Skill.query.filter_by(Skill_Name = data["name"].title()).first()):
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "This name already exists, please try another one."
+                }
+            ), 400 
+
+    # Check if the rest is the same, if same return message
+    if data['type'] == dbSkillData.Skill_Type and data['description'] == dbSkillData.Skill_Description and data['status'] == dbSkillData.Status:
+        return jsonify(
+            {
+                "code": 400,
+                "message": "No changes has been made."
+            }
+        ), 400 
+    
+    # Do the update
+    if data['type'] != dbSkillData.Skill_Type:
+        dbSkillData.Skill_Type = data['type']
+    
+    if data['description'] != dbSkillData.Skill_Description:
+        dbSkillData.Skill_Description = data['description']
+
+    if data['status'] != dbSkillData.Status:
+        dbSkillData.Status = data['status']
+    
+    try:
+        db.session.commit()
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while updating skill. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Updated successfully'
+        }
+    ), 201    
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
