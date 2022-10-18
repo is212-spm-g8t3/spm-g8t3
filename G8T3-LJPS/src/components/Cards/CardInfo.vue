@@ -1,6 +1,8 @@
 <template>
-
-	<a-card :bordered="false" class="card-info">
+	<a-card hoverable class="card-info">
+		<template #cover>
+			<img alt="example" :src="imageURl" style="height:200px; border-bottom: 1px solid #ededed; border-radius: 10px 10px 0px 0px"/>
+		</template>
 		<a-row type="flex">
 			<a-col class="col-content" :span="24" :xl="12">
 				<div class="card-content">
@@ -9,14 +11,8 @@
 					<p>{{description}}</p>
 				</div>
 			</a-col>
-			<a-col class="col-img" :span="24" :xl="12">
-				<div class="card-img-bg" style="width: 447px">
-					<img style="object-fit: cover;" :src="imageURl" alt="">
-				</div>
-			</a-col>
 		</a-row>
 	</a-card>
-
 </template>
 
 <script>
@@ -43,3 +39,4 @@
 	})
 
 </script>
+
