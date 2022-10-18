@@ -49,8 +49,8 @@ import { SlowBuffer } from 'buffer';
 	const skillCols = [
 		{
 			title: 'SKILL NAME',
-			dataIndex: 'Skill_Name',
-			scopedSlots: { customRender: 'Skill_Name' },
+			dataIndex: 'skillDetails',
+			scopedSlots: { customRender: 'skillDetails' },
 		},
 		{
 			title: 'SKILL DESCRIPTION',
@@ -115,6 +115,14 @@ import { SlowBuffer } from 'buffer';
 							skill.cartDetails = {}
 							skill.cartDetails.skillId = skill.Skill_ID
 							skill.cartDetails.isNotAdded = false
+
+							skill.skillDetails = {}
+							skill.skillDetails.skillId = skill.Skill_ID
+							skill.skillDetails.skillName = skill.Skill_Name
+							skill.skillDetails.skillDesc = skill.Skill_Description
+							skill.skillDetails.skillType = skill.Skill_Type
+							skill.skillDetails.lastUpdated = skill.Created_Date
+
 						}
 						console.log(this.skillsData)
 					})
