@@ -177,6 +177,33 @@ def get_all_courses():
         }
     )
 
+# Get courses based on selected skill
+@app.route("/getCoursesBySkill/<skillID>", methods=['GET'])
+def get_courses_by_skill(skillID):
+
+    courses = db.session.query(Courses_Catalog
+    ).join(course_skills
+    ).filter(course_skills.Skill_ID == skillID
+    ).filter(course_skills.Course_ID == Courses_Catalog.Course_ID
+    ).filter(Courses_Catalog.Course_Status == "Active"
+    ).all()
+
+    if len(courses):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "courseCatalog": [course.json() for course in courses]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no courses."
+        }
+    )
+
 @app.route("/getCourseSkills/<course>", methods=['GET'])
 def get_farming(course):
     query = db.session.query(course_skills, Skill, Courses_Catalog
