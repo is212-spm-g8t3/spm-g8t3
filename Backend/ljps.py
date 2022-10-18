@@ -144,12 +144,28 @@ class learning_journey(db.Model):
     Staff_ID = db.Column(db.Integer, db.ForeignKey(staff.Staff_ID), primary_key=True)
     Job_Role_ID = db.Column(db.Integer, db.ForeignKey(job_role.Job_Role_ID))
 
+    def __init__(self, LJ_ID, Staff_ID, Job_Role_ID):
+        self.LJ_ID = LJ_ID
+        self.Staff_ID = Staff_ID
+        self.Job_Role_ID = Job_Role_ID
+
+    def json(self):
+        return {"LJ_ID": self.LJ_ID, "Staff_ID": self.Staff_ID, "Job_Role_ID": self.Job_Role_ID}
+
 class learning_journey_skill(db.Model):
     __tablename__ = 'learning_journey_skill'
 
     LJ_ID = db.Column(db.Integer, db.ForeignKey(learning_journey.LJ_ID), primary_key=True)
     Staff_ID = db.Column(db.Integer, db.ForeignKey(learning_journey.Staff_ID), primary_key=True)
     Skill_ID = db.Column(db.Integer, db.ForeignKey(Skill.Skill_ID), primary_key=True)
+
+    def __init__(self, LJ_ID, Staff_ID, Skill_ID):
+        self.LJ_ID = LJ_ID
+        self.Staff_ID = Staff_ID
+        self.Skill_ID = Skill_ID
+
+    def json(self):
+        return {"LJ_ID": self.LJ_ID, "Staff_ID": self.Staff_ID, "Skill_ID": self.Skill_ID}
 
 class learning_journey_course(db.Model):
     __tablename__ = 'learning_journey_course'
@@ -160,6 +176,15 @@ class learning_journey_course(db.Model):
     Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID))
     Reg_ID = db.Column(db.Integer, db.ForeignKey(registration.Reg_ID))
 
+    def __init__(self, LJ_ID, Staff_ID, Skill_ID, Course_ID, Reg_ID):
+        self.LJ_ID = LJ_ID
+        self.Staff_ID = Staff_ID
+        self.Skill_ID = Skill_ID
+        self.Course_ID = Course_ID
+        self.Reg_ID = Reg_ID
+
+    def json(self):
+        return {"LJ_ID": self.LJ_ID, "Staff_ID": self.Staff_ID, "Skill_ID": self.Skill_ID, "Course_ID": self.Course_ID, "Reg_ID": self.Reg_ID}
 
 ## Course Related Functions
 @app.route("/courses", methods=['GET'])
@@ -170,8 +195,7 @@ def get_all_courses():
             {
                 "code": 200,
                 "data": {
-                    # "courseCatalog": [course.json() for course in catalog]
-                    "courseCatalog": [dict(row) for row in catalog]
+                    "courseCatalog": [course.json() for course in catalog]
                 }
             }
         )
@@ -314,42 +338,17 @@ def get_all_skills():
         }
     )
 
-@app.route("/skills-by-role", methods=['GET'])
-def get_skills_by_role():
-    roleId = request.args.get('roleId')
-
-    skills=db.session.query(Skill
-    ).join(job_role_skills
-    ).filter(job_role_skills.Job_Role_ID==roleId
-    ).filter(job_role_skills.Skill_ID==Skill.Skill_ID
-    ).all()
-
-    if len(skills):
-
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "skills": [skill.json() for skill in skills]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no skills."
-        }
-    )
-
 @app.route("/skills/addNewSkill", methods=['POST'])
 def addNewSkill():
     # Convert JSON string into JSON object
     # data = json.loads(request.get_json())
-    
-    data = request.form
+
+    # Convert JSON to object
+    data = json.loads(request.get_json()["skillFormData"])
 
     # to verify if Skill_ID is unique
-    if (Skill.query.filter_by(Skill_ID=data['Skill_ID']).first()):
+    if (Skill.query.filter_by(Skill_Name = data["name"].title()).first()):
+        print("Hey exist la")
         return jsonify(
             {
                 "code": 400,
@@ -359,9 +358,12 @@ def addNewSkill():
     
     # Initialize Skill class
     newSkill = Skill(
-        Skill_ID = data['Skill_ID'],
-        Skill_Name = data['Skill_Name'],
-        Skill_Description = data['Skill_Description']
+        Skill_ID = 0,
+        Skill_Name = data['name'].title(),
+        Skill_Description = data['description'],
+        Skill_Type = data['type'],
+        Status = data['status'],
+        Created_Date = datetime.today().strftime('%Y-%m-%d'),
     )
     
     try:
