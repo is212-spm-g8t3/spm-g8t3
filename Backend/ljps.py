@@ -311,16 +311,24 @@ def viewLearningJourney(LJ_ID):
         }
     ), 404
 
-@app.route("/learningJourney/viewStaffLearningJourneies/<Staff_ID>", methods=['GET'])
-def viewStaffLearningJournies(Staff_ID):
-    learningJournies = learning_journey.query.filter_by(Staff_ID=Staff_ID).all()
+@app.route("/learningJourney/viewStaffLearningJourneys/<Staff_ID>", methods=['GET'])
+def viewStaffLearningJourneys(Staff_ID):
+    query = job_role.query.all()
 
-    if len(learningJournies):
+
+    learningJourneys = db.session.query(learning_journey
+    ).join(job_role
+    ).filter(learning_journey.Job_Role_ID == job_role.Job_Role_ID
+    ).filter(learning_journey.Staff_ID == Staff_ID
+    ).all()
+
+    if len(learningJourneys):
+    
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "skills": [journey.json() for journey in learningJournies]
+                    "learning_journeys": [journey.json() for journey in learningJourneys]
                 }
             }
         )
@@ -417,41 +425,41 @@ def getLearningJourneySkill(LJ_ID):
         }
     )
 
-@app.route("/skills/addNewSkill", methods=['POST'])
-def addnNewSkill():
-    # Convert JSON string into JSON object
-    # data = json.loads(request.get_json())
+# @app.route("/skills/addNewSkill", methods=['POST'])
+# def addnNewSkill():
+#     # Convert JSON string into JSON object
+#     # data = json.loads(request.get_json())
 
-    # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
+#     # Convert JSON to object
+#     data = json.loads(request.get_json()["skillFormData"])
 
-    # Initialize LearningJourney class
-    newLearningJourneyCourse = learning_journey_course(
-        LJ_ID = data['lj_id'],
-        Staff_ID = data['staff_id'],
-        Skill_ID = data['skill_id'],
-        Course_ID = data['course_id'],
-        Reg_ID = data['reg_id']
-    )
+#     # Initialize LearningJourney class
+#     newLearningJourneyCourse = learning_journey_course(
+#         LJ_ID = data['lj_id'],
+#         Staff_ID = data['staff_id'],
+#         Skill_ID = data['skill_id'],
+#         Course_ID = data['course_id'],
+#         Reg_ID = data['reg_id']
+#     )
     
-    try:
-        db.session.add(learning_journey_course)
-        db.session.commit()
+#     try:
+#         db.session.add(learning_journey_course)
+#         db.session.commit()
         
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while creating a new learning journey. " + str(e)
-            }
-        ), 500
+#     except Exception as e:
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "message": "An error occurred while creating a new learning journey. " + str(e)
+#             }
+#         ), 500
     
-    return jsonify(
-        {
-            "code": 201,
-            "message": 'Successfully added a new learning journey!'
-        }
-    ), 201
+#     return jsonify(
+#         {
+#             "code": 201,
+#             "message": 'Successfully added a new learning journey!'
+#         }
+#     ), 201
 
 @app.route("/skills/updateSkill", methods=['POST'])
 def updateSkill():
