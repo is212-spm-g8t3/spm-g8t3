@@ -330,7 +330,7 @@ def viewStaffLearningJourneys(Staff_ID):
             {
                 "code": 200,
                 "data": {
-                    "skills": [journey.json() for journey in learningJournies]
+                    "learning_journeys" : [dict(row) for row in learningJourneys]
                 }
             }
         )

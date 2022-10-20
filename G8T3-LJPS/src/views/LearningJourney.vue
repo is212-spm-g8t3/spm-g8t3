@@ -16,11 +16,11 @@
 
 		<!-- Learning Journeys -->
 		<a-row :gutter="24" type="flex" style="margin:0px">
-			<a-col :span="24" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
+			<a-col :span="24" :xl="6" class="mb-24" v-for="(learningJourney, index) in learningJourneys" :key="index">
 				<CardInfo 
-					:title="stat.title"
-					:description="stat.description"
-					:imageURl="stat.imageURl"
+					:roleName="learningJourney.name"
+					:roleDescription="learningJourney.description"
+					:imageURl="learningJourney.imageURL"
 				></CardInfo>
 			</a-col>
 		</a-row>
@@ -99,6 +99,7 @@
 			return {
 				// Counter Widgets Stats
 				stats,
+				learningJourneys: []
 			}
 		},
 		methods: {
@@ -109,18 +110,19 @@
 				axios.get(learningJourneyURL)
 					.then((res) => {
 						console.log(res);
-						// this.skillsData = res.data.data.skills
-						// console.log(this.skillsData)
-						// for (let skill of this.skillsData){
-						// 	skill.cartDetails = {}
-						// 	skill.cartDetails.skillId = skill.Skill_ID
-						// 	skill.cartDetails.isNotAdded = false
-						// }
-						// console.log(this.skillsData)
+						for (let learningJourney of res.data.data.learning_journeys) {
+
+							this.learningJourneys.push({
+								id: learningJourney.LJ_ID,
+								name: learningJourney.Job_Role_Name,
+								description: learningJourney.Job_Role_Description,
+								department: learningJourney.Department,
+								imageURL: 'images/front-end-engineer.jpeg',
+							})
+						}
 					})
 					.catch((error) => {
-					// eslint-disable-next-line
-					console.error(error);
+						console.error(res.message);
 					});
 			}
 		},

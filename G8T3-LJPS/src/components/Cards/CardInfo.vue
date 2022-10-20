@@ -7,8 +7,8 @@
 			<a-col class="col-content" :span="24" :xl="12">
 				<div class="card-content">
 					<h6>Role</h6>
-					<h5>{{title}}</h5>
-					<p>{{description}}</p>
+					<h5>{{roleName}}</h5>
+					<p>{{roleDescription}}</p>
 				</div>
 			</a-col>
 		</a-row>
@@ -19,11 +19,11 @@
 
 	export default ({
 		props: {
-			title: {
+			roleName: {
 				type: String,
 				default: "",
 			},
-			description: {
+			roleDescription: {
 				type: String,
 				default: "",
 			},
