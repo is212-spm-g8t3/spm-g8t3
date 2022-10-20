@@ -313,22 +313,24 @@ def viewLearningJourney(LJ_ID):
 
 @app.route("/learningJourney/viewStaffLearningJourneys/<Staff_ID>", methods=['GET'])
 def viewStaffLearningJourneys(Staff_ID):
-    query = job_role.query.all()
+    # learningJournies = learning_journey.query.filter_by(Staff_ID=Staff_ID).all()
 
+    learningJourneys = db.session.query(learning_journey, job_role
+        ).filter(learning_journey.Job_Role_ID == job_role.Job_Role_ID,
+                learning_journey.Staff_ID == Staff_ID
+                ).with_entities(learning_journey.LJ_ID, learning_journey.Staff_ID, learning_journey.Job_Role_ID, job_role.Job_Role_Name, job_role.Job_Role_Description, job_role.Department, job_role.Created_Date)
 
-    learningJourneys = db.session.query(learning_journey
-    ).join(job_role
-    ).filter(learning_journey.Job_Role_ID == job_role.Job_Role_ID
-    ).filter(learning_journey.Staff_ID == Staff_ID
-    ).all()
+    # query = db.session.query(course_skills, Skill, Courses_Catalog
+    #     ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
+    #             course_skills.Skill_ID == Skill.Skill_ID,
+    #             Courses_Catalog.Course_Name == course).with_entities(Skill.Skill_Name, Skill.Skill_Description)
 
-    if len(learningJourneys):
-    
+    if learningJourneys.count() > 0:
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "learning_journeys": [journey.json() for journey in learningJourneys]
+                    "skills": [journey.json() for journey in learningJournies]
                 }
             }
         )
