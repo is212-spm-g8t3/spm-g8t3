@@ -132,7 +132,6 @@ muse-vue-ant-design-dashboard
 │   │   │   ├── DashboardHeader.vue
 │   │   │   └── DefaultHeader.vue
 │   │   ├── Sidebars
-│   │   │   ├── DashboardSettingsDrawer.vue
 │   │   │   └── DashboardSidebar.vue
 │   │   └── Widgets
 │   │       ├── WidgetCounter.vue

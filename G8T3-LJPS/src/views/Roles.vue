@@ -35,6 +35,7 @@
 					:titleName="titleName"
 					:data="table1Data"
 					:columns="table1Columns"
+					@updateRecord="updateModalRecord"
 				></CardRoleTable>
 				<!-- / Authors Table Card -->
 
@@ -61,6 +62,11 @@
 					</template>
 
 					<a-form-model layout="vertical" ref="ruleForm" :model="form" :rules="rules">
+						<Alert 
+							type="error"
+							:message="createErrorMessage" 
+							:visible="createErrorVisible"
+							:closable="false"></Alert>
 						<a-row :gutter="16">
 							<a-col :span="12">
 								<a-form-model-item slot="" label="Role Name" prop="name">
@@ -81,29 +87,170 @@
 						</a-row>
 						<a-row>
 							<a-form-model-item label="Skills" prop="skills">
+									<!-- @value="form.skills" -->
 								<a-select
-									@value="form.skills"
+									v-model="form.skills"
 									show-search
 									mode="multiple"
 									style="width: 100%"
 									placeholder="Select Skill"
 									:filter-option="filterOption"
-									
 									@change="handleSkillsChange"
 								>
-									<a-select-option v-for="(option, index) in skillsData" :key="index" :value="option.Skill_ID">
+									<!-- :default-value="[3,2]" -->
+									<a-select-option v-for="option in skillsData" :key="option.Skill_ID" :value="option.Skill_ID">
 										{{ option.Skill_Name }}
 									</a-select-option>
 								</a-select>
 							</a-form-model-item>
 						</a-row>
-
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model="form.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
 					</a-form-model>
-
 				</a-modal>
 			</div>
 		</template>
 		<!-- / Create Role Modal Pop up -->
+
+		<!-- / Update Role Modal Pop up -->
+		<template>
+			<div>
+				<a-modal centered v-model="isVisibleUpdate" title="Update Role" @cancel="handleCancel">
+
+					<!-- <a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/> -->
+
+					<a-form-model layout="vertical" ref="ruleForm" :model="updateForm" :rules="rules">
+						<a-row :gutter="16">
+							<a-col :span="12">
+								<a-form-model-item slot="" label="Role Name" prop="name">
+									<a-input v-model="updateForm.name" placeholder="E.g. Software Developer" />
+								</a-form-model-item>
+							</a-col>
+							<a-col :span="12">
+								<a-form-model-item label="Department" prop="department">
+									<a-input v-model="updateForm.department" placeholder="E.g. Technology" />
+								</a-form-model-item>
+							</a-col>
+						</a-row>
+
+						<a-row>
+							<a-form-model-item label="Role Description" prop="description">
+								<a-input v-model="updateForm.description" type="textarea" />
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Skills" prop="skills">
+
+								<a-select
+									:value="updateForm.skills"
+									mode="multiple"
+									placeholder="Select skills"
+									style="width: 100%"
+									:showArrow="true"
+									@deselect="handleDeselect"
+									@select="handleSelect"
+								>
+									<a-select-option v-for="(option, index) in filteredOptions" :key="index">
+										{{ option }}
+									</a-select-option>
+								</a-select>
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model="updateForm.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
+					</a-form-model>
+				</a-modal>
+									
+				<template slot="footer">
+					<a-button key="back" @click="handleCancel">
+					Cancel
+					</a-button>
+					<a-button key="submit" type="primary" :loading="loading" @click="handleCreate">
+					Create
+					</a-button>
+				</template>
+			</div>
+		</template>
+		<!-- / Update Role Modal Pop up -->
+
+		<!-- / Update Role Modal Pop up -->
+		<template>
+			<div>
+				<a-modal centered v-model="isVisibleUpdate" title="Update Role" @cancel="handleCancel">
+
+					<!-- <a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/> -->
+
+					<a-form-model layout="vertical" ref="ruleForm" :model="updateForm" :rules="rules">
+						<a-row :gutter="16">
+							<a-col :span="12">
+								<a-form-model-item slot="" label="Role Name" prop="name">
+									<a-input v-model="updateForm.name" placeholder="E.g. Software Developer" />
+								</a-form-model-item>
+							</a-col>
+							<a-col :span="12">
+								<a-form-model-item label="Department" prop="department">
+									<a-input v-model="updateForm.department" placeholder="E.g. Technology" />
+								</a-form-model-item>
+							</a-col>
+						</a-row>
+
+						<a-row>
+							<a-form-model-item label="Role Description" prop="description">
+								<a-input v-model="updateForm.description" type="textarea" />
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Skills" prop="skills">
+
+								<a-select
+									:value="updateForm.skills"
+									mode="multiple"
+									placeholder="Select skills"
+									style="width: 100%"
+									:showArrow="true"
+									@deselect="handleDeselect"
+									@select="handleSelect"
+								>
+									<a-select-option v-for="(option, index) in filteredOptions" :key="index">
+										{{ option }}
+									</a-select-option>
+								</a-select>
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model="updateForm.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
+					</a-form-model>
+				</a-modal>
+									
+				<template slot="footer">
+					<a-button key="back" @click="handleCancel">
+					Cancel
+					</a-button>
+					<a-button key="submit" type="primary" :loading="loading" @click="handleCreate">
+					Create
+					</a-button>
+				</template>
+			</div>
+		</template>
+		<!-- / Update Role Modal Pop up -->
 
 	</div>
 </template>
@@ -112,6 +259,7 @@
 	import Vue from "vue";
 	import axios from 'axios';
 	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import Alert from '../components/Alert/Alert' ;
 	import { FormModel } from 'ant-design-vue';
 	Vue.use(FormModel);
 	
@@ -229,6 +377,7 @@
 	export default ({
 		components: {
 			CardRoleTable,
+			Alert
 		},
 		data() {
 			return {
@@ -250,14 +399,18 @@
 					name: '',
 					department: '',
 					description: '',
-					skills: []
+					skills: [],
+					// status: ""
 				},
 				rules: {
 					name: [{ required: true, message: 'Name is required!'}],
 					department: [{ required: true, message: 'Department is required!'}],
 					description: [{ required: true, message: 'Description is required!'}],
 					skills: [{type:'array', required: true, min: 1, message: 'Please input at least one skill!'}]
-				}
+				},
+				createSuccessVisible: false,
+				createErrorVisible: false,
+				createErrorMessage: ""
 			}
 		},
 		created(){
@@ -290,20 +443,26 @@
 
 				this.$refs.ruleForm.validate(valid => {
 					if (valid) {
-						// this.loading = true;
+						this.loading = true;
 
 						const path = 'http://localhost:5000/createRole';
 						axios.post(path, this.form, 
 							{headers:{"Content-Type" : "application/json"}})
 						.then((res) => {
 							console.log(res)
+      						this.$message.success('Role created successfully!');
+							this.handleCancel();
+							this.visible = false;
 						})
 						.catch((error) => {
 							// eslint-disable-next-line
 							console.log(error);
 							console.error(error.response.data);
+							this.createErrorVisible = true;
+							this.createErrorMessage = error.response.data.message;
 						});
-						// this.visible = false;
+						this.loading = false;
+
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -311,9 +470,13 @@
 				});
 			},
 
-			handleCancel(e) {
+			handleCancel() {
 				this.visible = false;
+				this.createErrorVisible = false;
+				this.createErrorMessage = true;
+				// this.form.skills = [];
       			this.$refs.ruleForm.resetFields();
+
 			},
 
 			getAllSkills(){
@@ -336,11 +499,41 @@
 				);
 			},
 
-			handleSkillsChange(value){
-				// console.log(`selected ${value}`);
-				console.log(value);
-				this.form.skills = value;
-			}
+			// handleSkillsChange(value){
+			// 	// console.log(`selected ${value}`);
+			// 	console.log(value);
+			// 	this.form.skills = value;
+			// },
+
+			// updateModalRecord(value) {
+			// 	console.log(value);
+			// 	this.updateForm.name = value.roleName.name;
+			// 	this.updateForm.department = value.func.department;
+			// 	this.updateForm.description = "Insert description, value.xxx.description";
+			// 	this.updateForm.skills = ['Apples', 'Nails'];
+			// 	this.updateForm.status = value.status
+			// 	this.isVisibleUpdate = true;
+			// },
+
+			// handleDeselect(value) {
+			// const index = this.updateForm.skills.indexOf(value);
+			// if (index > -1) { // only splice array when item is found
+			// 	this.updateForm.skills.splice(index, 1); // 2nd parameter means remove one item only
+			// }
+			// },
+
+			// handleSelect(value) {
+			// this.updateForm.skills.push(this.filteredOptions[value]);
+			// },
+
+	},
+
+	computed: {
+
+			// Update Modal //
+			// filteredOptions() {
+			// 	return this.skillsList.filter(o => !this.updateForm.skills.includes(o))
+			// },
 		},
 	})
 
