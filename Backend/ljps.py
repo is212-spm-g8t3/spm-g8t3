@@ -226,6 +226,42 @@ def get_all_roles():
         }
     )
 
+@app.route("/getRolesWithSkills", methods=['GET'])
+def getRolesWithSkills():
+    # rolesWithSkills = job_role.query.all()
+
+    # query = db.session.query(job_role, job_role_skills , Skill
+    #     ).filter(job_role.Job_Role_ID == job_role_skills.Job_Role_ID,
+    #             job_role_skills.Job_Role_ID == Skill.Skill_ID).with_entities(Skill.Skill_Name, Skill.Skill_Description)
+    query= ["test"]
+
+    print(query)
+
+    return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": [dict(row) for row in query]
+                }
+            }
+        )
+
+    # if len(rolesWithSkills):
+    #     return jsonify(
+    #         {
+    #             "code": 200,
+    #             "data": {
+    #                 "roles": [role.json() for role in roles]
+    #             }
+    #         }
+    #     )
+    # return jsonify(
+    #     {
+    #         "code": 404,
+    #         "message": "There are no roles."
+    #     }
+    # )
+
 @app.route('/createRole', methods=['POST'])
 def create_role():
     data = request.get_json()
