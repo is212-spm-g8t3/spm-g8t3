@@ -274,8 +274,8 @@ def create_role():
     )
     
     try:
-        # db.session.add(newRole)
-        # db.session.commit()
+        db.session.add(newRole)
+        db.session.commit()
 
         newRoleID_row = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).one()
                
