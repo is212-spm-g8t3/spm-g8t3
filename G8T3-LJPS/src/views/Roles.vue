@@ -35,6 +35,7 @@
 					:titleName="titleName"
 					:data="table1Data"
 					:columns="table1Columns"
+					@updateRecord="updateModalRecord"
 				></CardRoleTable>
 				<!-- / Authors Table Card -->
 
@@ -103,13 +104,153 @@
 								</a-select>
 							</a-form-model-item>
 						</a-row>
-
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model:value="form.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
 					</a-form-model>
-
 				</a-modal>
 			</div>
 		</template>
 		<!-- / Create Role Modal Pop up -->
+
+		<!-- / Update Role Modal Pop up -->
+		<template>
+			<div>
+				<a-modal centered v-model="isVisibleUpdate" title="Update Role" @cancel="handleCancel">
+
+					<!-- <a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/> -->
+
+					<a-form-model layout="vertical" ref="ruleForm" :model="updateForm" :rules="rules">
+						<a-row :gutter="16">
+							<a-col :span="12">
+								<a-form-model-item slot="" label="Role Name" prop="name">
+									<a-input v-model="updateForm.name" placeholder="E.g. Software Developer" />
+								</a-form-model-item>
+							</a-col>
+							<a-col :span="12">
+								<a-form-model-item label="Department" prop="department">
+									<a-input v-model="updateForm.department" placeholder="E.g. Technology" />
+								</a-form-model-item>
+							</a-col>
+						</a-row>
+
+						<a-row>
+							<a-form-model-item label="Role Description" prop="description">
+								<a-input v-model="updateForm.description" type="textarea" />
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Skills" prop="skills">
+
+								<a-select
+									:value="updateForm.skills"
+									mode="multiple"
+									placeholder="Select skills"
+									style="width: 100%"
+									:showArrow="true"
+									@deselect="handleDeselect"
+									@select="handleSelect"
+								>
+									<a-select-option v-for="(option, index) in filteredOptions" :key="index">
+										{{ option }}
+									</a-select-option>
+								</a-select>
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model:value="updateForm.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
+					</a-form-model>
+				</a-modal>
+									
+				<template slot="footer">
+					<a-button key="back" @click="handleCancel">
+					Cancel
+					</a-button>
+					<a-button key="submit" type="primary" :loading="loading" @click="handleCreate">
+					Create
+					</a-button>
+				</template>
+			</div>
+		</template>
+		<!-- / Update Role Modal Pop up -->
+
+		<!-- / Update Role Modal Pop up -->
+		<template>
+			<div>
+				<a-modal centered v-model="isVisibleUpdate" title="Update Role" @cancel="handleCancel">
+
+					<!-- <a-alert v-if="ifExistingRole" type="error" message="That is an existing role! Please enter another role." banner style="margin-bottom:20px;margin-top:0px"/> -->
+
+					<a-form-model layout="vertical" ref="ruleForm" :model="updateForm" :rules="rules">
+						<a-row :gutter="16">
+							<a-col :span="12">
+								<a-form-model-item slot="" label="Role Name" prop="name">
+									<a-input v-model="updateForm.name" placeholder="E.g. Software Developer" />
+								</a-form-model-item>
+							</a-col>
+							<a-col :span="12">
+								<a-form-model-item label="Department" prop="department">
+									<a-input v-model="updateForm.department" placeholder="E.g. Technology" />
+								</a-form-model-item>
+							</a-col>
+						</a-row>
+
+						<a-row>
+							<a-form-model-item label="Role Description" prop="description">
+								<a-input v-model="updateForm.description" type="textarea" />
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Skills" prop="skills">
+
+								<a-select
+									:value="updateForm.skills"
+									mode="multiple"
+									placeholder="Select skills"
+									style="width: 100%"
+									:showArrow="true"
+									@deselect="handleDeselect"
+									@select="handleSelect"
+								>
+									<a-select-option v-for="(option, index) in filteredOptions" :key="index">
+										{{ option }}
+									</a-select-option>
+								</a-select>
+							</a-form-model-item>
+						</a-row>
+						<a-row>
+							<a-form-model-item label="Status" prop="status">
+								<a-radio-group v-model:value="updateForm.status">
+									<a-radio-button value="Active">Active</a-radio-button>
+									<a-radio-button value="Inactive">Inactive</a-radio-button>
+								</a-radio-group>
+							</a-form-model-item>
+						</a-row>
+					</a-form-model>
+				</a-modal>
+									
+				<template slot="footer">
+					<a-button key="back" @click="handleCancel">
+					Cancel
+					</a-button>
+					<a-button key="submit" type="primary" :loading="loading" @click="handleCreate">
+					Create
+					</a-button>
+				</template>
+			</div>
+		</template>
+		<!-- / Update Role Modal Pop up -->
 
 	</div>
 </template>
@@ -278,12 +419,12 @@
 				this.visible = true;
 			},
 
-			handleCreate(e) {
-				console.log(e);
-				// Perform check with database whether role is in database
-				// If not, add to database
-				// this.loading = false and this.visible = false
-				// Show green alert bar if added successfully
+		handleCreate(e) {
+			console.log(e);
+			// Perform check with database whether role is in database
+			// If not, add to database
+			// this.loading = false and this.visible = false
+			// Show green alert bar if added successfully
 
 				this.$refs.ruleForm.validate(valid => {
 					if (valid) {

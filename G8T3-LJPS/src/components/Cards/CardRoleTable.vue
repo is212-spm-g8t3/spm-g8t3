@@ -9,9 +9,9 @@
 				</a-col>
 				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 					<a-radio-group v-model="statusRadioBtn" size="small">
-						<a-radio-button value="all">ALL</a-radio-button>
-						<a-radio-button value="active">ACTIVE</a-radio-button>
-						<a-radio-button value="inactive">INACTIVE</a-radio-button>
+						<a-radio-button value="All">ALL</a-radio-button>
+						<a-radio-button value="Active">ACTIVE</a-radio-button>
+						<a-radio-button value="Inactive">INACTIVE</a-radio-button>
 					</a-radio-group>
 				</a-col>
 			</a-row>
@@ -20,7 +20,8 @@
 
 			<template slot="roleName" slot-scope="roleName">
 				<div class="table-avatar-info">
-					<a-avatar shape="square" :src="roleName.avatar" />
+					<a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar>
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
 					<div class="avatar-info" style="margin-top: 7px">
 						<h6>{{ roleName.name }}</h6>
 					</div>
@@ -30,18 +31,19 @@
 			<template slot="func" slot-scope="func">
 				<div class="author-info">
 					<h6 class="m-0">{{ func.department }}</h6>
+					<h6 class="m-0">{{ func.type }}</h6>
 					<p class="m-0 font-regular text-muted">{{ func.job }}</p>
 				</div>
 			</template>
 
 			<template slot="status" slot-scope="status">
-				<a-tag class="tag-status" :class="status == 'active' ? 'ant-tag-success' : 'ant-tag-muted'">
-					{{ status == 'active' ? "ACTIVE" : "INACTIVE" }}
+				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
 			<template slot="editBtn" slot-scope="row">
-				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key-1])">
+				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key])">
 					Edit
 				</a-button>
 			</template>
@@ -54,6 +56,7 @@
 
 <script>
 import structuredClone from '@ungap/structured-clone';
+
 export default ({
 	props: {
 		data: {
@@ -72,13 +75,14 @@ export default ({
 	data() {
 		return {
 			// Active button for the "Authors" table's card header radio button group.
-			statusRadioBtn: 'all',
+			statusRadioBtn: 'All',
+			colorList: []
 		}
 	},
 
 	computed: {
 		dataFilteredStatus: function() {
-			if (this.statusRadioBtn != 'all') {
+			if (this.statusRadioBtn != 'All') {
 				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
 			}
 			return this.data
@@ -88,8 +92,8 @@ export default ({
 	methods: {
 		updateRoles(currentRowData) {
 			this.$emit('updateRecord', structuredClone(currentRowData))
-		}
-	}
+		},
+	},
 })
 
 </script>
