@@ -274,13 +274,21 @@ def create_role():
     )
     
     try:
-        db.session.add(newRole)
-        db.session.commit()
+        # db.session.add(newRole)
+        # db.session.commit()
 
-        newRoleID = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).one()
-        #  Issue here: Need to get the value and not the tuple
-        print(newRoleID) # Prints (4,)
-        
+        newRoleID_row = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).one()
+               
+        if newRoleID_row == None:
+            return jsonify(
+                    {
+                        "code": 500,
+                        "message": "There is no role ID associated with the role you are creating."
+                    }
+                ), 500
+
+        newRoleID = newRoleID_row[0]
+
         newSkills = data['skills']
         print(newSkills)
         for eachSkill in newSkills:
@@ -305,7 +313,7 @@ def create_role():
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while creating a new role. " + str(e)
+                "message": "An error occurred while creating a new role. " + str(e) + "."
             }
         ), 500
     
