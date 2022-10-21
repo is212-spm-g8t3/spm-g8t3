@@ -222,6 +222,29 @@ def get_farming(course):
         }
     )
 
+@app.route("/getCoursesBySkill/<skill_id>", methods=['GET'])
+def getCoursesBySkill(skill_id):
+    query = db.session.query(course_skills, Courses_Catalog
+        ).filter(course_skills.Skill_ID == skill_id,
+                course_skills.Course_ID == Courses_Catalog.Course_ID,
+                ).with_entities(Courses_Catalog.Course_ID, Courses_Catalog.Course_Name, Courses_Catalog.Course_Description, Courses_Catalog.Course_Type, Courses_Catalog.Course_Category)
+    if query.count() > 0:
+        return  jsonify(
+            {
+                "code":200,
+                "data": {
+                    "courses" : [dict(row) for row in query]
+                }
+            }
+        )
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    )
+
 ## Skills Related Functions
 @app.route("/skills", methods=['GET'])
 def get_all_skills():
@@ -313,17 +336,11 @@ def viewLearningJourney(LJ_ID):
 
 @app.route("/learningJourney/viewStaffLearningJourneys/<Staff_ID>", methods=['GET'])
 def viewStaffLearningJourneys(Staff_ID):
-    # learningJournies = learning_journey.query.filter_by(Staff_ID=Staff_ID).all()
 
     learningJourneys = db.session.query(learning_journey, job_role
         ).filter(learning_journey.Job_Role_ID == job_role.Job_Role_ID,
                 learning_journey.Staff_ID == Staff_ID
                 ).with_entities(learning_journey.LJ_ID, learning_journey.Staff_ID, learning_journey.Job_Role_ID, job_role.Job_Role_Name, job_role.Job_Role_Description, job_role.Department, job_role.Created_Date)
-
-    # query = db.session.query(course_skills, Skill, Courses_Catalog
-    #     ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
-    #             course_skills.Skill_ID == Skill.Skill_ID,
-    #             Courses_Catalog.Course_Name == course).with_entities(Skill.Skill_Name, Skill.Skill_Description)
 
     if learningJourneys.count() > 0:
         return jsonify(
@@ -404,11 +421,34 @@ def createLearningJourneySkill():
         }
     ), 201
 
+@app.route("/learningJourney/getLearningJourneyRole/<LJ_ID>", methods=['GET'])
+def getLearningJourneyRole(LJ_ID):
+    learningJourneySkills = db.session.query(learning_journey, job_role
+        ).filter(learning_journey.LJ_ID == LJ_ID,
+                learning_journey.Job_Role_ID == job_role.Job_Role_ID).with_entities(job_role.Job_Role_ID, job_role.Job_Role_Name,job_role.Job_Role_Description, job_role.Department)
+    if learningJourneySkills.count() > 0:
+        return  jsonify(
+            {
+                "code":200,
+                "data": {
+                    "LJ_ID" : LJ_ID,
+                    "Role" : [dict(row) for row in learningJourneySkills]
+                }
+            }
+        )
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Skills not found."
+        }
+    )
+
 @app.route("/learningJourney/getLearningJourneySkills/<LJ_ID>", methods=['GET'])
 def getLearningJourneySkill(LJ_ID):
     learningJourneySkills = db.session.query(learning_journey_skill, Skill
         ).filter(learning_journey_skill.Skill_ID == Skill.Skill_ID,
-                learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_Name)
+                learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_ID, Skill.Skill_Name, Skill.Skill_Description, Skill.Skill_Type)
     if learningJourneySkills.count() > 0:
         return  jsonify(
             {

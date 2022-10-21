@@ -18,6 +18,8 @@
 		<a-row :gutter="24" type="flex" style="margin:0px">
 			<a-col :span="24" :xl="6" class="mb-24" v-for="(learningJourney, index) in learningJourneys" :key="index">
 				<CardInfo 
+					:id="learningJourney.id"
+					:staffId="learningJourney.staffId"
 					:roleName="learningJourney.name"
 					:roleDescription="learningJourney.description"
 					:imageURl="learningJourney.imageURL"
@@ -109,10 +111,11 @@
 				const learningJourneyURL = 'http://localhost:5000/learningJourney/viewStaffLearningJourneys/130001' 
 				axios.get(learningJourneyURL)
 					.then((res) => {
-						console.log(res);
+						// console.log(res);
 						for (let learningJourney of res.data.data.learning_journeys) {
 
 							this.learningJourneys.push({
+								staffId: learningJourney.Staff_ID,
 								id: learningJourney.LJ_ID,
 								name: learningJourney.Job_Role_Name,
 								description: learningJourney.Job_Role_Description,
@@ -124,7 +127,7 @@
 					.catch((error) => {
 						console.error(res.message);
 					});
-			}
+			},
 		},
 		created() {
 			this.getStaffLearningJourneys();
