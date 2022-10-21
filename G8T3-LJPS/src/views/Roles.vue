@@ -106,7 +106,7 @@
 						</a-row>
 						<a-row>
 							<a-form-model-item label="Status" prop="status">
-								<a-radio-group v-model:value="form.status">
+								<a-radio-group v-model="form.status">
 									<a-radio-button value="Active">Active</a-radio-button>
 									<a-radio-button value="Inactive">Inactive</a-radio-button>
 								</a-radio-group>
@@ -164,7 +164,7 @@
 						</a-row>
 						<a-row>
 							<a-form-model-item label="Status" prop="status">
-								<a-radio-group v-model:value="updateForm.status">
+								<a-radio-group v-model="updateForm.status">
 									<a-radio-button value="Active">Active</a-radio-button>
 									<a-radio-button value="Inactive">Inactive</a-radio-button>
 								</a-radio-group>
@@ -231,7 +231,7 @@
 						</a-row>
 						<a-row>
 							<a-form-model-item label="Status" prop="status">
-								<a-radio-group v-model:value="updateForm.status">
+								<a-radio-group v-model="updateForm.status">
 									<a-radio-button value="Active">Active</a-radio-button>
 									<a-radio-button value="Inactive">Inactive</a-radio-button>
 								</a-radio-group>
@@ -398,7 +398,8 @@
 					name: '',
 					department: '',
 					description: '',
-					skills: []
+					skills: [],
+					// status: ""
 				},
 				rules: {
 					name: [{ required: true, message: 'Name is required!'}],
@@ -419,12 +420,12 @@
 				this.visible = true;
 			},
 
-		handleCreate(e) {
-			console.log(e);
-			// Perform check with database whether role is in database
-			// If not, add to database
-			// this.loading = false and this.visible = false
-			// Show green alert bar if added successfully
+			handleCreate(e) {
+				console.log(e);
+				// Perform check with database whether role is in database
+				// If not, add to database
+				// this.loading = false and this.visible = false
+				// Show green alert bar if added successfully
 
 				this.$refs.ruleForm.validate(valid => {
 					if (valid) {
@@ -484,11 +485,41 @@
 				);
 			},
 
-			handleSkillsChange(value){
-				// console.log(`selected ${value}`);
-				console.log(value);
-				this.form.skills = value;
-			}
+			// handleSkillsChange(value){
+			// 	// console.log(`selected ${value}`);
+			// 	console.log(value);
+			// 	this.form.skills = value;
+			// },
+
+			// updateModalRecord(value) {
+			// 	console.log(value);
+			// 	this.updateForm.name = value.roleName.name;
+			// 	this.updateForm.department = value.func.department;
+			// 	this.updateForm.description = "Insert description, value.xxx.description";
+			// 	this.updateForm.skills = ['Apples', 'Nails'];
+			// 	this.updateForm.status = value.status
+			// 	this.isVisibleUpdate = true;
+			// },
+
+			// handleDeselect(value) {
+			// const index = this.updateForm.skills.indexOf(value);
+			// if (index > -1) { // only splice array when item is found
+			// 	this.updateForm.skills.splice(index, 1); // 2nd parameter means remove one item only
+			// }
+			// },
+
+			// handleSelect(value) {
+			// this.updateForm.skills.push(this.filteredOptions[value]);
+			// },
+
+	},
+
+	computed: {
+
+			// Update Modal //
+			// filteredOptions() {
+			// 	return this.skillsList.filter(o => !this.updateForm.skills.includes(o))
+			// },
 		},
 	})
 
