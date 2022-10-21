@@ -245,6 +245,7 @@
 				loading: false,
 				modalLayout: "vertical",
 				skillsData: [], // Make ID tagged to skills
+				rolesData: [],
 				form: {
 					name: '',
 					department: '',
@@ -261,10 +262,23 @@
 		},
 		created(){
 			this.getAllSkills();
+			this.getRolesData();
 		},
 		methods: {
 			showModal() {
 				this.visible = true;
+			},
+
+			getRolesData(){
+				const path = 'http://localhost:5000/getRolesWithSkills';
+				axios.get(path)
+					.then((res) => {
+						console.log(res)
+					})
+					.catch((error) => {
+						console.log(error);
+						console.error(error.response.data);
+					});
 			},
 
 			handleCreate(e) {
