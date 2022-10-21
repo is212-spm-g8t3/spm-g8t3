@@ -61,6 +61,11 @@
 					</template>
 
 					<a-form-model layout="vertical" ref="ruleForm" :model="form" :rules="rules">
+						<Alert 
+							type="error"
+							:message="createErrorMessage" 
+							:visible="createErrorVisible"
+							:closable="false"></Alert>
 						<a-row :gutter="16">
 							<a-col :span="12">
 								<a-form-model-item slot="" label="Role Name" prop="name">
@@ -88,10 +93,10 @@
 									style="width: 100%"
 									placeholder="Select Skill"
 									:filter-option="filterOption"
-									
 									@change="handleSkillsChange"
 								>
-									<a-select-option v-for="(option, index) in skillsData" :key="index" :value="option.Skill_ID">
+									<!-- :default-value="[3,2]" -->
+									<a-select-option v-for="option in skillsData" :key="option.Skill_ID" :value="option.Skill_ID">
 										{{ option.Skill_Name }}
 									</a-select-option>
 								</a-select>
@@ -112,6 +117,7 @@
 	import Vue from "vue";
 	import axios from 'axios';
 	import CardRoleTable from '../components/Cards/CardRoleTable' ;
+	import Alert from '../components/Alert/Alert' ;
 	import { FormModel } from 'ant-design-vue';
 	Vue.use(FormModel);
 	
@@ -229,6 +235,7 @@
 	export default ({
 		components: {
 			CardRoleTable,
+			Alert
 		},
 		data() {
 			return {
@@ -256,7 +263,10 @@
 					department: [{ required: true, message: 'Department is required!'}],
 					description: [{ required: true, message: 'Description is required!'}],
 					skills: [{type:'array', required: true, min: 1, message: 'Please input at least one skill!'}]
-				}
+				},
+				createSuccessVisible: false,
+				createErrorVisible: false,
+				createErrorMessage: ""
 			}
 		},
 		created(){
@@ -276,20 +286,26 @@
 
 				this.$refs.ruleForm.validate(valid => {
 					if (valid) {
-						// this.loading = true;
+						this.loading = true;
 
 						const path = 'http://localhost:5000/createRole';
 						axios.post(path, this.form, 
 							{headers:{"Content-Type" : "application/json"}})
 						.then((res) => {
 							console.log(res)
+      						this.$message.success('Role created successfully!');
+							this.handleCancel();
+							this.visible = false;
 						})
 						.catch((error) => {
 							// eslint-disable-next-line
 							console.log(error);
 							console.error(error.response.data);
+							this.createErrorVisible = true;
+							this.createErrorMessage = error.response.data.message;
 						});
-						// this.visible = false;
+						this.loading = false;
+
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -297,8 +313,11 @@
 				});
 			},
 
-			handleCancel(e) {
+			handleCancel() {
 				this.visible = false;
+				this.createErrorVisible = false;
+				this.createErrorMessage = true;
+				// this.form.skills = [];
       			this.$refs.ruleForm.resetFields();
 			},
 
