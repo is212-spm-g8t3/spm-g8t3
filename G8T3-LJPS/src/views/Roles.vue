@@ -86,8 +86,9 @@
 						</a-row>
 						<a-row>
 							<a-form-model-item label="Skills" prop="skills">
+									<!-- @value="form.skills" -->
 								<a-select
-									@value="form.skills"
+									v-model="form.skills"
 									show-search
 									mode="multiple"
 									style="width: 100%"
@@ -319,6 +320,7 @@
 				this.createErrorMessage = true;
 				// this.form.skills = [];
       			this.$refs.ruleForm.resetFields();
+
 			},
 
 			getAllSkills(){
