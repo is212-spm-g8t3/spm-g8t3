@@ -84,6 +84,7 @@ class job_role(db.Model):
     Job_Role_Name = db.Column(db.String(50), nullable=False)
     Job_Role_Description = db.Column(db.String(255), nullable=False)
     Department = db.Column(db.String(50))
+    Status = db.Column(db.String(20))
     Created_Date  = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
@@ -254,19 +255,17 @@ def get_all_roles():
 def getRolesWithSkills():
     # rolesWithSkills = job_role.query.all()
 
-    # query = db.session.query(job_role, job_role_skills , Skill
-    #     ).filter(job_role.Job_Role_ID == job_role_skills.Job_Role_ID,
-    #             job_role_skills.Job_Role_ID == Skill.Skill_ID).with_entities(Skill.Skill_Name, Skill.Skill_Description)
-    query= ["test"]
+    query = db.session.query(job_role, job_role_skills , Skill
+        ).filter(job_role.Job_Role_ID == job_role_skills.Job_Role_ID,
+                job_role_skills.Skill_ID == Skill.Skill_ID).with_entities(job_role.Job_Role_ID, job_role.Job_Role_Name, job_role.Job_Role_Description, job_role.Department, job_role.Status, Skill.Skill_ID, Skill.Skill_Name)
+    # query= ["test"]
 
     print(query)
 
     return jsonify(
             {
                 "code": 200,
-                "data": {
-                    "roles": [dict(row) for row in query]
-                }
+                "data": [dict(row) for row in query]
             }
         )
 
@@ -306,6 +305,7 @@ def create_role():
         Job_Role_Name = data['name'],
         Job_Role_Description = data['description'],
         Department=data['department'],
+        Status='Active',
         Created_Date=datetime.today().strftime('%Y-%m-%d')
     )
     
