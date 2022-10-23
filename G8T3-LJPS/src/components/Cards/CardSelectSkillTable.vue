@@ -18,13 +18,33 @@
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template slot="Skill_Name" slot-scope="Skill_Name">
+			<template slot="skillDetails" slot-scope="skillDetails">
 				<div class="table-avatar-info">
 					<!-- <a-avatar shape="square" :src="Skill_Name.avatar" /> -->
 					<div class="avatar-info" style="margin-top: 7px">
-						<h6>{{ Skill_Name }}</h6>
+						<!-- <h6>{{ Skill_Name }}</h6> -->
+						<a @click="showModal" type="dark" icon="plus" style="margin-right: 24px" >
+							{{ skillDetails.skillName }}
+						</a>
+
+
 					</div>
 				</div>
+				<template>
+					<div>
+						<a-modal centered v-model="visible" title="Skill Details" @ok="handleOk">
+							<strong>Skill ID: </strong><p style="display: inline;">{{skillDetails.skillId}}</p>
+							<br>
+							<strong>Skill Name: </strong><p style="display: inline;">{{skillDetails.skillName}}</p>
+							<br>
+							<strong>Skill Description: </strong><p style="display: inline;">{{skillDetails.skillDesc}}</p>
+							<br>
+							<strong>Skill Type: </strong><p style="display: inline;">{{skillDetails.skillType}}</p>
+							<br>
+							<strong>Last Updated: </strong><p style="display: inline;">{{skillDetails.lastUpdated}}</p>
+						</a-modal>
+					</div>
+				</template>
 			</template>
 
 			<template slot="func" slot-scope="func">
@@ -43,9 +63,8 @@
 
 			<template slot="cartDetails" slot-scope="cartDetails" >
 				<a-button v-on:click="selectSkill(cartDetails.skillId)" 
-							:disabled="cartDetails.isNotAdded == true ? true : false"
-							:class="cartDetails.isNotAdded == true ? 'ant-tag-muted' : 'ant-tag-primary'">
-					{{ cartDetails.isNotAdded == true ? "Added" : "Select" }}
+							:class="cartDetails.isNotAdded == true ? 'ant-tag-mute' : 'ant-tag-primary'">
+					{{ cartDetails.isNotAdded == true ? "Modify" : "Select" }}
 				</a-button>
 
 			</template>
@@ -60,9 +79,12 @@
 				</a-button>
 			</template>
 
+
+
 		</a-table>
 	</a-card>
 	<!-- / Authors Table Card -->
+
 
 </template>
 
@@ -86,17 +108,48 @@
 			return {
 				// Active button for the "Authors" table's card header radio button group.
 				statusRadioBtn: 'all',
+				visible: false,
 			}
 		},
 
 
 		methods: {
+			showModal() {
+				console.log("opening modal")
+				this.visible = true;
+				console.log(this.visible)
+			},
+
 			selectSkill(skillId){
+
+				//update localStorage variable for skills
+				// localStorage.removeItem('selectedSkills');
+				//TODO: move this to courses
+				let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
+				
+				if (selectedSkills === null){
+					// if selected skills is null then initialise selected skills array.
+					selectedSkills = [skillId]
+					console.log(typeof(selectedSkills))
+				} else if(!selectedSkills.includes(skillId) ){
+					console.log(selectedSkills)
+					console.log(typeof(selectedSkills))
+					selectedSkills.push(skillId)
+				}
+				console.log(selectedSkills)
+				localStorage.setItem('selectedSkills', JSON.stringify(selectedSkills));
+
+
 				this.$route.query.roleId
 				this.$router.push({
-						path: '/select-courses?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
+						path: '/select-course?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
 					});
 			},
+
+			handleOk(e) {
+			console.log(e);
+			this.visible = false;
+			}
 
 		},
 
@@ -111,7 +164,8 @@
 
 			getRoleId: function() {
 
-			}
+			},
+			
 		},
 
 		created() {

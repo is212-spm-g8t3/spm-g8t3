@@ -18,31 +18,49 @@
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template slot="roleName" slot-scope="roleName">
+			<template slot="Job_Role_Name" slot-scope="Job_Role_Name">
 				<div class="table-avatar-info">
-					<a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar>
+					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
 					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
 					<div class="avatar-info" style="margin-top: 7px">
-						<h6>{{ roleName.name }}</h6>
+						<h6>{{ Job_Role_Name }}</h6>
 					</div>
 				</div>
 			</template>
 
-			<template slot="func" slot-scope="func">
+			<template slot="Department" slot-scope="Department">
 				<div class="author-info">
-					<h6 class="m-0">{{ func.department }}</h6>
-					<h6 class="m-0">{{ func.type }}</h6>
-					<p class="m-0 font-regular text-muted">{{ func.job }}</p>
+					<h6 class="m-0">{{ Department }}</h6>
+					<!-- <h6 class="m-0">{{ func.type }}</h6>
+					<p class="m-0 font-regular text-muted">{{ func.job }}</p> -->
 				</div>
 			</template>
 
-			<template slot="status" slot-scope="status">
-				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
-					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
+			<template slot="Status" slot-scope="Status">
+				<a-tag class="tag-status" :class="Status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ Status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
-			<template slot="editBtn" slot-scope="row">
+			<template slot="Skills" slot-scope="Skills">
+				<div class="author-info">
+					<h6 class="m-0">{{ Skills.length }}</h6>
+				</div>
+			</template>
+
+			<template slot="action" slot-scope="row">
+				<span>
+					<a-icon type="eye" :style="{ color: '#87d068' }"/>
+					<a-icon type="edit" :style="{ color: '#1890FF' }"/>
+					<a-icon type="delete" :style="{color: '#F5222D'}" />
+				</span>
+				<!-- <span>
+					<a-button shape="circle"  icon="eye" :style="{ color: '#87d068' }"/>
+					<a-button shape="circle"  icon="edit"/>
+					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
+				</span> -->
+
+
 				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key])">
 					Edit
 				</a-button>
