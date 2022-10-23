@@ -168,13 +168,13 @@ import { SlowBuffer } from 'buffer';
 const table1Columns = [
 	{
 		title: 'NAME',
-		dataIndex: 'roleName',
-		scopedSlots: { customRender: 'roleName' },
+		dataIndex: 'Job_Role_Name',
+		scopedSlots: { customRender: 'Job_Role_Name' },
 	},
 	{
 		title: 'Type',
-		dataIndex: 'func',
-		scopedSlots: { customRender: 'func' },
+		dataIndex: 'Department',
+		scopedSlots: { customRender: 'Department' },
 	},
 	{
 		title: 'STATUS',
@@ -188,7 +188,7 @@ const table1Columns = [
 	},
 	{
 		title: '',
-		scopedSlots: { customRender: 'editBtn' },
+		scopedSlots: { customRender: 'action' },
 		width: 50,
 	},
 ];
@@ -260,22 +260,18 @@ export default ({
 						var template = {
 							key: '',
 							skillID: 0,
-							roleName: {
-								name: '',
-							},
+							Job_Role_Name: '',
 							description : '',
-							func: {
-								type: '',
-							},
+							Department: '',
 							status: '',
 							created: '',
 						}
 						let skillData = response[i];
 						template.key = i;
 						template.skillID = skillData.Skill_ID
-						template.roleName.name = skillData.Skill_Name;
+						template.Job_Role_Name = skillData.Skill_Name;
 						template.description = skillData.Skill_Description;
-						template.func.type = skillData.Skill_Type;
+						template.Department = skillData.Skill_Type;
 						template.status = skillData.Status;
 						template.created = new Date(skillData.Created_Date).toLocaleDateString();
 						this.table1Data.push(template);
@@ -352,8 +348,8 @@ export default ({
 		updateModalRecord(value) {
 			// console.log(value);
 			this.updateForm.id = value.skillID;
-			this.updateForm.name = value.roleName.name;
-			this.updateForm.type = value.func.type;
+			this.updateForm.name = value.Job_Role_Name;
+			this.updateForm.type = value.Department;
 			this.updateForm.description = value.description;
 			this.updateForm.status = value.status
 			this.isVisibleUpdate = true;
@@ -386,7 +382,7 @@ export default ({
 							if (response.data.code == 201) {
 								message.success(response.data.message, 10);
 								this.handleUpdateCancel();
-								window.location.reload();
+								location.reload();
 							}
 
 						})

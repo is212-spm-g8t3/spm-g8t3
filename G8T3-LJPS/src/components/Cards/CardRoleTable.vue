@@ -20,7 +20,7 @@
 
 			<template slot="Job_Role_Name" slot-scope="Job_Role_Name">
 				<div class="table-avatar-info">
-					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
+					<a-avatar shape="square" style="background-color: #595959;"> {{Job_Role_Name.match(/\b(\w)/g).join('')}}</a-avatar>
 					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
 					<div class="avatar-info" style="margin-top: 7px">
 						<h6>{{ Job_Role_Name }}</h6>
