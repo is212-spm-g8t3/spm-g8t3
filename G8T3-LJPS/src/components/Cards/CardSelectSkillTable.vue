@@ -63,9 +63,8 @@
 
 			<template slot="cartDetails" slot-scope="cartDetails" >
 				<a-button v-on:click="selectSkill(cartDetails.skillId)" 
-							:disabled="cartDetails.isNotAdded == true ? true : false"
-							:class="cartDetails.isNotAdded == true ? 'ant-tag-muted' : 'ant-tag-primary'">
-					{{ cartDetails.isNotAdded == true ? "Added" : "Select" }}
+							:class="cartDetails.isNotAdded == true ? 'ant-tag-mute' : 'ant-tag-primary'">
+					{{ cartDetails.isNotAdded == true ? "Modify" : "Select" }}
 				</a-button>
 
 			</template>
@@ -122,6 +121,25 @@
 			},
 
 			selectSkill(skillId){
+
+				//update localStorage variable for skills
+				// localStorage.removeItem('selectedSkills');
+				//TODO: move this to courses
+				let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
+				
+				if (selectedSkills === null){
+					// if selected skills is null then initialise selected skills array.
+					selectedSkills = [skillId]
+					console.log(typeof(selectedSkills))
+				} else if(!selectedSkills.includes(skillId) ){
+					console.log(selectedSkills)
+					console.log(typeof(selectedSkills))
+					selectedSkills.push(skillId)
+				}
+				console.log(selectedSkills)
+				localStorage.setItem('selectedSkills', JSON.stringify(selectedSkills));
+
+
 				this.$route.query.roleId
 				this.$router.push({
 						path: '/select-courses?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
