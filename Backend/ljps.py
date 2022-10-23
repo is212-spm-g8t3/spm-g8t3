@@ -382,6 +382,35 @@ def get_all_skills():
         }
     )
 
+#get skills by role ID
+@app.route("/skills-by-role", methods=['GET'])
+def get_skills_by_role():
+    roleId = request.args.get('roleId')
+
+    skills=db.session.query(Skill
+    ).join(job_role_skills
+    ).filter(job_role_skills.Job_Role_ID==roleId
+    ).filter(job_role_skills.Skill_ID==Skill.Skill_ID
+    ).all()
+
+    if len(skills):
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [skill.json() for skill in skills]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no skills."
+        }
+    )
+
+
 @app.route("/skills/addNewSkill", methods=['POST'])
 def addNewSkill():
     # Convert JSON string into JSON object

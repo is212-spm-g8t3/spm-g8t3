@@ -8,7 +8,7 @@
 		<!-- Title -->
 		<a-row :gutter="24">
 			<a-col :span="24" :md="12" class="mb-12">
-				<h3 style="margin-left: 12px">Skill Selection</h3>
+				<h3 style="margin-left: 12px">Skill Selection - {{ roleName }}</h3>
 			</a-col>
 			<a-col :span="24" :md="12" class="mb-12" style="display: flex; align-items: center; justify-content: flex-end">
 			</a-col>
@@ -49,8 +49,8 @@ import { SlowBuffer } from 'buffer';
 	const skillCols = [
 		{
 			title: 'SKILL NAME',
-			dataIndex: 'Skill_Name',
-			scopedSlots: { customRender: 'Skill_Name' },
+			dataIndex: 'skillDetails',
+			scopedSlots: { customRender: 'skillDetails' },
 		},
 		{
 			title: 'SKILL DESCRIPTION',
@@ -95,6 +95,7 @@ import { SlowBuffer } from 'buffer';
 				table1Columns: skillCols,
 				visible: false,
 				titleName: "Skills",
+				roleName: "",
 
 				
 			}
@@ -114,7 +115,23 @@ import { SlowBuffer } from 'buffer';
 						for (let skill of this.skillsData){
 							skill.cartDetails = {}
 							skill.cartDetails.skillId = skill.Skill_ID
-							skill.cartDetails.isNotAdded = false
+
+							//check if skill has been added to cart
+							let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
+							if (selectedSkills.includes(skill.Skill_ID)){
+								skill.cartDetails.isNotAdded = true
+							}else{
+								skill.cartDetails.isNotAdded = false
+							}
+
+							//for skill details display
+							skill.skillDetails = {}
+							skill.skillDetails.skillId = skill.Skill_ID
+							skill.skillDetails.skillName = skill.Skill_Name
+							skill.skillDetails.skillDesc = skill.Skill_Description
+							skill.skillDetails.skillType = skill.Skill_Type
+							skill.skillDetails.lastUpdated = skill.Created_Date
+
 						}
 						console.log(this.skillsData)
 					})
@@ -124,36 +141,37 @@ import { SlowBuffer } from 'buffer';
 					});
                     
 			},
+			getRoleName(){
+                //get selected role name
+				const path = 'http://localhost:5000/roles';
+				axios.get(path)
+					.then((res) => {
+						let roles = res.data.data.roles
+						for (let role of roles){
+							if (this.$route.query.roleId == role.Job_Role_ID){
+								this.roleName = role.Job_Role_Name
+								break
+							}
+						}
+						console.log(this.roleName)
 
-            // getSkills() {
-			// const path = 'http://localhost:5000/skills';
-			// axios.get(path)
-			// 	.then((res) => {
-			// 		this.skillsData = res.data.data.skills
-			// 		console.log(this.skillsData)
-			// 		for (let skill of this.skillsData){
-			// 			skill.cartDetails = {}
-			// 			skill.cartDetails.skillId = skill.Skill_ID
-			// 			skill.cartDetails.isNotAdded = false
-			// 		}
-			// 		console.log(this.skillsData)
-			// 	})
-			// 	.catch((error) => {
-			// 	// eslint-disable-next-line
-			// 	console.error(error);
-			// 	});
-			// },
+					})
+					.catch((error) => {
+					// eslint-disable-next-line
+					console.error(error);
+					});
+                    
+			},
+
 			handleOk(e) {
 			console.log(e);
 			this.visible = false;
 			}
 
-			//TODO: Show skills related to selected role.
-
-			//TODO: Show attained and not attained skills. (show status)
 		},
 	created() {
     	this.getSkillsByRole();
+		this.getRoleName();
   	},
 	})
 
