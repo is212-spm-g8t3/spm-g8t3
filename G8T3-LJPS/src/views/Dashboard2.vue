@@ -37,7 +37,7 @@
 		</a-row>
 		<!-- / Title -->
 
-		<!-- Table & Timeline -->
+		<!-- Table &  Timeline -->
 		<a-row :gutter="24" type="flex" align="stretch">
 			<!-- Table -->
 			<a-col :span="24" :lg="24" class="mb-24">
