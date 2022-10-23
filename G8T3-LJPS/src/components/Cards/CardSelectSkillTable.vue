@@ -142,7 +142,7 @@
 
 				this.$route.query.roleId
 				this.$router.push({
-						path: '/select-courses?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
+						path: '/select-course?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
 					});
 			},
 
