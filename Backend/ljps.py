@@ -259,7 +259,7 @@ def get_farming(course):
         }
     )
 
-@app.route("/getCoursesBySkill/<skill_id>", methods=['GET'])
+@app.route("/getCoursesBySkillId/<skill_id>", methods=['GET'])
 def getCoursesBySkill(skill_id):
     query = db.session.query(course_skills, Courses_Catalog
         ).filter(course_skills.Skill_ID == skill_id,
@@ -279,6 +279,26 @@ def getCoursesBySkill(skill_id):
         {
             "code": 404,
             "message": "Course not found."
+        }
+    )
+
+## Roles Related Functions
+@app.route("/roles", methods=['GET'])
+def get_all_roles():
+    roles = job_role.query.all()
+    if len(roles):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": [role.json() for role in roles]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no roles."
         }
     )
 

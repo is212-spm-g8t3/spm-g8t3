@@ -135,7 +135,7 @@
             viewCourse(skill) {
                 this.selectedSkill = skill;
                 this.courseData = [];
-                const learningJourneyURL = 'http://localhost:5000/getCoursesBySkill/' + this.selectedSkill.Skill_ID;
+                const learningJourneyURL = 'http://localhost:5000/getCoursesBySkillId/' + this.selectedSkill.Skill_ID;
                 axios.get(learningJourneyURL)
                     .then((res) => {
                         for (let course of res.data.data.courses) {
