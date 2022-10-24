@@ -32,7 +32,13 @@
 					:titleName="titleName"
 					:data="rolesData"
 					:columns="table1Columns"
-				></CardRoleTable>
+					page="roles"
+				>
+				
+			
+
+				
+				</CardRoleTable>
 					<!-- @updateRecord="updateModalRecord" -->
 			</a-col>
 
@@ -429,7 +435,7 @@
 		{
 			title: 'STATUS',
 			dataIndex: 'Status',
-			scopedSlots: { customRender: 'Status' },
+			scopedSlots: { customRender: 'status' },
 		},
 		{
 			title: 'SKILLS COUNT',
@@ -589,7 +595,7 @@
 									"key": each_row.Job_Role_ID,
 									"Job_Role_ID": each_row.Job_Role_ID,
 									"Job_Role_Name": each_row.Job_Role_Name,
-									"Job_Role_Description": each_row.Job_Role_Description,
+									"description": each_row.Job_Role_Description,
 									"Department": each_row.Department,
 									"Status": each_row.Status,
 									"Skills": [{

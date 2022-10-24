@@ -18,7 +18,7 @@
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template slot="Job_Role_Name" slot-scope="Job_Role_Name">
+			<template v-if="page=='roles'" slot="Job_Role_Name" slot-scope="Job_Role_Name">
 				<div class="table-avatar-info">
 					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
 					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
@@ -28,7 +28,17 @@
 				</div>
 			</template>
 
-			<template slot="Department" slot-scope="Department">
+			<template v-if="page=='skills'" slot="roleName" slot-scope="roleName">
+				<div class="table-avatar-info">
+					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
+					<div class="avatar-info" style="margin-top: 7px">
+						<h6>{{ roleName.name }}</h6>
+					</div>
+				</div>
+			</template>
+
+			<template v-if="page=='roles'" slot="Department" slot-scope="Department">
 				<div class="author-info">
 					<h6 class="m-0">{{ Department }}</h6>
 					<!-- <h6 class="m-0">{{ func.type }}</h6>
@@ -36,13 +46,23 @@
 				</div>
 			</template>
 
-			<template slot="Status" slot-scope="Status">
-				<a-tag class="tag-status" :class="Status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
-					{{ Status == 'Active' ? "ACTIVE" : "INACTIVE" }}
+			<template v-if="page=='skills'" slot="func" slot-scope="func">
+				<div class="table-avatar-info">
+					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
+					<div class="avatar-info" style="margin-top: 7px">
+						<h6>{{ func.type }}</h6>
+					</div>
+				</div>
+			</template>
+
+			<template slot="status" slot-scope="status">
+				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
-			<template slot="Skills" slot-scope="Skills">
+			<template v-if="page=='roles'" slot="Skills" slot-scope="Skills">
 				<div class="author-info">
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
@@ -71,11 +91,14 @@
 			</template>
 
 			<div slot="expandedRowRender" slot-scope="record" style="margin: 0">
-				{{ record.Job_Role_Description }}<br><br>
-				<h6>SKILLS</h6>
-				<ul>
-					<li v-for="(each_skill, index) in record.Skills" :key="index">{{each_skill.Skill_Name}}</li>
-				</ul>
+				{{ record.description }}<br><br>
+				<div v-if="page=='roles'">
+
+					<h6>SKILLS</h6>
+					<ul>
+						<li v-for="(each_skill, index) in record.Skills" :key="index">{{each_skill.Skill_Name}}</li>
+					</ul>
+				</div>
 			</div>
 
 		</a-table>
@@ -100,7 +123,15 @@ export default ({
 		titleName: {
 			type: String,
 			default: ""
+		},
+		page: {
+			type: String,
+			default: ""
 		}
+	},
+	create(){
+		console.log(this.page)
+		console.log(page)
 	},
 	data() {
 		return {
