@@ -237,6 +237,7 @@ def get_courses_by_skill(skillID):
 
 @app.route("/getCourseSkills/<course>", methods=['GET'])
 def get_farming(course):
+    print(course)
     query = db.session.query(course_skills, Skill, Courses_Catalog
         ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
                 course_skills.Skill_ID == Skill.Skill_ID,

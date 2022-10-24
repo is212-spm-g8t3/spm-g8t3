@@ -66,6 +66,12 @@ let routes = [
 		component: () => import('../views/Skills.vue'),
 	},
 	{
+		path: '/courses',
+		name: 'Tables',
+		layout: "dashboard",
+		component: () => import('../views/Courses.vue'),
+	},
+	{
 		path: '/select-skills',
 		name: 'Tables',
 		layout: "dashboard",

@@ -68,17 +68,18 @@
 				</div>
 			</template>
 
-			<template slot="action" slot-scope="row" :style="{display: 'flex'}">
-				<!-- <span>
-					<a-icon class="editIcon" type="edit"/>
-					<a-icon class="deleteIcon" type="delete"/>
-				</span> -->
+			<template slot="Type" slot-scope="type">
+				<div class="author-info">
+					<h6 class="m-0">{{ Skills.length }}</h6>
+				</div>
+			</template>
 
-				<a-row>
-					<a-col><a-icon class="editIcon" type="edit"/></a-col>
-					<a-col><a-icon class="deleteIcon" type="delete"/></a-col>
-
-				</a-row>
+			<template slot="action" slot-scope="row">
+				<span>
+					<a-icon type="eye" :style="{ color: '#87d068' }"/>
+					<a-icon type="edit" :style="{ color: '#1890FF' }"/>
+					<a-icon type="delete" :style="{color: '#F5222D'}" />
+				</span>
 				<!-- <span>
 					<a-button shape="circle"  icon="edit"/>
 					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
