@@ -42,10 +42,10 @@
 								<path d="M14 9C13.4477 9 13 9.44771 13 10V16C13 16.5523 13.4477 17 14 17H16C16.5523 17 17 16.5523 17 16V10C17 9.44771 16.5523 9 16 9H14Z" fill="#111827"/>
 							</svg>
 						</span>
-						<span class="label">Dashboard2</span>
+						<span class="label">Browse</span>
 					</router-link>
 				</a-menu-item>
-				<a-menu-item>
+				<!-- <a-menu-item>
 					<router-link to="/tables">
 						<span class="icon">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +66,7 @@
 						</span>
 						<span class="label">Billing</span>
 					</router-link>
-				</a-menu-item>
+				</a-menu-item> -->
 				<a-menu-item class="menu-item-header">
 					Management
 				</a-menu-item>
@@ -92,7 +92,7 @@
 						<span class="label">Skills</span>
 					</router-link>
 				</a-menu-item>
-				<a-menu-item>
+				<!-- <a-menu-item>
 					<router-link to="/profile">
 						<span class="icon">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +133,7 @@
 						</span>
 						<span class="label">Sign Up</span>
 					</router-link>
-				</a-menu-item>
+				</a-menu-item> -->
 			</a-menu>
 			<!-- / Sidebar Navigation Menu -->
 
