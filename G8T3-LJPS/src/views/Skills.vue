@@ -30,6 +30,7 @@
 					:data="table1Data"
 					:columns="table1Columns"
 					@updateRecord="updateModalRecord"
+					page="skills"
 				></CardRoleTable>
 				<!-- / Authors Table Card -->
 
@@ -187,7 +188,7 @@ const table1Columns = [
 		class: 'text-muted',
 	},
 	{
-		title: '',
+		title: 'ACTIONS',
 		scopedSlots: { customRender: 'action' },
 		width: 50,
 	},
