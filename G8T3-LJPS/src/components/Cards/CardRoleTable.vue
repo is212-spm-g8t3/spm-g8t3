@@ -18,7 +18,7 @@
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template v-if="page=='roles'" slot="Job_Role_Name" slot-scope="Job_Role_Name">
+			<template slot="Job_Role_Name" slot-scope="Job_Role_Name">
 				<div class="table-avatar-info">
 					<a-avatar shape="square" style="background-color: #595959;"> {{Job_Role_Name.match(/\b(\w)/g).join('')}}</a-avatar>
 					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
@@ -27,7 +27,7 @@
 					</div>
 				</div>
 			</template>
-
+			
 			<template v-if="page=='skills'" slot="roleName" slot-scope="roleName">
 				<div class="table-avatar-info">
 					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
@@ -38,7 +38,7 @@
 				</div>
 			</template>
 
-			<template v-if="page=='roles'" slot="Department" slot-scope="Department">
+			<template  slot="Department" slot-scope="Department">
 				<div class="author-info">
 					<h6 class="m-0">{{ Department }}</h6>
 					<!-- <h6 class="m-0">{{ func.type }}</h6>
