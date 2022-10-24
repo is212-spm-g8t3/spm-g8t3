@@ -9,45 +9,97 @@
 				</a-col>
 				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 					<a-radio-group v-model="statusRadioBtn" size="small">
-						<a-radio-button value="all">ALL</a-radio-button>
-						<a-radio-button value="active">ACTIVE</a-radio-button>
-						<a-radio-button value="inactive">INACTIVE</a-radio-button>
+						<a-radio-button value="All">ALL</a-radio-button>
+						<a-radio-button value="Active">ACTIVE</a-radio-button>
+						<a-radio-button value="Inactive">INACTIVE</a-radio-button>
 					</a-radio-group>
 				</a-col>
 			</a-row>
 		</template>
 		<a-table :columns="columns" :data-source="dataFilteredStatus" :pagination="true">
 
-			<template slot="roleName" slot-scope="roleName">
+			<template v-if="page=='roles'" slot="Job_Role_Name" slot-scope="Job_Role_Name">
 				<div class="table-avatar-info">
-					<a-avatar shape="square" :src="roleName.avatar" />
+					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
+					<div class="avatar-info" style="margin-top: 7px">
+						<h6>{{ Job_Role_Name }}</h6>
+					</div>
+				</div>
+			</template>
+
+			<template v-if="page=='skills'" slot="roleName" slot-scope="roleName">
+				<div class="table-avatar-info">
+					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
 					<div class="avatar-info" style="margin-top: 7px">
 						<h6>{{ roleName.name }}</h6>
 					</div>
 				</div>
 			</template>
 
-			<template slot="func" slot-scope="func">
+			<template v-if="page=='roles'" slot="Department" slot-scope="Department">
 				<div class="author-info">
-					<h6 class="m-0">{{ func.department }}</h6>
-					<p class="m-0 font-regular text-muted">{{ func.job }}</p>
+					<h6 class="m-0">{{ Department }}</h6>
+					<!-- <h6 class="m-0">{{ func.type }}</h6>
+					<p class="m-0 font-regular text-muted">{{ func.job }}</p> -->
+				</div>
+			</template>
+
+			<template v-if="page=='skills'" slot="func" slot-scope="func">
+				<div class="table-avatar-info">
+					<!-- <a-avatar shape="square" style="background-color: #595959;"> {{roleName.name.match(/\b(\w)/g).join('')}}</a-avatar> -->
+					<!-- <a-avatar shape="square" :src="roleName.avatar" /> -->
+					<div class="avatar-info" style="margin-top: 7px">
+						<h6>{{ func.type }}</h6>
+					</div>
 				</div>
 			</template>
 
 			<template slot="status" slot-scope="status">
-				<a-tag class="tag-status" :class="status == 'active' ? 'ant-tag-success' : 'ant-tag-muted'">
-					{{ status == 'active' ? "ACTIVE" : "INACTIVE" }}
+				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
-			<template slot="editBtn" slot-scope="row">
-				<a-button type="link" :data-id="row.key">
-					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path class="fill-gray-7" d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L15.6213 7.20711L12.7929 4.37868L13.5858 3.58579Z"/>
-						<path class="fill-gray-7" d="M11.3787 5.79289L3 14.1716V17H5.82842L14.2071 8.62132L11.3787 5.79289Z"/>
-					</svg>
+			<template v-if="page=='roles'" slot="Skills" slot-scope="Skills">
+				<div class="author-info">
+					<h6 class="m-0">{{ Skills.length }}</h6>
+				</div>
+			</template>
+
+			<template slot="action" slot-scope="row" :style="{display: 'flex'}">
+				<!-- <span>
+					<a-icon class="editIcon" type="edit"/>
+					<a-icon class="deleteIcon" type="delete"/>
+				</span> -->
+
+				<a-row>
+					<a-col><a-icon class="editIcon" type="edit"/></a-col>
+					<a-col><a-icon class="deleteIcon" type="delete"/></a-col>
+
+				</a-row>
+				<!-- <span>
+					<a-button shape="circle"  icon="edit"/>
+					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
+				</span> -->
+
+
+				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key])">
+					Edit
 				</a-button>
 			</template>
+
+			<div slot="expandedRowRender" slot-scope="record" style="margin: 0">
+				{{ record.description }}<br><br>
+				<div v-if="page=='roles'">
+
+					<h6>SKILLS</h6>
+					<ul>
+						<li v-for="(each_skill, index) in record.Skills" :key="index">{{each_skill.Skill_Name}}</li>
+					</ul>
+				</div>
+			</div>
 
 		</a-table>
 	</a-card>
@@ -56,37 +108,65 @@
 </template>
 
 <script>
+import structuredClone from '@ungap/structured-clone';
 
-	export default ({
-		props: {
-			data: {
-				type: Array,
-				default: () => [],
-			},
-			columns: {
-				type: Array,
-				default: () => [],
-			},
-			titleName: {
-				type: String,
-				default: ""
-			}
+export default ({
+	props: {
+		data: {
+			type: Array,
+			default: () => [],
 		},
-		data() {
-			return {
-				// Active button for the "Authors" table's card header radio button group.
-				statusRadioBtn: 'all',
-			}
+		columns: {
+			type: Array,
+			default: () => [],
 		},
-
-		computed: {
-			dataFilteredStatus: function() {
-				if (this.statusRadioBtn != 'all') {
-					return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
-				}
-				return this.data
-			}
+		titleName: {
+			type: String,
+			default: ""
+		},
+		page: {
+			type: String,
+			default: ""
 		}
-	})
+	},
+	create(){
+		console.log(this.page)
+		console.log(page)
+	},
+	data() {
+		return {
+			// Active button for the "Authors" table's card header radio button group.
+			statusRadioBtn: 'All',
+			colorList: []
+		}
+	},
+
+	computed: {
+		dataFilteredStatus: function() {
+			if (this.statusRadioBtn != 'All') {
+				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
+			}
+			return this.data
+		}
+	},
+
+	methods: {
+		updateRoles(currentRowData) {
+			this.$emit('updateRecord', structuredClone(currentRowData))
+		},
+	},
+})
 
 </script>
+
+<style scoped>
+	.editIcon :hover {
+		color: #1890FF;
+		cursor: pointer;
+	}
+
+	.deleteIcon :hover {
+		color: #F5222D;
+		cursor: pointer;
+	}
+</style>

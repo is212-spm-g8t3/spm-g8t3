@@ -84,6 +84,7 @@ class job_role(db.Model):
     Job_Role_Name = db.Column(db.String(50), nullable=False)
     Job_Role_Description = db.Column(db.String(255), nullable=False)
     Department = db.Column(db.String(50))
+    Status = db.Column(db.String(20))
     Created_Date  = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
@@ -94,6 +95,11 @@ class job_role(db.Model):
         self.Department = Department
         self.Created_Date = Created_Date
 
+    def json(self):
+        # return {"Role_ID": self.Job_Role_ID, "Role_Name": self.Job_Role_Name, "Role_Description": self.Job_Role_Description}
+
+        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description, "Department": self.Department, "Created_Date": self.Created_Date}
+
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
 
@@ -103,6 +109,9 @@ class job_role_skills(db.Model):
     def __init__(self, Job_Role_ID, Skill_ID):
         self.Job_Role_ID = Job_Role_ID
         self.Skill_ID = Skill_ID
+    
+    def json(self):
+        return {"Role_ID": self.Job_Role_ID, "Skill_ID": self.Skill_ID}
 
 class system_role(db.Model):
     __tablename__ = 'system_role'
@@ -188,6 +197,34 @@ def get_all_courses():
                 "code": 200,
                 "data": {
                     "courseCatalog": [course.json() for course in catalog]
+                    # "courseCatalog": [dict(row) for row in catalog]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no courses."
+        }
+    )
+
+# Get courses based on selected skill
+@app.route("/getCoursesBySkill/<skillID>", methods=['GET'])
+def get_courses_by_skill(skillID):
+
+    courses = db.session.query(Courses_Catalog
+    ).join(course_skills
+    ).filter(course_skills.Skill_ID == skillID
+    ).filter(course_skills.Course_ID == Courses_Catalog.Course_ID
+    ).filter(Courses_Catalog.Course_Status == "Active"
+    ).all()
+
+    if len(courses):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "courseCatalog": [course.json() for course in courses]
                 }
             }
         )
@@ -222,6 +259,137 @@ def get_farming(course):
         }
     )
 
+## Roles Related Functions
+@app.route("/roles", methods=['GET'])
+def get_all_roles():
+    roles = job_role.query.all()
+    if len(roles):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": [role.json() for role in roles]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no roles."
+        }
+    )
+
+@app.route("/getRolesWithSkills", methods=['GET'])
+def getRolesWithSkills():
+    # rolesWithSkills = job_role.query.all()
+
+    query = db.session.query(job_role, job_role_skills , Skill
+        ).filter(job_role.Job_Role_ID == job_role_skills.Job_Role_ID,
+                job_role_skills.Skill_ID == Skill.Skill_ID).with_entities(job_role.Job_Role_ID, job_role.Job_Role_Name, job_role.Job_Role_Description, job_role.Department, job_role.Status, Skill.Skill_ID, Skill.Skill_Name)
+    # query= ["test"]
+
+    print(query)
+
+    return jsonify(
+            {
+                "code": 200,
+                "data": [dict(row) for row in query]
+            }
+        )
+
+    # if len(rolesWithSkills):
+    #     return jsonify(
+    #         {
+    #             "code": 200,
+    #             "data": {
+    #                 "roles": [role.json() for role in roles]
+    #             }
+    #         }
+    #     )
+    # return jsonify(
+    #     {
+    #         "code": 404,
+    #         "message": "There are no roles."
+    #     }
+    # )
+
+@app.route('/createRole', methods=['POST'])
+def create_role():
+    data = request.get_json()
+    print(data)
+
+    # to verify if Role is unique by checking role name
+    if (job_role.query.filter_by(Job_Role_Name=data['name']).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "message": "Role already exists. Please create another role."
+            }
+        ), 400 
+    
+    # Initialize new job_role class
+    newRole = job_role(
+        Job_Role_ID=0,
+        Job_Role_Name = data['name'],
+        Job_Role_Description = data['description'],
+        Department=data['department'],
+        Status='Active',
+        Created_Date=datetime.today().strftime('%Y-%m-%d')
+    )
+    
+    try:
+        db.session.add(newRole)
+        db.session.commit()
+
+        newRoleID_row = job_role.query.filter_by(Job_Role_Name=data['name']).with_entities(job_role.Job_Role_ID).one()
+               
+        if newRoleID_row == None:
+            return jsonify(
+                    {
+                        "code": 500,
+                        "message": "There is no role ID associated with the role you are creating."
+                    }
+                ), 500
+
+        newRoleID = newRoleID_row[0]
+
+        newSkills = data['skills']
+        print(newSkills)
+        for eachSkill in newSkills:
+            newJobRoleSkill = job_role_skills(
+                Job_Role_ID=newRoleID,
+                Skill_ID=eachSkill
+            )
+
+            try:
+                db.session.add(newJobRoleSkill)
+                db.session.commit()
+
+            except Exception as e:
+                return jsonify(
+                        {
+                            "code": 500,
+                            "message": "An error occurred while creating a new role with skill associated. " + str(e)
+                        }
+                    ), 500
+                
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new role. " + str(e) + "."
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new role!'
+        }
+    ), 201
+
+
+
 ## Skills Related Functions
 @app.route("/skills", methods=['GET'])
 def get_all_skills():
@@ -242,8 +410,37 @@ def get_all_skills():
         }
     )
 
+#get skills by role ID
+@app.route("/skills-by-role", methods=['GET'])
+def get_skills_by_role():
+    roleId = request.args.get('roleId')
+
+    skills=db.session.query(Skill
+    ).join(job_role_skills
+    ).filter(job_role_skills.Job_Role_ID==roleId
+    ).filter(job_role_skills.Skill_ID==Skill.Skill_ID
+    ).all()
+
+    if len(skills):
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [skill.json() for skill in skills]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no skills."
+        }
+    )
+
+
 @app.route("/skills/addNewSkill", methods=['POST'])
-def addnNewSkill():
+def addNewSkill():
     # Convert JSON string into JSON object
     # data = json.loads(request.get_json())
 
@@ -252,7 +449,6 @@ def addnNewSkill():
 
     # to verify if Skill_ID is unique
     if (Skill.query.filter_by(Skill_Name = data["name"].title()).first()):
-        print("Hey exist la")
         return jsonify(
             {
                 "code": 400,
@@ -260,7 +456,7 @@ def addnNewSkill():
             }
         ), 400 
     
-    # Initialize Menu class
+    # Initialize Skill class
     newSkill = Skill(
         Skill_ID = 0,
         Skill_Name = data['name'].title(),
@@ -358,7 +554,7 @@ def createLearningJourney():
     try:
         db.session.add(newLearningJourney)
         db.session.commit()
-        
+    
     except Exception as e:
         return jsonify(
             {
@@ -373,6 +569,66 @@ def createLearningJourney():
             "message": 'Successfully added a new learning journey!'
         }
     ), 201
+        
+@app.route("/skills/updateSkill", methods=['POST'])
+def updateSkill():
+    # Convert JSON string into JSON object
+    # data = json.loads(request.get_json())
+
+    # Convert JSON to object
+    data = json.loads(request.get_json()["skillFormData"])
+    print(data)
+
+    # Get existing data
+    dbSkillData = Skill.query.get(data["id"])
+
+    # If different skill name, check if skill name exists
+    if data['name'] != dbSkillData.Skill_Name:
+        # to verify if Skill_ID is unique
+        if (Skill.query.filter_by(Skill_Name = data["name"].title()).first()):
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "This name already exists, please try another one."
+                }
+            ), 400 
+
+    # Check if the rest is the same, if same return message
+    if data['type'] == dbSkillData.Skill_Type and data['description'] == dbSkillData.Skill_Description and data['status'] == dbSkillData.Status:
+        return jsonify(
+            {
+                "code": 400,
+                "message": "No changes has been made."
+            }
+        ), 400 
+    
+    # Do the update
+    if data['type'] != dbSkillData.Skill_Type:
+        dbSkillData.Skill_Type = data['type']
+    
+    if data['description'] != dbSkillData.Skill_Description:
+        dbSkillData.Skill_Description = data['description']
+
+    if data['status'] != dbSkillData.Status:
+        dbSkillData.Status = data['status']
+    
+    try:
+        db.session.commit()
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while updating skill. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Updated successfully'
+        }
+    ), 201    
 
 @app.route("/learningJourney/createLearningJourneySkill", methods=['POST'])
 def createLearningJourneySkill():
@@ -460,6 +716,7 @@ def createLearningJourneyCourse():
             "message": 'Successfully added a new learning journey!'
         }
     ), 201
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
