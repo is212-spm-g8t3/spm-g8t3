@@ -48,14 +48,18 @@
 				</div>
 			</template>
 
-			<template slot="action" slot-scope="row">
-				<span>
-					<a-icon type="eye" :style="{ color: '#87d068' }"/>
-					<a-icon type="edit" :style="{ color: '#1890FF' }"/>
-					<a-icon type="delete" :style="{color: '#F5222D'}" />
-				</span>
+			<template slot="action" slot-scope="row" :style="{display: 'flex'}">
 				<!-- <span>
-					<a-button shape="circle"  icon="eye" :style="{ color: '#87d068' }"/>
+					<a-icon class="editIcon" type="edit"/>
+					<a-icon class="deleteIcon" type="delete"/>
+				</span> -->
+
+				<a-row>
+					<a-col><a-icon class="editIcon" type="edit"/></a-col>
+					<a-col><a-icon class="deleteIcon" type="delete"/></a-col>
+
+				</a-row>
+				<!-- <span>
 					<a-button shape="circle"  icon="edit"/>
 					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
 				</span> -->
@@ -65,6 +69,14 @@
 					Edit
 				</a-button>
 			</template>
+
+			<div slot="expandedRowRender" slot-scope="record" style="margin: 0">
+				{{ record.Job_Role_Description }}<br><br>
+				<h6>SKILLS</h6>
+				<ul>
+					<li v-for="(each_skill, index) in record.Skills" :key="index">{{each_skill.Skill_Name}}</li>
+				</ul>
+			</div>
 
 		</a-table>
 	</a-card>
@@ -115,3 +127,15 @@ export default ({
 })
 
 </script>
+
+<style scoped>
+	.editIcon :hover {
+		color: #1890FF;
+		cursor: pointer;
+	}
+
+	.deleteIcon :hover {
+		color: #F5222D;
+		cursor: pointer;
+	}
+</style>

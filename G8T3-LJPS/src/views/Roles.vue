@@ -569,6 +569,7 @@
 		created(){
 			this.getAllSkills();
 			this.getRolesData();
+			console.log(this.rolesData)
 		},
 		methods: {
 			showModal() {
