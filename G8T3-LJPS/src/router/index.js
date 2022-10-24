@@ -12,16 +12,25 @@ let routes = [
 	{
 		path: '/',
 		name: 'Home',
-		redirect: '/dashboard',
+		redirect: '/learning-journey',
 	},
 	{
-		path: '/dashboard',
-		name: 'Dashboard',
+		path: '/learning-journey',
+		name: 'Learning-Journey',
 		layout: "dashboard",
 		// route level code-splitting
 		// this generates a separate chunk (about.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
-		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+		component: () => import(/* webpackChunkName: "dashboard" */ '../views/LearningJourney.vue'),
+	},
+	{
+		path: '/learning-journey-role',
+		name: 'Learning-Journey-Role',
+		layout: "dashboard",
+		// route level code-splitting
+		// this generates a separate chunk (about.[hash].js) for this route
+		// which is lazy-loaded when the route is visited.
+		component: () => import(/* webpackChunkName: "dashboard" */ '../views/LearningJourneyRole.vue'),
 	},
 	{
 		path: '/dashboard2',

@@ -80,7 +80,7 @@
 			<a-col :span="24" :xl="10" class="mb-24">
 
 				<!-- Information Card 2 -->
-				<CardInfo2></CardInfo2>
+				
 				<!-- / Information Card 2 -->
 
 			</a-col>
