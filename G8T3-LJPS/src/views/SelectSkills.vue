@@ -117,12 +117,16 @@ import { SlowBuffer } from 'buffer';
 							skill.cartDetails.skillId = skill.Skill_ID
 
 							//check if skill has been added to cart
-							let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
-							if (selectedSkills.includes(skill.Skill_ID)){
-								skill.cartDetails.isNotAdded = true
-							}else{
-								skill.cartDetails.isNotAdded = false
+							let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+
+							if (!(selectedSkillsAndCourses === null)){
+								if (!(skill.Skill_ID in selectedSkillsAndCourses)){
+									skill.cartDetails.isNotAdded = false
+								}else{
+									skill.cartDetails.isNotAdded = true
+								}
 							}
+							
 
 							//for skill details display
 							skill.skillDetails = {}

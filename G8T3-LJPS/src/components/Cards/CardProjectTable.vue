@@ -18,7 +18,7 @@
 			<!-- Project Column -->
 			<a-col :span="24" :md="6" v-for="(item, index) in dataFilteredStatus" :key="index">
 				<!-- Project Card -->
-				<a-card class="card-info" hoverable @click="selectCourse" bodyStyle="height:200px;">
+				<a-card class="card-info" hoverable @click="selectCourse(item.Course_ID)" bodyStyle="height:200px;">
 					<template #cover>
 						<img
 						alt="example"
@@ -64,16 +64,50 @@
 		},
 
 		methods: {
-			selectCourse(){
-				console.log("Hello!")
-				let text;
-  				if (confirm("Confirm course selection?") == true) {
-					text = "Selection confirmed!";
-					alert(text)
-				} else {
-					text = "You canceled!";
-					alert(text)
-  				}
+			// selectCourse(){
+			// 	console.log("Hello!")
+			// 	let text;
+  			// 	if (confirm("Confirm course selection?") == true) {
+			// 		text = "Selection confirmed!";
+			// 		alert(text)
+			// 	} else {
+			// 		text = "You canceled!";
+			// 		alert(text)
+  			// 	}
+			// },
+
+			selectCourse(courseId){
+
+			//update localStorage variable for skills
+			//localStorage.removeItem('selectedSkillsAndCourses');
+			let skillId = this.$route.query.skillId
+			console.log(skillId)
+			console.log(courseId)
+			
+			//handle skills selection
+			let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+			
+			if (selectedSkillsAndCourses === null){
+				selectedSkillsAndCourses = {}
+			}
+
+			if (!(skillId in selectedSkillsAndCourses)){
+				// if selected skills is null then initialise selected skills array.
+				
+				let skillCourse = [courseId] //initialise course list
+				selectedSkillsAndCourses[skillId] = skillCourse
+			} else{
+
+				//check if courseId is in list of courses
+				if (!selectedSkillsAndCourses[skillId].includes(courseId)){
+
+					selectedSkillsAndCourses[skillId].push(courseId) //add skill course object
+				}
+			}
+
+			console.log(selectedSkillsAndCourses)
+			localStorage.setItem('selectedSkillsAndCourses', JSON.stringify(selectedSkillsAndCourses));
+
 			},
 		},
 		computed: {

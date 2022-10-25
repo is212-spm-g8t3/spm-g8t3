@@ -125,22 +125,22 @@
 				//update localStorage variable for skills
 				// localStorage.removeItem('selectedSkills');
 				//TODO: move this to courses
-				let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
+				// let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
 				
-				if (selectedSkills === null){
-					// if selected skills is null then initialise selected skills array.
-					selectedSkills = [skillId]
-					console.log(typeof(selectedSkills))
-				} else if(!selectedSkills.includes(skillId) ){
-					console.log(selectedSkills)
-					console.log(typeof(selectedSkills))
-					selectedSkills.push(skillId)
-				}
-				console.log(selectedSkills)
-				localStorage.setItem('selectedSkills', JSON.stringify(selectedSkills));
+				// if (selectedSkills === null){
+				// 	// if selected skills is null then initialise selected skills array.
+				// 	selectedSkills = [skillId]
+				// 	console.log(typeof(selectedSkills))
+				// } else if(!selectedSkills.includes(skillId) ){
+				// 	console.log(selectedSkills)
+				// 	console.log(typeof(selectedSkills))
+				// 	selectedSkills.push(skillId)
+				// }
+				// console.log(selectedSkills)
+				// localStorage.setItem('selectedSkills', JSON.stringify(selectedSkills));
 
 
-				this.$route.query.roleId
+				// this.$route.query.roleId
 				this.$router.push({
 						path: '/select-course?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
 					});
