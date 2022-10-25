@@ -25,9 +25,18 @@
                     <!-- Description -->
 
                     <!-- Skill -->
-                    <h5>
-                        Skills
-                    </h5>
+                    <a-row>
+                        <a-col :md="12">
+                            <h5>
+                                Skills
+                            </h5>
+                        </a-col>
+                        <a-col :md="12" style="text-align: right">
+                            <a-button size="small">
+                                <a-icon type="plus" theme="outlined" />Add Skill
+                            </a-button>
+                        </a-col>
+                    </a-row>
                     <a-card hoverable v-for="(skill, index) in skillsData" :key="index" @click="viewCourse(skill)" :style="selectedSkill == skill ? 'background-color: #ebf9ff; border: 1px #dedede solid;margin-bottom: 15px;' : 'margin-bottom: 15px;'">
                         <h6>{{skill.Skill_Name}}
                             <a-tag color="blue" style="margin-left: 5px">In-progress</a-tag>
@@ -43,10 +52,19 @@
             <!-- Right Info -->
             <a-col :span="15" class="mb-12">
                 <a-card  style="margin-right: 15px;">
-                    <h5>
-                        Courses
-                    </h5>
-
+                    <a-row>
+                        <a-col :md="12">
+                            <h5>
+                                Courses
+                            </h5>
+                        </a-col>
+                        <a-col :md="12" style="text-align: right">
+                            <a-button size="small">
+                                <a-icon type="plus" theme="outlined" />Add Course
+                            </a-button>
+                        </a-col>
+                    </a-row>
+            
                     <a-card hoverable v-for="(course, index) in courseData" :key="index" style="margin-bottom: 15px;">
                         <!-- <template #extra>
                             <a href="#">More</a>
@@ -59,8 +77,6 @@
                         </h6>
                         <p>{{course.Course_Description}}</p>
                         
-                        
-                    
                         <template #actions>
                             <a-icon type="check" theme="outlined" />
                             <a-icon type="delete" theme="outlined" />

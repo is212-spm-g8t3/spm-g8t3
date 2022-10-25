@@ -22,7 +22,8 @@
 					:titleName="titleName"
 					:data="table1Data"
 					:columns="table1Columns"
-					@updateRecord="updateModalRecord"
+					@updateCourse="updateModalCourse"
+					:page="tableType"
 				></CardRoleTable>
 				<!-- / Authors Table Card -->
 			</a-col>
@@ -30,61 +31,38 @@
 		</a-row>
 		<!-- / Authors Table -->
 
-		<!-- / Update Course Modal Pop up -->
-		<template>
-			<div>
-				<a-modal centered v-model="isVisibleUpdate" title="Update Skill" @cancel="handleCancel">
-									
-					<template slot="footer">
-						<a-button key="back" @click="handleUpdateCancel">
-						Cancel
-						</a-button>
-						<a-button key="submit" type="primary" :loading="loading" @click="handleUpdate">
-						Update
-						</a-button>
-					</template>
+		<!-- Course Modal -->
+		<a-modal
+			v-model:visible="modal2Visible"
+			title="Assign Skills"
+			centered
+			@ok="modal2Visible = false"
+			>
+			<template slot="footer">
+				<a-button key="back" @click="handleUpdateCancel">
+				Cancel
+				</a-button>
+				<a-button key="submit" type="primary" @click="handleUpdate">
+				Update
+				</a-button>
+			</template>
+			<a-select
+				:value="existingSkills"
+				mode="multiple"
+				placeholder="Select skills"
+				style="width: 100%"
+				:showArrow="true"
+				@deselect="handleDeselect"
+				@select="handleSelect"
+			>
+				<a-select-option v-for="(option, index) in filteredOptions" :key="index">
+					{{ option }}
+				</a-select-option>
+			</a-select>
+		</a-modal>
+		<!-- Course Modal -->
 
-					<a-form-model layout="vertical" ref="ruleUpdateForm" :model="updateForm" :rules="rules">
-						<a-row :gutter="16">
-							<a-col :span="12">
-								<a-form-model-item slot="" label="Name" prop="name">
-									<a-input v-model="updateForm.name" placeholder="E.g. Critical Thinking" />
-								</a-form-model-item>
-							</a-col>
-							<a-col :span="12">
-								<a-form-model-item label="Type" prop="type">
-									<a-select
-										v-model:value="updateForm.type"
-										show-search
-										placeholder="Select skill type"
-										:options="options"
-									>
-									</a-select>
-								</a-form-model-item>
-							</a-col>
-						</a-row>
 
-						<a-row>
-							<a-form-model-item label="Description" prop="description">
-								<a-input v-model="updateForm.description" type="textarea" />
-							</a-form-model-item>
-						</a-row>
-
-						<a-row>
-							<a-form-model-item label="Status" prop="status">
-								<a-radio-group v-model:value="updateForm.status">
-									<a-radio-button value="Active">Active</a-radio-button>
-									<a-radio-button value="Inactive">Inactive</a-radio-button>
-								</a-radio-group>
-							</a-form-model-item>
-						</a-row>
-						
-						<a-alert v-if="isUpdateError" :message="updateErrorMsg" type="error" show-icon closable />
-					</a-form-model>
-				</a-modal>
-			</div>
-		</template>
-		<!-- / Update Course Modal Pop up -->
 	</div>
 </template>
 
@@ -93,13 +71,12 @@
 // "Authors" table component.
 import CardRoleTable from '../components/Cards/CardRoleTable' ;
 import axios from 'axios';
-import { message } from 'ant-design-vue';
-import { SlowBuffer } from 'buffer';
-	
+
+const OPTIONS = ['Apples', 'Nails', 'Bananas', 'Helicopters'];
 // "Authors" table list of columns and their properties.
 const table1Columns = [
 	{
-		title: 'NAME',
+		title: 'Name',
 		dataIndex: 'Job_Role_Name',
 		scopedSlots: { customRender: 'Job_Role_Name' },
 	},
@@ -116,16 +93,16 @@ const table1Columns = [
 	{
 		title: 'Skills',
 		dataIndex: 'Skills',
-		class: 'text-muted',
+		scopedSlots: { customRender: 'Skills' },
 	},
 	{
-		title: 'STATUS',
+		title: 'Status',
 		dataIndex: 'status',
 		scopedSlots: { customRender: 'status' },
 	},
 	{
-		title: '',
-		scopedSlots: { customRender: 'action' },
+		title: 'Actions',
+		scopedSlots: { customRender: 'courseAction' },
 		width: 50,
 	},
 ];
@@ -141,47 +118,47 @@ export default ({
 
 			// Associating "Authors" table columns with its corresponding property.
 			table1Columns: table1Columns,
-			visible: false,
 			titleName: "Courses",
-			ifExistingRole: false,
-			ifSuccessfulCreation: false,
-			ifErrorCreation: false,
-			loading: false,
-			modalLayout: "vertical",
-			rules: {
-				name: [{ required: true, message: 'Name is required!'}],
-				type: [{ required: true, message: 'Type is required!'}],
-				description: [{ required: true, message: 'Description is required!'}],
-				status: [{required: true, message: 'Status is required!'}]
-			},
-			options: [
-				{
-					value: 'Soft Skill',
-					label: 'Soft Skill',
-				}, 
-				{
-					value: 'Hard Skill',
-					label: 'Hard Skill',
-				}, 
-			],
-
-			// Update Modal Pop up
-			isVisibleUpdate: false,
-			updateForm: {
-				id: 0,
-				name: '',
-				type: '',
-				description: '',
-				status: ''
-			},
-			isUpdateError: false,
-			updateErrorMsg: 'Default Error Message'
-			// Update Modal Pop up
+			CoursesSkillsData: [],
+			modal2Visible: false,
+			skillData: [],
+			existingSkills: [],
+			tableType: "Course"
 		}
 	},
 	methods: {
+		getCoursesSkills() {
+			const path = 'http://localhost:5000/getCoursesWithSkills';
+			axios.get(path)
+				.then((res) => {
+					let response = res.data.data
+					// console.log(response);
+					for (let i = 0; i < response.length; i++) {
+						let courseId = response[i].Course_ID;
+						let skillData = {
+								'skillId': response[i].Skill_ID,
+								'skillName': response[i].Skill_Name,
+								'skillDescription': response[i].Skill_Description,
+								'skillType': response[i].Skill_Type,
+								'skillStatus': response[i].Status,
+						}
+						if (this.CoursesSkillsData[courseId]) {
+							this.CoursesSkillsData[courseId].push(skillData);
+						}
+						else {
+							this.CoursesSkillsData[courseId] = [skillData];
+						}
+					}
+					// console.log(this.CoursesSkillsData);
+				})
+
+				.catch((error) => {
+					console.error(error);
+				});
+		},
 		// Display Course Table
-		getCourses() {
+		async getCourses() {
+			await this.getCoursesSkills();
 			const path = 'http://localhost:5000/courses';
 			axios.get(path)
 				.then((res) => {
@@ -191,56 +168,61 @@ export default ({
 					// Retrieve Courses
 					for (let i=0; i<response.length; i++) {
 						let courseData = response[i];
-						var template = {};
-						template.key = i;
-						template.courseId = courseData.Course_ID;
-						template.Job_Role_Name = courseData.Course_Name;
-						template.description = courseData.Course_Description;
-						template.Department = courseData.Course_Category;
-						template.status = courseData.Course_Status;
-						template.type = courseData.Course_Type;
-						
-						// async let skillsData = this.getSkills(courseData.Course_Name);
-						// console.log(skillsData);
-						// if (skillsData) {
-						// 	if (skillsData.data.code == 200) {
-						// 		template.Skills = skillsData.data.data.courseSkills;
-						// 	}
-						// }
-						// console.log(skillsData);
+						var template = {
+							'key' : i,
+							'courseId' : courseData.Course_ID,
+							'Job_Role_Name' : courseData.Course_Name,
+							'description' : courseData.Course_Description,
+							'Department' : courseData.Course_Category,
+							'status' : courseData.Course_Status,
+							'type' : courseData.Course_Type,
+							'Skills' : []
+						};
+
+						if (this.CoursesSkillsData[courseData.Course_ID]) {
+							template['Skills'] = this.CoursesSkillsData[courseData.Course_ID];
+						}
 						this.table1Data.push(template);
 					}
-					console.log(this.table1Data);
-					
+					// console.log(this.table1Data);
 				})
 				.catch((error) => {
 					// eslint-disable-next-line
 					console.error(error);
 				});
 		},
-		// Display Course Table
 
-		handleOk(e) {
-			console.log(e);
-			this.visible = false;
+		getAllSkills() {
+			const path = 'http://localhost:5000/skills';
+			axios.get(path)
+				.then((res) => {
+					let response = res.data.data.skills
+					console.log(response);
+					for (let i=0; i < response.length; i++) {
+						if (response[i].Status == "Active") {
+							this.skillData.push(response[i].Skill_Name)
+						}
+					}
+				})
+				.catch((error) => {
+					// eslint-disable-next-line
+					console.error(error);
+				});
 		},
 
-		handleCancel(e) {
-			this.visible = false;
-			this.ifExistingRole = false;
-			this.$refs.ruleForm.resetFields();
+		
+		async updateModalCourse(value) {
+			this.existingSkills = [];
+			await this.getAllSkills();
+			for (let i=0; i < value.Skills.length; i++) {
+				this.existingSkills.push(value.Skills[i].skillName); 
+			}
+			// console.log(this.existingSkills)
+			this.modal2Visible = true;
 		},
 
-		// Update Modal //
-
-		updateModalRecord(value) {
-			// console.log(value);
-			this.updateForm.id = value.skillID;
-			this.updateForm.name = value.Job_Role_Name;
-			this.updateForm.type = value.Department;
-			this.updateForm.description = value.description;
-			this.updateForm.status = value.status
-			this.isVisibleUpdate = true;
+		handleUpdateCancel(e) {
+			this.modal2Visible = false;
 		},
 
 		handleUpdate(e) {
@@ -249,58 +231,71 @@ export default ({
 			// this.loading = false and this.visible = false
 			// Show green alert bar if added successfully
 
-			this.$refs.ruleUpdateForm.validate(valid => {
-				// Form validation: Success
-				if (valid) {
-					this.loading = true;
+			// this.$refs.ruleUpdateForm.validate(valid => {
+			// 	// Form validation: Success
+			// 	if (valid) {
+			// 		this.loading = true;
 
-					console.log(this.updateForm)
+			// 		console.log(this.updateForm)
 
-					const path = 'http://localhost:5000/skills/updateSkill';
+			// 		const path = 'http://localhost:5000/skills/updateSkill';
 
-					let formData = JSON.stringify(this.updateForm);
+			// 		let formData = JSON.stringify(this.updateForm);
 
-					axios.post(path, {
-						"skillFormData": formData,
-					})
-						.then((response) => {
-							console.log(response);
+			// 		axios.post(path, {
+			// 			"skillFormData": formData,
+			// 		})
+			// 			.then((response) => {
+			// 				console.log(response);
 
-							// Happy path, success creation
-							if (response.data.code == 201) {
-								message.success(response.data.message, 10);
-								this.handleUpdateCancel();
-								location.reload();
-							}
+			// 				// Happy path, success creation
+			// 				if (response.data.code == 201) {
+			// 					message.success(response.data.message, 10);
+			// 					this.handleUpdateCancel();
+			// 					location.reload();
+			// 				}
 
-						})
-						.catch((error) => {
-							console.log(error);
-							console.log("error error");
-							this.updateErrorMsg = error.response.data.message
-							console.log(this.updateErrorMsg)
-							this.isUpdateError = true;
-							this.loading = false;
-						});
-				} 
+			// 			})
+			// 			.catch((error) => {
+			// 				console.log(error);
+			// 				console.log("error error");
+			// 				this.updateErrorMsg = error.response.data.message
+			// 				console.log(this.updateErrorMsg)
+			// 				this.isUpdateError = true;
+			// 				this.loading = false;
+			// 			});
+			// 	} 
 
-				// Form validation: Fail
-				else {
-					console.log('There is an error when submitting the form');
-					return false;
-				}
-			});
+			// 	// Form validation: Fail
+			// 	else {
+			// 		console.log('There is an error when submitting the form');
+			// 		return false;
+			// 	}
+			// });
 		},
 
-		handleUpdateCancel(e) {
-			this.isVisibleUpdate = false;
+		
+		handleSelect(value) {
+			this.existingSkills.push(this.filteredOptions[value]);
 		},
 
+		handleDeselect(value) {
+			const index = this.existingSkills.indexOf(value);
+			if (index > -1) { // only splice array when item is found
+				this.existingSkills.splice(index, 1); // 2nd parameter means remove one item only
+			}
+		},
 	},
 	
 	created() {
 		this.getCourses();
 	},
+
+	computed: {
+		filteredOptions() {
+			return this.skillData.filter(skill => !this.existingSkills.includes(skill))
+		},
+	}
 })
 
 </script>

@@ -3,7 +3,20 @@
 	<!-- Authors Table Card -->
 	<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{padding: 0,}">
 		<template #title>
-			<a-row type="flex" align="middle">
+			<a-row v-if="page == 'Course'"type="flex" align="middle">
+				<a-col :span="24" :md="12">
+					<h5 class="font-semibold m-0">{{titleName}}</h5>
+				</a-col>
+				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
+					<a-radio-group v-model="statusRadioBtn" size="small">
+						<a-radio-button value="All">ALL</a-radio-button>
+						<a-radio-button value="Active">Active</a-radio-button>
+						<a-radio-button value="Pending">Pending</a-radio-button>
+						<a-radio-button value="Retired">Retired</a-radio-button>
+					</a-radio-group>
+				</a-col>
+			</a-row>
+			<a-row v-else type="flex" align="middle">
 				<a-col :span="24" :md="12">
 					<h5 class="font-semibold m-0">{{titleName}}</h5>
 				</a-col>
@@ -57,12 +70,16 @@
 			</template>
 
 			<template slot="status" slot-scope="status">
-				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+				<a-tag v-if="page == 'Course'" class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ status == 'Active' ? "ACTIVE" : status == 'Pending' ? 'PENDING' : 'Retired' }}
+				</a-tag>
+
+				<a-tag v-else class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
 					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
-			<template v-if="page=='roles'" slot="Skills" slot-scope="Skills">
+			<template slot="Skills" slot-scope="Skills">
 				<div class="author-info">
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
@@ -73,6 +90,16 @@
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
 			</template>
+
+			<!-- Skill.vue -->
+			<template slot="actionSkill" slot-scope="row">
+				
+				<a-button style="margin-right: 10px;" :data-id="row.key" @click="updateRoles(data[row.key])">
+					Edit
+				</a-button>
+				
+			</template>
+			<!-- Skill.vue -->
 
 			<template slot="action" slot-scope="row">
 				<span>
@@ -91,6 +118,14 @@
 				</a-button>
 			</template>
 
+			<!-- Courses.vue -->
+			<template slot="courseAction" slot-scope="row">
+				<a-button type="default" :data-id="row.key" @click="updateModalCourse(data[row.key])">
+					Edit Skills
+				</a-button>
+			</template>
+			<!-- Courses.vue -->
+			
 			<div slot="expandedRowRender" slot-scope="record" style="margin: 0">
 				{{ record.description }}<br><br>
 				<div v-if="page=='roles'">
@@ -138,6 +173,7 @@ export default ({
 		return {
 			// Active button for the "Authors" table's card header radio button group.
 			statusRadioBtn: 'All',
+			statusRadioBtnCourse: 'All', // For Courses.vue
 			colorList: []
 		}
 	},
@@ -155,6 +191,16 @@ export default ({
 		updateRoles(currentRowData) {
 			this.$emit('updateRecord', structuredClone(currentRowData))
 		},
+
+		// For Courses.vue
+		updateModalCourse(currentRowData) {
+			this.$emit('updateCourse', structuredClone(currentRowData))
+		},
+
+		// For Skill.vue
+		deleteSkill(currentRowData) {
+			console.log(currentRowData);
+		}
 	},
 })
 

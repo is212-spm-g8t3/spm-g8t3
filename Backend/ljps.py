@@ -260,6 +260,30 @@ def get_farming(course):
         }
     )
 
+@app.route("/getCoursesWithSkills", methods=['GET'])
+def getCoursesWithSkills():
+    # rolesWithSkills = job_role.query.all()
+
+    query = db.session.query(Courses_Catalog, course_skills , Skill
+        ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
+                course_skills.Skill_ID == Skill.Skill_ID,
+                Skill.Status == "Active").with_entities(Courses_Catalog.Course_ID, Skill.Skill_ID, Skill.Skill_Name, Skill.Skill_Description, Skill.Skill_Type, Skill.Status)
+
+    if query.count() > 0:
+        return jsonify(
+            {
+                "code": 200,
+                "data": [dict(row) for row in query]
+            }
+        )
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    )
+
 @app.route("/getCoursesBySkillId/<skill_id>", methods=['GET'])
 def getCoursesBySkill(skill_id):
     query = db.session.query(course_skills, Courses_Catalog
