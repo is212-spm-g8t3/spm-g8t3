@@ -80,7 +80,25 @@
 				e.preventDefault();
 				this.form.validateFields((err, values) => {
 					if ( !err ) {
+
 						console.log('Received values of form: ', values) ;
+						// Testing : Admin (HR)
+						// Email: Sally.Loh@allinone.com.sg
+						// Password: adminadmin
+						if (values.email == "Sally.Loh@allinone.com.sg" && values.password == "adminadmin") {
+							let staffData = {
+								"staffId" : "160008",
+								"role" : "Admin"
+							};
+							localStorage.setItem(
+								'staffInfo',
+								JSON.stringify(staffData)
+							);
+							this.$router.push({ name: 'Home' });
+						}
+						
+						// Insert User Info
+						else {}
 					}
 				});
 			},
