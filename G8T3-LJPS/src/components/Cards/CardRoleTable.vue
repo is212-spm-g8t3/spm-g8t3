@@ -3,11 +3,36 @@
 	<!-- Authors Table Card -->
 	<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{padding: 0,}">
 		<template #title>
-			<a-row type="flex" align="middle">
+			<a-row v-if="page == 'Course'"type="flex" align="middle">
 				<a-col :span="24" :md="12">
 					<h5 class="font-semibold m-0">{{titleName}}</h5>
 				</a-col>
 				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
+					<a-input-search
+						v-model:value="search"
+						placeholder="Search"
+						style="width: 200px; margin-right: 20px"
+					/>
+
+					<a-radio-group v-model="statusRadioBtn" size="small">
+						<a-radio-button value="All">ALL</a-radio-button>
+						<a-radio-button value="Active">Active</a-radio-button>
+						<a-radio-button value="Pending">Pending</a-radio-button>
+						<a-radio-button value="Retired">Retired</a-radio-button>
+					</a-radio-group>
+				</a-col>
+			</a-row>
+			<a-row v-else type="flex" align="middle">
+				<a-col :span="24" :md="12">
+					<h5 class="font-semibold m-0">{{titleName}}</h5>
+				</a-col>
+				<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
+					<a-input-search
+						v-model:value="search"
+						placeholder="Search for Name"
+						style="width: 200px; margin-right: 20px"
+					/>
+					
 					<a-radio-group v-model="statusRadioBtn" size="small">
 						<a-radio-button value="All">ALL</a-radio-button>
 						<a-radio-button value="Active">ACTIVE</a-radio-button>
@@ -138,7 +163,8 @@ export default ({
 		return {
 			// Active button for the "Authors" table's card header radio button group.
 			statusRadioBtn: 'All',
-			colorList: []
+			colorList: [],
+			search: '',
 		}
 	},
 
@@ -147,6 +173,10 @@ export default ({
 			if (this.statusRadioBtn != 'All') {
 				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
 			}
+			if (this.search != '') {
+				return this.data.filter(eachData => 
+					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()));
+				}
 			return this.data
 		}
 	},
