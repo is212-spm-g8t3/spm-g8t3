@@ -33,13 +33,9 @@
 					:data="rolesData"
 					:columns="table1Columns"
 					page="roles"
+					@updateRecord="updateModalRecord"
 				>
-				
-			
-
-				
 				</CardRoleTable>
-					<!-- @updateRecord="updateModalRecord" -->
 			</a-col>
 
 		</a-row>
@@ -250,7 +246,7 @@
 		<!-- / Update Role Modal Pop up -->
 
 		<!-- / Update Role Modal Pop up -->
-		<!-- <template>
+		<template>
 			<div>
 				<a-modal centered v-model="isVisibleUpdate" title="Update Role" @cancel="handleCancel">
 
@@ -276,7 +272,7 @@
 						<a-row>
 							<a-form-model-item label="Skills" prop="skills">
 
-								<a-select
+								<!-- <a-select
 									:value="updateForm.skills"
 									mode="multiple"
 									placeholder="Select skills"
@@ -287,6 +283,20 @@
 								>
 									<a-select-option v-for="(option, index) in filteredOptions" :key="index">
 										{{ option }}
+									</a-select-option>
+								</a-select> -->
+
+								<a-select
+									v-model="updateForm.skills"
+									mode="multiple"
+									placeholder="Select Skills"
+									style="width: 100%"
+									show-search
+									:filter-option="filterOption"
+								>
+									<!-- :default-value="[3,2]" -->
+									<a-select-option v-for="option in skillsData" :key="option.Skill_ID" :value="option.Skill_ID">
+										{{ option.Skill_Name }}
 									</a-select-option>
 								</a-select>
 							</a-form-model-item>
@@ -311,7 +321,7 @@
 					</a-button>
 				</template>
 			</div>
-		</template> -->
+		</template>
 		<!-- / Update Role Modal Pop up -->
 
 		<!-- / Update Role Modal Pop up -->
@@ -447,90 +457,10 @@
 			title: 'ACTIONS',
 			scopedSlots: { customRender: 'action' },
 			width: 50,
+			align: "center"
 		},
 	];
 
-	// "Authors" table list of rows and their properties.
-	const table1Data = [
-		{
-			key: '1',
-			roleName: {
-				avatar: 'images/face-2.jpg',
-				name: 'Front-End Engineer',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Developer',
-			},
-			status: "active",
-			created: '23/04/18',
-		},
-		{
-			key: '2',
-			roleName: {
-				avatar: 'images/face-3.jpg',
-				name: 'Back-End Engineer',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Developer',
-			},
-			status: "inactive",
-			created: '23/12/20',
-		},
-		{
-			key: '3',
-			roleName: {
-				avatar: 'images/face-1.jpg',
-				name: 'Data Scientist',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Analyst',
-			},
-			status: "active",
-			created: '13/04/19',
-		},
-		{
-			key: '4',
-			roleName: {
-				avatar: 'images/face-4.jpg',
-				name: 'UI/UX Designer',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Design',
-			},
-			status: "active",
-			created: '03/04/21',
-		},
-		{
-			key: '5',
-			roleName: {
-				avatar: 'images/face-5.jpeg',
-				name: 'Business Analyst',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Analyst',
-			},
-			status: "inactive",
-			created: '23/03/20',
-		},
-		{
-			key: '6',
-			roleName: {
-				avatar: 'images/face-6.jpeg',
-				name: 'Project Manager',
-			},
-			func: {
-				department: 'Technology',
-				job: 'Manager',
-			},
-			status: "active",
-			created: '14/04/17',
-		},
-	];
 	
 	export default ({
 		components: {
@@ -539,8 +469,6 @@
 		},
 		data() {
 			return {
-				// Associating "Authors" table data with its corresponding property.
-				table1Data: table1Data,
 				rolesData: [],
 
 				// Associating "Authors" table columns with its corresponding property.
@@ -553,7 +481,6 @@
 				loading: false,
 				modalLayout: "vertical",
 				skillsData: [], // Make ID tagged to skills
-				rolesData: [],
 				form: {
 					name: '',
 					department: '',
@@ -569,7 +496,19 @@
 				},
 				createSuccessVisible: false,
 				createErrorVisible: false,
-				createErrorMessage: ""
+				createErrorMessage: "",
+
+				isVisibleUpdate: false,
+				updateForm: {
+					id: 0,
+					name: '',
+					department: '',
+					description: '',
+					status: '',
+					skills:[]
+				},
+				isUpdateError: false,
+				updateErrorMsg: 'Default Error Message'
 			}
 		},
 		created(){
@@ -615,10 +554,9 @@
 						}
 						console.log(sortedData)
 
-						Object.values(sortedData).forEach(val => 
+						Object.values(sortedData).forEach(val => {
 							this.rolesData.push(val)
-						);
-						console.log(this.rolesData)
+						});
 					})
 					.catch((error) => {
 						console.log(error);
@@ -699,15 +637,19 @@
 			// 	this.form.skills = value;
 			// },
 
-			// updateModalRecord(value) {
-			// 	console.log(value);
-			// 	this.updateForm.name = value.roleName.name;
-			// 	this.updateForm.department = value.func.department;
-			// 	this.updateForm.description = "Insert description, value.xxx.description";
-			// 	this.updateForm.skills = ['Apples', 'Nails'];
-			// 	this.updateForm.status = value.status
-			// 	this.isVisibleUpdate = true;
-			// },
+			updateModalRecord(value) {
+				console.log(value);
+				this.updateForm.id = value.Job_Role_ID
+				this.updateForm.name = value.Job_Role_Name;
+				this.updateForm.department = value.Department;
+				this.updateForm.description = value.description;
+				this.updateForm.skills = [];
+				for(var each_skill of value.Skills){
+					this.updateForm.skills.push(each_skill.Skill_ID);
+				}
+				this.updateForm.status = value.Status
+				this.isVisibleUpdate = true;
+			},
 
 			// handleDeselect(value) {
 			// const index = this.updateForm.skills.indexOf(value);

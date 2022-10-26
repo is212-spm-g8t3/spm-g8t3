@@ -63,7 +63,7 @@
 				</div>
 			</template>
 
-			<template  slot="Department" slot-scope="Department">
+			<template slot="Department" slot-scope="Department">
 				<div class="author-info">
 					<h6 class="m-0">{{ Department }}</h6>
 					<!-- <h6 class="m-0">{{ func.type }}</h6>
@@ -114,20 +114,24 @@
 			<!-- Skill.vue -->
 
 			<template slot="action" slot-scope="row">
-				<span>
+				<!-- <span>
 					<a-icon type="eye" :style="{ color: '#87d068' }"/>
 					<a-icon type="edit" :style="{ color: '#1890FF' }"/>
 					<a-icon type="delete" :style="{color: '#F5222D'}" />
-				</span>
+				</span> -->
 				<!-- <span>
 					<a-button shape="circle"  icon="edit"/>
 					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
 				</span> -->
 
-
-				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key])">
-					Edit
-				</a-button>
+				<div :style="{'display': 'flex'}">
+					<a-button type="default" :data-id="row.key" @click="updateRoles(row)">
+						Edit
+					</a-button>
+					<a-button class="deleteBtn" :style="{'border-color': '#ff4d4f', 'color': '#ff4d4f', 'margin-left': '10px'}" :data-id="row.key" @click="deleteRole(data[row.key])">
+						Delete
+					</a-button>
+				</div>
 			</template>
 
 			<!-- Courses.vue -->
@@ -216,6 +220,11 @@ export default ({
 		// For Skill.vue
 		deleteSkill(currentRowData) {
 			console.log(currentRowData);
+		},
+
+		// For Roles.vue
+		deleteRole(currentRowData) {
+			console.log(currentRowData);
 		}
 	},
 })
@@ -223,6 +232,11 @@ export default ({
 </script>
 
 <style scoped>
+	.deleteBtn :hover {
+		background-color: #ff4d4f;
+		color: white;
+	}
+
 	.editIcon :hover {
 		color: #1890FF;
 		cursor: pointer;
