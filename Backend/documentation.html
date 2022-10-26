@@ -1,0 +1,119 @@
+<html>
+<head>
+    <title>LJPS API Documentation</title>
+</head>
+<body>
+
+    <h1>LJPS API v1.0 - Documentation</h1>
+    
+    <hr>
+    
+    <h2>itineraries</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns the itineraries of a user in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../database_connectivity/itineraries.php?username=alice</font>
+        <br>
+        where <b>username</b> is the <b>username</b> parameter, and alice is the user value.
+        <br>
+        <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    </p>
+    <hr>
+
+    <h2>add_itinerary</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Adds an itinerary to the database.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../database_connectivity/add_itinerary.php</font>
+        <br>
+        Work in Progress
+        <br>
+        <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    </p>
+    <hr>
+
+    <h2>remove_itinerary</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Remove an itinerary from the database based on specified itinerary id.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../database_connectivity/remove_itinerary.php?itinerary_id=2</font>
+        <br>
+        where <b>itinerary_id</b> is the <b>itinerary_id</b> parameter, and 2 is the itinerary_id value.
+        <br>
+        <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    </p>
+    <hr>
+
+    <h2>events</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns events of an itinerary in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../database_connectivity/events.php?username=bob&itinerary_name=test</font>
+        <br>
+        where <b>username</b> is the <b>username</b> parameter, and bob is the username value and
+        where <b>itinerary_name</b> is the <b>itinerary_name</b> parameter, and test is the itinerary_name value.
+        <br>
+        <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    </p>
+    <hr>
+
+    <h2>add_event</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Adds an event to the specified itinerary.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../database_connectivity/add_event.php</font>
+        <br>
+        Work in Progress
+        <br>
+        <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    </p>
+    <hr>
+
+    <h2>remove_event</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Remove an event from a specified itinerary id based on the event id.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../database_connectivity/remove_event.php?itinerary_id=4&id=5</font>
+        <br>
+        where <b>itinerary_id</b> is the <b>itinerary_id</b> parameter, and 4 is the itinerary_id value and 
+        <br>
+        where <b>id</b> is the <b>event id</b> parameter, and 4 is the event id value
+        <br>
+        <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    </p>
+    <hr>
+
+    
+    <footer>&copy; Copyright 2021 Travel Dictators</footer>
+</body>
+</html>
