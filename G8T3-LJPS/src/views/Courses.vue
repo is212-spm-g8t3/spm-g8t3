@@ -175,19 +175,6 @@ export default ({
 					}
 					// console.log(this.CoursesSkillsData);
 				})
-
-			// Update Modal Pop up
-			isVisibleUpdate: false,
-			updateForm: {
-				id: 0,
-				name: '',
-				type: '',
-				description: '',
-				status: ''
-			},
-			isUpdateError: false,
-			updateErrorMsg: 'Default Error Message'
-			// Update Modal Pop up
 		}
 	},
 	methods: {
