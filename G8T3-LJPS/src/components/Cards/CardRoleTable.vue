@@ -82,12 +82,16 @@
 			</template>
 
 			<template slot="status" slot-scope="status">
-				<a-tag class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+				<a-tag v-if="page == 'Course'" class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
+					{{ status == 'Active' ? "ACTIVE" : status == 'Pending' ? 'PENDING' : 'Retired' }}
+				</a-tag>
+
+				<a-tag v-else class="tag-status" :class="status == 'Active' ? 'ant-tag-success' : 'ant-tag-muted'">
 					{{ status == 'Active' ? "ACTIVE" : "INACTIVE" }}
 				</a-tag>
 			</template>
 
-			<template v-if="page=='roles'" slot="Skills" slot-scope="Skills">
+			<template slot="Skills" slot-scope="Skills">
 				<div class="author-info">
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
@@ -98,6 +102,16 @@
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
 			</template>
+
+			<!-- Skill.vue -->
+			<template slot="actionSkill" slot-scope="row">
+				
+				<a-button style="margin-right: 10px;" :data-id="row.key" @click="updateRoles(data[row.key])">
+					Edit
+				</a-button>
+				
+			</template>
+			<!-- Skill.vue -->
 
 			<template slot="action" slot-scope="row">
 				<span>
@@ -116,6 +130,14 @@
 				</a-button>
 			</template>
 
+			<!-- Courses.vue -->
+			<template slot="courseAction" slot-scope="row">
+				<a-button type="default" :data-id="row.key" @click="updateModalCourse(data[row.key])">
+					Edit Skills
+				</a-button>
+			</template>
+			<!-- Courses.vue -->
+			
 			<div slot="expandedRowRender" slot-scope="record" style="margin: 0">
 				{{ record.description }}<br><br>
 				<div v-if="page=='roles'">
@@ -185,6 +207,16 @@ export default ({
 		updateRoles(currentRowData) {
 			this.$emit('updateRecord', structuredClone(currentRowData))
 		},
+
+		// For Courses.vue
+		updateModalCourse(currentRowData) {
+			this.$emit('updateCourse', structuredClone(currentRowData))
+		},
+
+		// For Skill.vue
+		deleteSkill(currentRowData) {
+			console.log(currentRowData);
+		}
 	},
 })
 

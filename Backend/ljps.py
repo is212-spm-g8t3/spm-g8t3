@@ -260,6 +260,30 @@ def get_farming(course):
         }
     )
 
+@app.route("/getCoursesWithSkills", methods=['GET'])
+def getCoursesWithSkills():
+    # rolesWithSkills = job_role.query.all()
+
+    query = db.session.query(Courses_Catalog, course_skills , Skill
+        ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
+                course_skills.Skill_ID == Skill.Skill_ID,
+                Skill.Status == "Active").with_entities(Courses_Catalog.Course_ID, Skill.Skill_ID, Skill.Skill_Name, Skill.Skill_Description, Skill.Skill_Type, Skill.Status)
+
+    if query.count() > 0:
+        return jsonify(
+            {
+                "code": 200,
+                "data": [dict(row) for row in query]
+            }
+        )
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    )
+
 @app.route("/getCoursesBySkillId/<skill_id>", methods=['GET'])
 def getCoursesBySkill(skill_id):
     query = db.session.query(course_skills, Courses_Catalog
@@ -282,6 +306,57 @@ def getCoursesBySkill(skill_id):
             "message": "Course not found."
         }
     )
+
+@app.route("/updateCourseSkills", methods=['POST'])
+def update_course_skills():
+
+    # Convert JSON to object
+    data = json.loads(request.get_json()["updateInfo"])
+    skills_data = data['skillsForUpdate']
+    course_id = data['courseId']
+
+    # Remove all skills currently assigned to courseId
+    existing_assigned_skills = db.session.query(course_skills
+        ).filter(course_skills.Course_ID == course_id,
+                ).all()
+        
+    # If there is assigned Skills, delete all
+    if len(existing_assigned_skills) > 0:
+        for eachSkill in existing_assigned_skills:
+            db.session.delete(eachSkill)
+        db.session.commit()
+
+    # Assign all the skills in skillsData
+    if len(skills_data) > 0:
+
+        for skill in skills_data:
+            # Initialize course_skills class
+            skill_id = db.session.query(Skill).filter(Skill.Skill_Name == skill,
+            ).with_entities(Skill.Skill_ID).one()
+
+            new_course_skill = course_skills(
+                Skill_ID = skill_id[0],
+                Course_ID = course_id
+            )
+    
+            try:
+                db.session.add(new_course_skill)
+                db.session.commit()
+                
+            except Exception as e:
+                return jsonify(
+                    {
+                        "code": 500,
+                        "message": "An error occurred while updating course" + str(e)
+                    }
+                ), 500
+            
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully updated courses.'
+        }
+    ), 201
 
 ## Roles Related Functions
 @app.route("/roles", methods=['GET'])
