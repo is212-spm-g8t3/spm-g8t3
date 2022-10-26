@@ -189,7 +189,7 @@ const table1Columns = [
 	},
 	{
 		title: 'ACTIONS',
-		scopedSlots: { customRender: 'action' },
+		scopedSlots: { customRender: 'actionSkill' },
 		width: 50,
 	},
 ];
