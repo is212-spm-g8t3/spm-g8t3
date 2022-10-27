@@ -181,9 +181,8 @@ export default ({
 			default: ""
 		}
 	},
-	create(){
-		console.log(this.page)
-		console.log(page)
+	created(){
+		console.log(this.data)
 	},
 	data() {
 		return {
@@ -201,7 +200,7 @@ export default ({
 			}
 			if (this.search != '') {
 				return this.data.filter(eachData => 
-					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()));
+					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) || eachData.Department.toLowerCase().includes(this.search.toLowerCase())); 
 				}
 			return this.data
 		}

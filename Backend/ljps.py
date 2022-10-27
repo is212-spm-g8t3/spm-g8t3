@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+from tabnanny import check
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -88,11 +89,12 @@ class job_role(db.Model):
     Created_Date  = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
-    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description, Department, Created_Date):
+    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description, Department, Status,Created_Date):
         self.Job_Role_ID = Job_Role_ID
         self.Job_Role_Name = Job_Role_Name
         self.Job_Role_Description = Job_Role_Description
         self.Department = Department
+        self.Status = Status
         self.Created_Date = Created_Date
 
     def json(self):
@@ -323,6 +325,7 @@ def update_course_skills():
     # If there is assigned Skills, delete all
     if len(existing_assigned_skills) > 0:
         for eachSkill in existing_assigned_skills:
+
             db.session.delete(eachSkill)
         db.session.commit()
 
@@ -415,7 +418,6 @@ def getRolesWithSkills():
 @app.route('/createRole', methods=['POST'])
 def create_role():
     data = request.get_json()
-    print(data)
 
     # to verify if Role is unique by checking role name
     if (job_role.query.filter_by(Job_Role_Name=data['name']).first()):
@@ -432,7 +434,7 @@ def create_role():
         Job_Role_Name = data['name'],
         Job_Role_Description = data['description'],
         Department=data['department'],
-        Status='Active',
+        Status=data['status'],
         Created_Date=datetime.today().strftime('%Y-%m-%d')
     )
     
@@ -486,6 +488,109 @@ def create_role():
             "message": 'Successfully added a new role!'
         }
     ), 201
+
+@app.route("/updateRole", methods=['POST'])
+def updateRole():
+    data = request.get_json()
+    role_ID = data['id']
+
+
+    rowToUpdate = job_role.query.filter_by(Job_Role_ID=data['id']).first()
+    if (rowToUpdate):
+        checkName = job_role.query.filter_by(Job_Role_Name=data['name']).first()
+        if (checkName and checkName.Job_Role_ID != role_ID):
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "Role already exists. Please use another role name."
+                }
+            ), 400 
+
+        # Udpate job_role table
+        try:
+            rowToUpdate.Job_Role_Name = data['name']
+            rowToUpdate.Job_Role_Description = data['description']
+            rowToUpdate.Department = data['department']
+            rowToUpdate.Status = data['status']
+
+            db.session.commit()
+
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "Error in updating job_role table."
+                }
+            ), 500    
+
+        # Update job_role_skills table - delete the rows associated with the roleID and add in new rows
+        try:
+            # Delete rows with corresponding Job_Role_ID
+            existing_assigned_role_skills = db.session.query(job_role_skills
+                ).filter(job_role_skills.Job_Role_ID == role_ID).all()
+            
+            print(existing_assigned_role_skills)
+
+            # If there is assigned Skills, delete all
+            if len(existing_assigned_role_skills) > 0:
+                for eachSkill in existing_assigned_role_skills:
+                    print(eachSkill)
+                    db.session.delete(eachSkill)
+                    print("Successful db.session.delete")
+
+                print("outside for loop")
+                db.session.commit()
+                print("Successful after commit")
+
+            # db.session.query(job_role_skills).filter(job_role_skills.Job_Role_ID == role_ID).delete()
+            # db.session.commit()
+
+            # Add updated skills
+            newSkills = data['skills']
+            print(newSkills)
+            for eachSkill in newSkills:
+                newJobRoleSkill = job_role_skills(
+                    Job_Role_ID=role_ID,
+                    Skill_ID=eachSkill
+                )
+
+                try:
+                    db.session.add(newJobRoleSkill)
+                    db.session.commit()
+
+                    
+
+                except Exception as e:
+                    return jsonify(
+                            {
+                                "code": 500,
+                                "message": "An error occurred while updating the role with skill associated. " + str(e)
+                            }
+                        ), 500
+
+            return jsonify(
+                        {
+                            "code": 201,
+                            "message": 'Successfully updated role.'
+                        }
+                    ), 201
+
+        except Exception as e:
+            return jsonify(
+            {
+                "code": 500,
+                "message": "Error in deleting associated skills."
+            }
+        ), 500
+        
+ 
+    else:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Role does not exist."
+            }
+        ), 500
 
 
 
