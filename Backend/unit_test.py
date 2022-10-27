@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 
 class TestBackend(unittest.TestCase):
     def test(self):
+        print('potato')
         pass
 
     # def setUp(self):
