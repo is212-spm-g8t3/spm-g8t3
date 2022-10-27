@@ -97,11 +97,11 @@
 				</div>
 			</template>
 
-			<template slot="Type" slot-scope="type">
+			<!-- <template slot="Type" slot-scope="type">
 				<div class="author-info">
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
-			</template>
+			</template> -->
 
 			<!-- Skill.vue -->
 			<template slot="actionSkill" slot-scope="row">
@@ -196,13 +196,19 @@ export default ({
 	computed: {
 		dataFilteredStatus: function() {
 			if (this.statusRadioBtn != 'All') {
+				if(this.page == "roles"){
+					return this.data.filter(eachData => eachData.Status == this.statusRadioBtn)
+				}
 				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
+
 			}
 			if (this.search != '') {
 				return this.data.filter(eachData => 
-					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) || eachData.Department.toLowerCase().includes(this.search.toLowerCase())); 
+					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) 
+					|| eachData.Department.toLowerCase().includes(this.search.toLowerCase())); 
 				}
 			return this.data
+
 		}
 	},
 
