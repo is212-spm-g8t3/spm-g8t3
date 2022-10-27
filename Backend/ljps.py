@@ -323,11 +323,21 @@ def update_course_skills():
                 ).all()
         
     # If there is assigned Skills, delete all
-    if len(existing_assigned_skills) > 0:
+    try:
+       if len(existing_assigned_skills) > 0:
         for eachSkill in existing_assigned_skills:
 
             db.session.delete(eachSkill)
         db.session.commit()
+        
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while updating course" + str(e)
+            }
+        ), 500
+    
 
     # Assign all the skills in skillsData
     if len(skills_data) > 0:
