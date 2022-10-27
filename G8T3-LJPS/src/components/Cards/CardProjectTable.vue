@@ -55,6 +55,10 @@
 				type: Array,
 				default: () => [],
 			},
+			courseImage: {
+				type: Array,
+				default: () => [],
+			},
 		},
 		data() {
 			return {
