@@ -170,6 +170,107 @@
         , <b>type</b> is the type the skill has and <b>status</b> is the status of the skill.
     <hr>
 
+    <h2>update skill</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Updates a skill in the database
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../skills/updateSkill</font>
+        <br>
+        where POST data parameter <b>id</b> is the id of the skill, <b>name</b> is the name of the skill to be created, <b>description</b> is the description of the skill
+        , <b>type</b> is the type the skill has and <b>status</b> is the status of the skill.
+    <hr>
+
+    <h1 id="learningJourney">Learning Journey Related</h1>
+
+    <h2>View a Learning Journey</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a specific Learning Joruney based on the Learning Journey ID provided
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../viewLearningJourney/&lt;LJ_ID&gt;</font>
+        <br>
+        where <b>LJ_ID</b> is the ID of the Learning Journey to be viewed.
+    <hr>
+
+    <h2>View a staff's Learning Journeys</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns all the Learning Joruneys of a Staff based on the Staff ID provided
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../viewStaffLearningJourneys/&lt;Staff_ID&gt;</font>
+        <br>
+        where <b>Staff_ID</b> is the ID of a Staff member.
+    <hr>
+
+    <h2>Create a Learning Journey</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Creates a Learning Journey in the LJPS system.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../createLearningJourney</font>
+        <br>
+        where POST data parameter <b>staff_id</b> is the id of the staff creating the learning journey and <b>job_role_id</b> is the id of the job role.
+    <hr>
+
+    <h2>Create a Learning Journey Skill Entry</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Creates a skill entry of a Learning Journey in the LJPS system.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../createLearningJourneySkill</font>
+        <br>
+        where POST data parameter <b>lj_id</b> is the ID of the learning journey, <b>staff_id</b> is the id of the staff creating the learning journey and <b>skill_id</b> is the id of the skill.
+    <hr>
+
+    <h2>Get a Learning Journey's Role Details </h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Displays the details of the role the Learning Journey aims to satisfy. 
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getLearningJourneyRole/&lt;LJ_ID&gt;</font>
+        <br>
+        where <b>LJ_ID</b> is the ID of the learning journey.
+    <hr>
+
+    <h2>Get a Learning Journey's Required Skills</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Displays the details of the skills required by the Learning Journey. 
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getLearningJourneySkills/&lt;LJ_ID&gt;</font>
+        <br>
+        where <b>LJ_ID</b> is the ID of the learning journey.
+    <hr>
+
     <footer>&copy; Copyright 2022 LJPS</footer>
 </body>
 </html>
