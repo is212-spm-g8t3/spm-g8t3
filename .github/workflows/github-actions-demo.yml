@@ -50,4 +50,4 @@ jobs:
       - name: Test with unittest
         #runs the unittest
         run: |
-          python -m unittest unit_tests
+          python -m unittest unit_test
