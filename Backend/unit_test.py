@@ -3,42 +3,41 @@ import flask_testing
 from ljps import *
 # from unittest.mock import MagicMock
 
+# class TestApp(flask_testing.TestCase):
+
+#     # Setting a in-memory temporary database
+#     app = Flask(__name__)
+#     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
+#     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+#     app.config['TESTING'] = True
+
+#     def create_app(self):
+#         return app
+
+#     # Run below each test function (method)
+#     def setUp(self):
+#         db.create_all()
+
+#     # Destroy after each test function (method)
+#     def tearDown(self):
+#         db.session.remove()
+#         db.drop_all()
 class TestApp(flask_testing.TestCase):
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+    app.config['TESTING'] = True
 
-    # # Setting a in-memory temporary database
-    # app = Flask(__name__)
-    # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
-    # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
-    # app.config['TESTING'] = True
+    def create_app(self):
+        return app
 
-    # def create_app(self):
-    #     return app
-
-    # # Run below each test function (method)
-    # def setUp(self):
-    #     db.create_all()
-
-    # # Destroy after each test function (method)
-    # def tearDown(self):
-    #     db.session.remove()
-    #     db.drop_all()
-    
     def setUp(self):
-
-        # Creates a new database for the unit test to use
-        self.app = Flask(__name__)
-        db.init_app(self.app)
-        with self.app.app_context():
-            db.create_all()
-            self.populate_db() # Your function that adds test data.
+        db.create_all()
 
     def tearDown(self):
-        # Ensures that the database is emptied for next unit test
-        self.app = Flask(__name__)
-        db.init_app(self.app)
-        with self.app.app_context():
-            db.drop_all()
-
+        db.session.remove()
+        db.drop_all()
+    
+class TestGetAllCourses(TestApp):
     ''' 
     Test Cases for Courses
     '''
