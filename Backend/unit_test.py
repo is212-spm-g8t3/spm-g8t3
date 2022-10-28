@@ -43,7 +43,6 @@ class TestApp(flask_testing.TestCase):
 
         response = self.client.get("/courses",
                                    content_type='application/json')
-        print(response)
 
         self.assertEqual(response.json, {
             'code': 200,
