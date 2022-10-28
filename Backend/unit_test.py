@@ -21,9 +21,7 @@ class TestApp(flask_testing.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-
-class TestBackend(TestApp):
-
+    
     def test_get_all_courses(self):
 
         # Uncomment below to see the full response of query
@@ -58,6 +56,10 @@ class TestBackend(TestApp):
                 ]
             }   
         })
+
+# class TestBackend(TestApp):
+
+    
         
 
 if __name__ == "__main__":
