@@ -5,6 +5,8 @@ from ljps import *
 
 class TestApp(flask_testing.TestCase):
 
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
+    TESTING = True
     
     def create_app(self):
         # Setting a in-memory temporary database
