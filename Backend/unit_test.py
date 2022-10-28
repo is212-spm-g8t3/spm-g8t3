@@ -5,13 +5,12 @@ from ljps import *
 
 class TestApp(flask_testing.TestCase):
 
-    # Test
-    # Setting a in-memory temporary database
+    
     def create_app(self):
-        app = Flask(__name__)
-        app.config['TESTING'] = True
+        # Setting a in-memory temporary database
         app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
         app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+        app.config['TESTING'] = True
         return app
 
     # Run below each test function (method)
