@@ -22,7 +22,7 @@
 					<template #cover>
 						<img
 						alt="example"
-						:src="courseImages[index]"
+						:src="courseImage[index]"
 						style="border-radius: 10px 10px 0px 0px; height:200px;"
 						/>
 					</template>
@@ -55,11 +55,16 @@
 				type: Array,
 				default: () => [],
 			},
+			courseImage: {
+				type: Array,
+				default: () => [],
+			},
 		},
 		data() {
 			return {
 				search: '',
 				courseImages: ["/images/back-end-engineering.jpg", "/images/ux-ui.png", "/images/data-scientist.jpg", "/images/front-end-engineer.jpeg"]
+				
 			}
 		},
 
