@@ -12,15 +12,32 @@ from os import environ
 
 import db_creds
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-    'dbURL') or 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
+db = SQLAlchemy()
 
-db = SQLAlchemy(app)
+def create_production_app():
+    app = Flask(__name__)
+    CORS(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
+        'dbURL') or 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
-CORS(app)
+    # Dynamically bind SQLAlchemy to application
+    db.init_app(app)
+    app.app_context().push()
+    return app
+
+def create_test_app():
+    app = Flask(__name__)
+    CORS(app)
+    app.config['TESTING'] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
+    # Dynamically bind SQLAlchemy to application
+    db.init_app(app)
+    app.app_context().push() # this does the binding
+    return app
+
+app = create_production_app()
 
 @dataclass
 class Courses_Catalog(db.Model):

@@ -6,21 +6,19 @@ from ljps import *
 class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
-    app.config['TESTING'] = True
+    # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
+    # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+    # app.config['TESTING'] = True
     
     def create_app(self):
-        return app
+        return create_test_app()
 
     # Run below each test function (method)
     def setUp(self):
-        print("hello")
         db.create_all()
 
     # Destroy after each test function (method)
     def tearDown(self):
-        print("byebye")
         db.session.remove()
         db.drop_all()
     
@@ -45,6 +43,7 @@ class TestApp(flask_testing.TestCase):
 
         response = self.client.get("/courses",
                                    content_type='application/json')
+        print(response)
 
         self.assertEqual(response.json, {
             'code': 200,
