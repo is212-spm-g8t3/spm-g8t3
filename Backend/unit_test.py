@@ -8,9 +8,11 @@ class TestApp(flask_testing.TestCase):
     
     def create_app(self):
         # Setting a in-memory temporary database
+        app = Flask(__name__)
         app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
         app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
         app.config['TESTING'] = True
+        db = SQLAlchemy(app)
         return app
 
     # Run below each test function (method)
