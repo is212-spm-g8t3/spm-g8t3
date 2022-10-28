@@ -1,47 +1,59 @@
 import unittest
+import flask_testing
 from unittest.mock import MagicMock
-# from bank_account import BankAccount, InterestRateComputer
+from ljps import *
 
+class TestApp(flask_testing.TestCase):
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+    app.config['TESTING'] = True
 
-class TestBackend(unittest.TestCase):
-    def test(self):
-        print('potato')
-        pass
+    def create_app(self):
+        return app
 
-    # def setUp(self):
-    #     self.a1 = BankAccount(1000, "Chris")
-    #     self.a2 = BankAccount(1500, "Hyacinth")
-    #     self.a3 = BankAccount(1000, "Daniel")
+    def setUp(self):
+        db.create_all()
 
-    # def tearDown(self):
-    #     self.a1 = None
-    #     self.a2 = None
-    #     self.a3 = None
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
-    # def test_deposit(self):
-    #     bal = self.a1.balance
-    #     self.assertEqual(bal, 1000)
-    #     self.assertEqual(self.a1.name, "Chris")
-    #     self.a1.deposit(500)
-    #     self.assertEqual(self.a1.balance, 1500)
+class TestBackend(TestApp):
 
-    # def test_withdrawal(self):
-    #     bal = self.a2.balance
-    #     self.assertEqual(bal, 1500)
-    #     self.a2.withdraw(1000)
-    #     self.assertEqual(self.a2.balance, 500)
-    #     #TODO: Add test for insufficient balance case
+    def test_get_all_courses(self):
 
-    # def test_EqualAccounts(self):
-    #     self.assertTrue(self.a1.balance > 0)
-    #     self.assertIsNot(self.a1, self.a2)
-    #     self.assertIs(self.a1, self.a1)
-      
-    # def test_interest(self):
-    #     interest_computer_mock = InterestRateComputer()
-    #     interest_computer_mock.get_rate = MagicMock(interest_computer_mock, return_value = 0.02)
-    #     self.assertEqual(self.a1.interest(interest_computer_mock),
-    #                      self.a1.balance * 0.02)
+        # Uncomment below to see the full response of query
+        # self.maxDiff = None
+
+        course1 = Courses_Catalog(
+            Course_ID="COR001",
+            Course_Name="Systems Thinking and Design",
+            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+            Course_Status="Active",
+            Course_Type="Internal",
+            Course_Category="Core")
+        
+        db.session.add(course1)
+        db.session.commit()
+
+        response = self.client.get("/courses",
+                                   content_type='application/json')
+
+        self.assertEqual(response.json, {
+            'code': 200,
+            'data': {
+                'courseCatalog': [
+                    {
+                        'Course_ID': 'COR001',
+                        'Course_Name': 'Systems Thinking and Design',
+                        'Course_Description': 'This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking',
+                        'Course_Status': 'Active',
+                        'Course_Type': 'Internal',
+                        'Course_Category': 'Core'
+                    }
+                ]
+            }   
+        })
         
 
 if __name__ == "__main__":
