@@ -61,7 +61,7 @@ class TestApp(flask_testing.TestCase):
         })
 
     # Insert another test case here   
-    # test again
+    # test again with production db script
 
 if __name__ == "__main__":
     unittest.main()
