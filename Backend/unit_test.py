@@ -1,7 +1,7 @@
 import unittest
 import flask_testing
 from unittest.mock import MagicMock
-from ljps import *
+from ljps import app, Courses_Catalog, db
 
 class TestApp(flask_testing.TestCase):
 
