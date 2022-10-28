@@ -6,10 +6,6 @@ from ljps import *
 class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
-    # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
-    # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
-    # app.config['TESTING'] = True
-    
     def create_app(self):
         return create_test_app()
 

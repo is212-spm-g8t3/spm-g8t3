@@ -14,8 +14,11 @@ import db_creds
 
 db = SQLAlchemy()
 
+# Creating a flask app
 app = Flask(__name__)
 CORS(app)
+
+# for Production 
 def create_production_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
         'dbURL') or 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps'
@@ -27,12 +30,11 @@ def create_production_app():
     app.app_context().push()
     return app
 
+# For testing
 def create_test_app():
-    # app = Flask(__name__)
-    # CORS(app)
     app.config['TESTING'] = True
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
-    
+
     # Dynamically bind SQLAlchemy to application
     db.init_app(app)
     app.app_context().push() # this does the binding
