@@ -64,7 +64,8 @@
 						if (res.data.code == 200) {
 							this.courses = res.data.data.courseCatalog;
 							for(let x = 0;x<this.courses.length;x++){
-								this.courseSkill.push(res.data.data.courseCatalog[x].Course_Category)
+								let skillpic = "/images/" + res.data.data.courseCatalog[x].Course_Category + ".png"
+								this.courseSkill.push(skillpic)
 							}
 							
 							console.log(this.courseSkill)
