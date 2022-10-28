@@ -39,6 +39,7 @@ jobs:
           pip install Flask-Testing
           pip install -U Flask-SQLAlchemy
           pip install -U flask-cors
+          pip install mysql-connector-python
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
