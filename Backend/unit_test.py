@@ -49,7 +49,7 @@ class TestApp(flask_testing.TestCase):
             'data': {
                 'courseCatalog': [
                     {
-                        'Course_ID': 'COR001',
+                        'Course_ID': 'COR002',
                         'Course_Name': 'Systems Thinking and Design',
                         'Course_Description': 'This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking',
                         'Course_Status': 'Active',

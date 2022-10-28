@@ -32,6 +32,7 @@ def create_test_app():
     # CORS(app)
     app.config['TESTING'] = True
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
+    
     # Dynamically bind SQLAlchemy to application
     db.init_app(app)
     app.app_context().push() # this does the binding
