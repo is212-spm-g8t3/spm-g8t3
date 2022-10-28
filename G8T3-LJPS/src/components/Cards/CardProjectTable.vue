@@ -4,6 +4,7 @@
 		<a-row type="flex" style="margin-bottom: 10px;">
 			<a-col :span="24" :md="12" style="text-align: left;">
 				<h3>Courses</h3>
+				
 			</a-col>
 			<a-col :span="24" :md="12" style="text-align: right;">
 				<a-input-search
@@ -13,12 +14,16 @@
 				/>
 			</a-col>
 		</a-row>
+		
+		<template v-if="dataFilteredStatus.length == 0">
+			<h5>No courses available.</h5>
+		</template>
 
 		<a-row type="flex" :gutter="[24,24]" align="stretch">
 			<!-- Project Column -->
 			<a-col :span="24" :md="6" v-for="(item, index) in dataFilteredStatus" :key="index">
 				<!-- Project Card -->
-				<a-card class="card-info" hoverable @click="selectCourse(item.Course_ID)" bodyStyle="height:200px;">
+				<a-card class="card-info" hoverable bodyStyle="height:200px;">
 					<template #cover>
 						<img
 						alt="example"
@@ -31,6 +36,11 @@
 					<p class="text">
 						{{item.Course_Description}}
 					</p>
+					<a-button v-on:click="selectCourse(item.Course_ID)" onclick="this.disabled = true; this.innerHTML = 'Added'"
+							:disabled="item.isInCart == true ? true : false"
+							:class="item.isInCart == true ? 'ant-tag-mute' : 'ant-tag-primary'">
+						{{ item.isInCart == true ? "Added" : "Add" }}
+					</a-button>
 					<!-- <template #actions>
 						<a-button type="link" style="width: 90%; margin: 0px; padding: 0px; height: 25px; color: black" size="large">Select</a-button>
 					</template> -->
@@ -55,6 +65,7 @@
 				type: Array,
 				default: () => [],
 			},
+
 		},
 		data() {
 			return {
@@ -64,20 +75,18 @@
 		},
 
 		methods: {
-			// selectCourse(){
-			// 	console.log("Hello!")
-			// 	let text;
-  			// 	if (confirm("Confirm course selection?") == true) {
-			// 		text = "Selection confirmed!";
-			// 		alert(text)
-			// 	} else {
-			// 		text = "You canceled!";
-			// 		alert(text)
-  			// 	}
-			// },
-
 			selectCourse(courseId){
+				for (let course of this.courseData){
+					if (course.Course_ID == courseId){
+						course.isInCart = true
+					}
+					
+				}
 
+			
+					
+			console.log(this.courseData)
+			//location.reload()
 			//update localStorage variable for skills
 			//localStorage.removeItem('selectedSkillsAndCourses');
 			let skillId = this.$route.query.skillId

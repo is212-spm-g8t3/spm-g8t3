@@ -50,6 +50,7 @@
 				skill: "",
 				// Active button for the "Projects" table's card header radio button group.
 				projectHeaderBtns: 'all',
+				displayCourses: true
 			}
 		},
 		methods: {
@@ -60,9 +61,34 @@
 				const course_url = "http://localhost:5000/getCoursesBySkill/" + this.$route.query.skillId
 				axios.get(course_url)
 					.then((res) => {
+						console.log(course_url)
+						console.log(res.data.code)
 						if (res.data.code == 200) {
 							this.courses = res.data.data.courseCatalog;
 							console.log(this.courses);
+
+										//handle skills selection
+							let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+							
+							if (selectedSkillsAndCourses === null){
+								selectedSkillsAndCourses = {}
+							}
+
+							else{
+								for (let course of this.courses){
+									//var isInCart = false
+									course.isInCart = false
+									//check if skill exists in dictionary
+
+									if (this.$route.query.skillId in selectedSkillsAndCourses){
+										// check if course exists in course list
+										if (selectedSkillsAndCourses[this.$route.query.skillId].includes(course.Course_ID)){
+											course.isInCart = true
+										}
+									}
+								}
+							}
+
 						}
 					})
 					.catch((error) => {
