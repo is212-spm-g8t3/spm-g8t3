@@ -103,7 +103,7 @@ class job_role(db.Model):
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
 
-    Job_Role_ID = db.Column(db.String(20), db.ForeignKey(job_role.Job_Role_ID), primary_key=True)
+    Job_Role_ID = db.Column(db.Integer, db.ForeignKey(job_role.Job_Role_ID), primary_key=True)
     Skill_ID = db.Column(db.Integer, db.ForeignKey(Skill.Skill_ID), primary_key=True)
 
     def __init__(self, Job_Role_ID, Skill_ID):
