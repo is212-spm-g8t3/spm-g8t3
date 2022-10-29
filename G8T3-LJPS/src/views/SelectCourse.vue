@@ -22,6 +22,7 @@
 				<!-- Projects Table Card -->
 				<CardProjectTable
 					:courseData="courses"
+					:courseImage="courseSkill"
 				></CardProjectTable>
 				<!-- / Projects Table Card -->
 			</a-col>
@@ -44,9 +45,8 @@
 		},
 		data() {
 			return {
-
-				correctCourseList: [],
 				courses: [],
+				courseSkill:[],
 				skill: "",
 				// Active button for the "Projects" table's card header radio button group.
 				projectHeaderBtns: 'all',
@@ -89,6 +89,13 @@
 								}
 							}
 
+						
+							for(let x = 0;x<this.courses.length;x++){
+								let skillpic = "/images/" + res.data.data.courseCatalog[x].Course_Category + ".png"
+								this.courseSkill.push(skillpic)
+							}
+							
+							console.log(this.courseSkill)
 						}
 					})
 					.catch((error) => {
