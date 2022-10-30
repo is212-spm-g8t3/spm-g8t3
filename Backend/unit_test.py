@@ -50,8 +50,17 @@ class TestGetAllCourses(TestApp):
             Course_Status="Active",
             Course_Type="Internal",
             Course_Category="Core")
+
+        course2 = Courses_Catalog(
+            Course_ID= 'COR002',
+            Course_Name= 'Lean Six Sigma Green Belt Certification',
+            Course_Description='Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics',
+            Course_Status= 'Active',
+            Course_Type= 'Internal',
+            Course_Category='Core')
         
         db.session.add(course1)
+        db.session.add(course2)
         db.session.commit()
 
         response = self.client.get("/courses",
@@ -65,6 +74,15 @@ class TestGetAllCourses(TestApp):
                         'Course_ID': 'COR001',
                         'Course_Name': 'Systems Thinking and Design',
                         'Course_Description': 'This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking',
+                        'Course_Status': 'Active',
+                        'Course_Type': 'Internal',
+                        'Course_Category': 'Core'
+                    },
+
+                    {
+                        'Course_ID': 'COR002',
+                        'Course_Name': 'Lean Six Sigma Green Belt Certification',
+                        'Course_Description': 'Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics',
                         'Course_Status': 'Active',
                         'Course_Type': 'Internal',
                         'Course_Category': 'Core'
