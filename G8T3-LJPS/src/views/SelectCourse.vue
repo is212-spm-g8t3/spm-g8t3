@@ -57,7 +57,6 @@
 
 			getCourses() {
 				// Update the skillId later on when merge
-				// @app.route("/getCoursesBySkill/<skillID>", methods=['GET']) this.$route.query.roleId
 				const course_url = "http://localhost:5000/getCoursesBySkill/" + this.$route.query.skillId
 				axios.get(course_url)
 					.then((res) => {

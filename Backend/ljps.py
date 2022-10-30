@@ -662,11 +662,11 @@ def viewStaffLearningJourneys(Staff_ID):
 
 @app.route("/learningJourney/createLearningJourney", methods=['POST'])
 def createLearningJourney():
-    data = request.form
+    data = request.get_json()
 
     # Initialize LearningJourney class
     newLearningJourney = learning_journey(
-        LJ_ID = 0,
+        LJ_ID = 13,
         Staff_ID = data['staff_id'],
         Job_Role_ID = data['job_role_id']
     )
@@ -865,7 +865,7 @@ def updateSkill():
 
 @app.route("/learningJourney/createLearningJourneySkill", methods=['POST'])
 def createLearningJourneySkill():
-    data = request.form
+    data = request.get_json()
 
     # Initialize LearningJourney class
     newLearningJourneySkill = learning_journey_skill(
@@ -875,7 +875,7 @@ def createLearningJourneySkill():
     )
     
     try:
-        db.session.add(learning_journey_skill)
+        db.session.add(newLearningJourneySkill)
         db.session.commit()
         
     except Exception as e:
@@ -920,7 +920,7 @@ def getLearningJourneySkill(LJ_ID):
 
 @app.route("/learningJourney/createLearningJourneyCourse", methods=['POST'])
 def createLearningJourneyCourse():
-    data = request.form
+    data = request.get_json()
 
     # Initialize LearningJourney class
     newLearningJourneyCourse = learning_journey_course(
@@ -932,7 +932,7 @@ def createLearningJourneyCourse():
     )
     
     try:
-        db.session.add(learning_journey_course)
+        db.session.add(newLearningJourneyCourse)
         db.session.commit()
         
     except Exception as e:

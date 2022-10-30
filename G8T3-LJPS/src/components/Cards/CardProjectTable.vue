@@ -15,9 +15,9 @@
 			</a-col>
 		</a-row>
 		
-		<template v-if="dataFilteredStatus.length == 0">
+		<div v-if="dataFilteredStatus.length == 0">
 			<h5>No courses available.</h5>
-		</template>
+		</div>
 
 		<a-row type="flex" :gutter="[24,24]" align="stretch">
 			<!-- Project Column -->
@@ -36,6 +36,7 @@
 					<p class="text">
 						{{item.Course_Description}}
 					</p>
+					<br>
 					<a-button v-on:click="selectCourse(item.Course_ID)" onclick="this.disabled = true; this.innerHTML = 'Added'"
 							:disabled="item.isInCart == true ? true : false"
 							:class="item.isInCart == true ? 'ant-tag-mute' : 'ant-tag-primary'">
@@ -49,9 +50,24 @@
 			</a-col>
 			<!-- / Project Column -->
 		</a-row>
+
+
+		<br>
+		<br>
+		<br>
+		<div>
+			<a-button type="dark" onclick="history.back()" style="margin-right: 24px">
+				Back
+			</a-button>
+		</div>
+
+
 	</div>
-	<!-- / Projects Table Card -->
+
 </template>
+
+
+
 
 <script>
 

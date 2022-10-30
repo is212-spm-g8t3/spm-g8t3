@@ -82,13 +82,28 @@
 
 
 		</a-table>
+		<div class="text-right">
+			<a-button type="dark" v-on:click="checkout()" >
+				Save
+			</a-button>
+		</div>
 	</a-card>
 	<!-- / Authors Table Card -->
 
 
 </template>
 
+<!-- <template>
+	<a-button type="link" :data-id="row.key">
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path class="fill-gray-7" d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L15.6213 7.20711L12.7929 4.37868L13.5858 3.58579Z"/>
+			<path class="fill-gray-7" d="M11.3787 5.79289L3 14.1716V17H5.82842L14.2071 8.62132L11.3787 5.79289Z"/>
+		</svg>
+	</a-button>
+</template> -->
+
 <script>
+	import axios from 'axios';
 	export default ({
 		props: {
 			data: {
@@ -122,28 +137,88 @@
 
 			selectSkill(skillId){
 
-				//update localStorage variable for skills
-				// localStorage.removeItem('selectedSkills');
-				//TODO: move this to courses
-				// let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
-				
-				// if (selectedSkills === null){
-				// 	// if selected skills is null then initialise selected skills array.
-				// 	selectedSkills = [skillId]
-				// 	console.log(typeof(selectedSkills))
-				// } else if(!selectedSkills.includes(skillId) ){
-				// 	console.log(selectedSkills)
-				// 	console.log(typeof(selectedSkills))
-				// 	selectedSkills.push(skillId)
-				// }
-				// console.log(selectedSkills)
-				// localStorage.setItem('selectedSkills', JSON.stringify(selectedSkills));
-
-
 				// this.$route.query.roleId
 				this.$router.push({
 						path: '/select-course?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
 					});
+			},
+
+			checkout(){
+				//checkout skills and courses
+				let sendData = confirm("You are about to save a learning journey. Proceed?");
+
+				if (sendData == false){
+					return
+				}
+
+				let roleId = this.$route.query.roleId
+				let skillId = this.$route.query.skillId
+				let staffId = 130001
+
+				let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+
+				let payload = { job_role_id: roleId, staff_id: staffId };
+				const path = 'http://localhost:5000/learningJourney/createLearningJourney';
+				axios.post(path, payload)
+					.then((res) => {
+						console.log(res)
+						//console.log("Learning Journey Successfully created")
+						
+						
+					})
+					.catch((error) => {
+					// eslint-disable-next-line
+					console.error(error);
+					});
+
+				//send data to save learning endpoint
+
+				// this.$router.push({
+				// 		path: '/save-learning-journey', 
+				// 	});
+
+				//save learning journey skills
+				for (let skill in selectedSkillsAndCourses){
+					console.log(skill)
+					let skillPayload = { skill_id: skill, staff_id: staffId, lj_id: 13 };
+					let skillPath = 'http://localhost:5000/learningJourney/createLearningJourneySkill';
+					axios.post(skillPath, skillPayload)
+						.then((res) => {
+							console.log("Learning Journey skill Successfully saved")
+							
+						})
+						.catch((error) => {
+						// eslint-disable-next-line
+						console.error(error);
+						});
+				}
+
+				//save learning journey courses
+				for (let skillId in selectedSkillsAndCourses){
+					for (let course of selectedSkillsAndCourses[skillId]){
+						let coursePayload = { skill_id: skillId, 
+							staff_id: staffId, 
+							reg_id: 1, 
+							course_id: course, 
+							lj_id: 13
+						};
+						let coursePath = 'http://localhost:5000/learningJourney/createLearningJourneyCourse';
+						axios.post(coursePath, coursePayload)
+							.then((res) => {
+								console.log("Learning Journey course Successfully saved")
+								
+							})
+							.catch((error) => {
+							// eslint-disable-next-line
+							console.error(error);
+							});
+					}
+					
+				}
+
+				alert("Learning Journey successfully created")
+				localStorage.removeItem('selectedSkillsAndCourses');
+				
 			},
 
 			handleOk(e) {
