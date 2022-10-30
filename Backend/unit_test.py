@@ -3,37 +3,36 @@ import flask_testing
 from ljps import *
 # from unittest.mock import MagicMock
 
-# class TestApp(flask_testing.TestCase):
-
-#     # Setting a in-memory temporary database
-#     app = Flask(__name__)
-#     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
-#     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
-#     app.config['TESTING'] = True
-
-#     def create_app(self):
-#         return app
-
-#     # Run below each test function (method)
-#     def setUp(self):
-#         db.create_all()
-
-#     # Destroy after each test function (method)
-#     def tearDown(self):
-#         db.session.remove()
-#         db.drop_all()
 class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
-    def create_app(self):
-        return create_test_app()
+    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
+        'dbURL') or 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+    app.config['TESTING'] = True
 
+    def create_app(self):
+        return app
+
+    # Run below each test function (method)
     def setUp(self):
         db.create_all()
 
+    # Destroy after each test function (method)
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
+    # # Setting a in-memory temporary database
+    # def create_app(self):
+    #     return create_test_app()
+
+    # def setUp(self):
+    #     db.create_all()
+
+    # def tearDown(self):
+    #     db.session.remove()
+    #     db.drop_all()
     
 class TestGetAllCourses(TestApp):
     ''' 
