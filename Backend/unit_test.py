@@ -125,7 +125,7 @@ class TestGetAllCourses(TestApp):
             Skill_ID='1'
         )
 
-        db.session.add(course1)
+        # db.session.add(course1)
         db.session.add(course2)
         db.session.add(course3)
         db.session.add(skill1)
