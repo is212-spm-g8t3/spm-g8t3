@@ -142,7 +142,7 @@ class TestGetAllCourses(TestApp):
             'data': {
                 'courseCatalog': [
                     {
-                        'Course_ID': 'COR003',
+                        'Course_ID': 'COR001',
                         'Course_Name': 'Systems Thinking and Design',
                         'Course_Description': 'This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking',
                         'Course_Status': 'Active',
