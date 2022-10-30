@@ -1,48 +1,34 @@
-<!-- 
-	This is the tables page, it uses the dashboard layout in: 
-	"./layouts/Dashboard.vue" .
- -->
 
  <template>
 	<div>
 		<!-- Title -->
 		<a-row :gutter="24">
 			<a-col :span="24" :md="12" class="mb-12">
-				<h3 style="margin-left: 12px">Skill Selection - {{ roleName }}</h3>
+				<h3 style="margin-left: 12px">Learning Journey Confirmation - {{ roleName }}</h3>
 			</a-col>
 			<a-col :span="24" :md="12" class="mb-12" style="display: flex; align-items: center; justify-content: flex-end">
 			</a-col>
 		</a-row>
 		<!-- / Title -->
 
-		<!-- Authors Table -->
-		<a-row :gutter="24" type="flex">
-
-			<!-- Authors Table Column -->
-			<a-col :span="24" class="mb-24">
-
-				<!-- Authors Table Card -->
-				<CardSkillTable
-					:titleName="titleName"
-					:data="skillsData"
-					:columns="table1Columns"
-				></CardSkillTable>
-				<!-- / Authors Table Card -->
-
-			</a-col>
-			<!-- / Authors Table Column -->
-
-		</a-row>
-		<!-- / Authors Table -->
+        <div>
+            <!-- iterate through skills -->
+            <a-row v-for="skill of skills">
+                <h4>{{skill.skillName}}</h4>
+                <a-row v-for="course of courses">
+                    <strong>{{course.courseName}}</strong>
+                </a-row>
+            </a-row>
+        </div>
 
 	</div>
 </template>
 
 <script>
 
-	import CardSkillTable from '../components/Cards/CardSelectSkillTable' ;
+	// import CardSkillTable from '../components/Cards/CardSelectSkillTable' ;
 	import axios from 'axios';
-import { SlowBuffer } from 'buffer';
+// import { SlowBuffer } from 'buffer';
 	
 			
 	
@@ -68,16 +54,6 @@ import { SlowBuffer } from 'buffer';
 			dataIndex: 'cartDetails',
 			scopedSlots: { customRender: 'cartDetails' },
 		},
-		// {
-		// 	title: 'CREATED',
-		// 	dataIndex: 'created',
-		// 	class: 'text-muted',
-		// },
-		// {
-		// 	title: '',
-		// 	scopedSlots: { customRender: 'editBtn' },
-		// 	width: 50,
-		// },
 	]
 
 
@@ -96,6 +72,8 @@ import { SlowBuffer } from 'buffer';
 				visible: false,
 				titleName: "Skills",
 				roleName: "",
+
+                
 
 				
 			}

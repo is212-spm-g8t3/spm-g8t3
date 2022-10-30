@@ -4,6 +4,7 @@
 		<a-row type="flex" style="margin-bottom: 10px;">
 			<a-col :span="24" :md="12" style="text-align: left;">
 				<h3>Courses</h3>
+				
 			</a-col>
 			<a-col :span="24" :md="12" style="text-align: right;">
 				<a-input-search
@@ -13,12 +14,16 @@
 				/>
 			</a-col>
 		</a-row>
+		
+		<div v-if="dataFilteredStatus.length == 0">
+			<h5>No courses available.</h5>
+		</div>
 
 		<a-row type="flex" :gutter="[24,24]" align="stretch">
 			<!-- Project Column -->
 			<a-col :span="24" :md="6" v-for="(item, index) in dataFilteredStatus" :key="index">
 				<!-- Project Card -->
-				<a-card class="card-info" hoverable @click="selectCourse" bodyStyle="height:200px;">
+				<a-card class="card-info" hoverable bodyStyle="height:200px;">
 					<template #cover>
 						<img
 						alt="example"
@@ -31,6 +36,12 @@
 					<p class="text">
 						{{item.Course_Description}}
 					</p>
+					<br>
+					<a-button v-on:click="selectCourse(item.Course_ID)" onclick="this.disabled = true; this.innerHTML = 'Added'"
+							:disabled="item.isInCart == true ? true : false"
+							:class="item.isInCart == true ? 'ant-tag-mute' : 'ant-tag-primary'">
+						{{ item.isInCart == true ? "Added" : "Add" }}
+					</a-button>
 					<!-- <template #actions>
 						<a-button type="link" style="width: 90%; margin: 0px; padding: 0px; height: 25px; color: black" size="large">Select</a-button>
 					</template> -->
@@ -39,9 +50,24 @@
 			</a-col>
 			<!-- / Project Column -->
 		</a-row>
+
+
+		<br>
+		<br>
+		<br>
+		<div>
+			<a-button type="dark" onclick="history.back()" style="margin-right: 24px">
+				Back
+			</a-button>
+		</div>
+
+
 	</div>
-	<!-- / Projects Table Card -->
+
 </template>
+
+
+
 
 <script>
 
@@ -55,6 +81,7 @@
 				type: Array,
 				default: () => [],
 			},
+
 			courseImage: {
 				type: Array,
 				default: () => [],
@@ -69,16 +96,48 @@
 		},
 
 		methods: {
-			selectCourse(){
-				console.log("Hello!")
-				let text;
-  				if (confirm("Confirm course selection?") == true) {
-					text = "Selection confirmed!";
-					alert(text)
-				} else {
-					text = "You canceled!";
-					alert(text)
-  				}
+			selectCourse(courseId){
+				for (let course of this.courseData){
+					if (course.Course_ID == courseId){
+						course.isInCart = true
+					}
+					
+				}
+
+			
+					
+			console.log(this.courseData)
+			//location.reload()
+			//update localStorage variable for skills
+			//localStorage.removeItem('selectedSkillsAndCourses');
+			let skillId = this.$route.query.skillId
+			console.log(skillId)
+			console.log(courseId)
+			
+			//handle skills selection
+			let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+			
+			if (selectedSkillsAndCourses === null){
+				selectedSkillsAndCourses = {}
+			}
+
+			if (!(skillId in selectedSkillsAndCourses)){
+				// if selected skills is null then initialise selected skills array.
+				
+				let skillCourse = [courseId] //initialise course list
+				selectedSkillsAndCourses[skillId] = skillCourse
+			} else{
+
+				//check if courseId is in list of courses
+				if (!selectedSkillsAndCourses[skillId].includes(courseId)){
+
+					selectedSkillsAndCourses[skillId].push(courseId) //add skill course object
+				}
+			}
+
+			console.log(selectedSkillsAndCourses)
+			localStorage.setItem('selectedSkillsAndCourses', JSON.stringify(selectedSkillsAndCourses));
+
 			},
 		},
 		computed: {
