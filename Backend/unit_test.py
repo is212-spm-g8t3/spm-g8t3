@@ -2,6 +2,9 @@ import unittest
 from datetime import datetime
 from ljps import *
 
+'''
+Test Done By: Quentin Quek 
+'''
 class TestCoursesCatalog(unittest.TestCase):
 
     def setUp(self):
