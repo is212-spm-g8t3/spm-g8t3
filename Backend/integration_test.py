@@ -23,10 +23,8 @@ class TestApp(flask_testing.TestCase):
         db.session.remove()
         db.drop_all()
     
-class TestGetAllCourses(TestApp):
-    ''' 
-    Test Cases for Courses
-    '''
+''' Test Cases for Courses '''
+class TestCourse(TestApp):
     def test_get_all_courses(self):
 
         # Uncomment below to see the full response of query
@@ -175,6 +173,70 @@ class TestGetAllCourses(TestApp):
                 ]
             }   
         })
+
+    def test_get_course_skills_by_course_name(self):
+        pass
+
+
+    def test_get_courses_with_skills(self):
+        pass
+
+    def test_get_courses_by_skill_id(self):
+        pass
+
+    def test_update_course_skills(self):
+        pass
+
+''' Test Cases for Roles '''
+class TestRoles(TestApp):
+    def test_get_all_roles(self):
+        pass
+
+    def test_get_roles_with_skills(self):
+        pass
+
+    def test_create_role(self):
+        pass
+
+
+''' Test Cases for Skills '''
+class TestSkills(TestApp):
+    def test_get_all_skills(self):
+        pass
+
+    def test_get_skills_by_role(self):
+        pass
+
+    # '/skills/AddNewSkill
+    def test_create_skill(self):
+        pass
+
+    def test_update_skill(self):
+        pass
+
+''' Test Cases for Learning Journey '''
+class TestLearningJourney(TestApp):
+    def test_view_learning_journey(self):
+        pass
+
+    def test_view_staff_learning_journeys(self):
+        pass
+
+    def test_create_learning_journey(self):
+        pass
+
+    def test_get_learning_journey_by_role_id(self):
+        pass
+
+    def test_create_learning_journey_skill(self):
+        pass
+
+    def test_get_learning_journey_skills_by_LJ_ID(self):
+        pass
+
+    def test_create_learning_journey_course(self):
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()
