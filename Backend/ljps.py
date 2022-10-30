@@ -77,6 +77,9 @@ class course_skills(db.Model):
     def __init__(self, Skill_ID, Course_ID):
         self.Skill_ID = Skill_ID
         self.Course_ID = Course_ID
+    
+    def json(self):
+        return {"Skill_ID": self.Skill_ID, "Course_ID": self.Course_ID}
 
 class job_role(db.Model):
     __tablename__ = 'job_role'
@@ -89,17 +92,18 @@ class job_role(db.Model):
     Created_Date  = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
-    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description, Department, Created_Date):
+    def __init__(self, Job_Role_ID, Job_Role_Name, Job_Role_Description, Department, Status, Created_Date):
         self.Job_Role_ID = Job_Role_ID
         self.Job_Role_Name = Job_Role_Name
         self.Job_Role_Description = Job_Role_Description
         self.Department = Department
+        self.Status = Status
         self.Created_Date = Created_Date
 
     def json(self):
         # return {"Role_ID": self.Job_Role_ID, "Role_Name": self.Job_Role_Name, "Role_Description": self.Job_Role_Description}
 
-        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description, "Department": self.Department, "Created_Date": self.Created_Date}
+        return {"Job_Role_ID": self.Job_Role_ID, "Job_Role_Name": self.Job_Role_Name, "Job_Role_Description": self.Job_Role_Description, "Department": self.Department, 'Status': self.Status, "Created_Date": self.Created_Date}
 
 class job_role_skills(db.Model):
     __tablename__ = 'job_role_skills'
@@ -120,6 +124,13 @@ class system_role(db.Model):
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(50))
 
+    def __init__(self, Role_ID, Role_Name):
+        self.Role_ID = Role_ID
+        self.Role_Name = Role_Name
+    
+    def json(self):
+        return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name}
+
 class staff(db.Model):
     __tablename__ = 'staff'
 
@@ -130,6 +141,17 @@ class staff(db.Model):
     Email = db.Column(db.String(50)) 
     System_Role = db.Column(db.Integer, db.ForeignKey(system_role.Role_ID))
 
+    def __init__(self, Staff_ID, Staff_FName, Staff_LName, Dept, Email, System_Role):
+        self.Staff_ID = Staff_ID
+        self.Staff_FName = Staff_FName
+        self.Staff_LName = Staff_LName
+        self.Dept = Dept
+        self.Email = Email
+        self.System_Role = System_Role
+    
+    def json(self):
+        return {"Staff_ID": self.Staff_ID, "Staff_FName": self.Staff_FName, "Staff_LName": self.Staff_LName, "Dept": self.Dept, "Email": self.Email, "System_Role": self.System_Role}
+
 class registration(db.Model):
     __tablename__ = 'registration'
 
@@ -138,6 +160,16 @@ class registration(db.Model):
     Staff_ID = db.Column(db.Integer, db.ForeignKey(staff.Staff_ID))
     Reg_Status = db.Column(db.String(20))
     Completion_Status = db.Column(db.String(20))
+
+    def __init__(self, Reg_ID, Course_ID, Staff_ID, Reg_Status, Completion_Status):
+        self.Reg_ID = Reg_ID
+        self.Course_ID = Course_ID
+        self.Staff_ID = Staff_ID
+        self.Reg_Status = Reg_Status
+        self.Completion_Status = Completion_Status
+    
+    def json(self):
+        return {"Reg_ID": self.Reg_ID, "Course_ID": self.Course_ID, "Staff_ID": self.Staff_ID, "Reg_Status": self.Reg_Status, "Completion_Status": self.Completion_Status}
 
 class learning_journey(db.Model):
     __tablename__ = 'learning_journey'

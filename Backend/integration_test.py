@@ -117,7 +117,7 @@ class TestGetAllCourses(TestApp):
             Skill_Type='Active',
             Status='Active',
             Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-                    )
+        )
         
         course_skill1 = course_skills(
             Course_ID='COR001',
