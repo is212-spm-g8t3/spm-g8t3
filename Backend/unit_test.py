@@ -78,13 +78,13 @@ class TestGetAllCourses(TestApp):
         # Uncomment below to see the full response of query
         # self.maxDiff = None
 
-        course1 = Courses_Catalog(
-            Course_ID="COR001",
-            Course_Name="Systems Thinking and Design",
-            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
-            Course_Status="Active",
-            Course_Type="Internal",
-            Course_Category="Core")
+        # course1 = Courses_Catalog(
+        #     Course_ID="COR001",
+        #     Course_Name="Systems Thinking and Design",
+        #     Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+        #     Course_Status="Active",
+        #     Course_Type="Internal",
+        #     Course_Category="Core")
 
         course2 = Courses_Catalog(
             Course_ID= 'COR002',
