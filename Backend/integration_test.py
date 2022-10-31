@@ -6,8 +6,7 @@ from ljps import *
 class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
-    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-        'dbURL') or 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
     app.config['TESTING'] = True
 
