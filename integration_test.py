@@ -1,11 +1,11 @@
 import unittest
-# import flask_testing
+import flask_testing
 from Backend import app, db
 # from app import app
 from Backend.models import Courses_Catalog, Skill, course_skills, learning_journey, learning_journey_course, learning_journey_skill, registration, job_role, job_role_skills, system_role, staff
 from datetime import datetime
 
-class TestApp(unittest.TestCase):
+class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
@@ -19,11 +19,11 @@ class TestApp(unittest.TestCase):
 
     # Run below each test function (method)
     def setUp(self):
-        self.client = app.test_client()
-        ctx = app.app_context()
-        ctx.push()
-        with ctx:
-            db.create_all()
+        # self.client = app.test_client()
+        # ctx = app.app_context()
+        # ctx.push()
+        # with ctx:
+        db.create_all()
 
     # Destroy after each test function (method)
     def tearDown(self):
