@@ -239,4 +239,5 @@ class TestLearningJourney(TestApp):
 
 
 if __name__ == "__main__":
+    print("INTEGRATION")
     unittest.main()
