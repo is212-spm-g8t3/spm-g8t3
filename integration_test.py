@@ -1,6 +1,6 @@
 import unittest
 import flask_testing
-from Backend import app, db, create_test_app
+from Backend import app, db
 # from app import app
 from Backend.models import Courses_Catalog, Skill, course_skills, learning_journey, learning_journey_course, learning_journey_skill, registration, job_role, job_role_skills, system_role, staff
 from datetime import datetime
@@ -10,13 +10,20 @@ class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
-    # # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
+    if __name__ == "__main__":
+        app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['TESTING'] = True
+        print('yup')
+
+    # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
     # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
     # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # app.config['TESTING'] = True
 
     def create_app(self):
-        return create_test_app()
+        return app
 
     # Run below each test function (method)
     def setUp(self):
@@ -250,5 +257,5 @@ class TestLearningJourney(TestApp):
 
 
 if __name__ == "__main__":
-    print("INTEGRATION")
     unittest.main()
+

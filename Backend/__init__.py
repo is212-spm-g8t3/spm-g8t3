@@ -14,15 +14,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 db.init_app(app)
 
-def create_test_app():
-    app.config['TESTING'] = True
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
-    # Dynamically bind SQLAlchemy to application
-    db.init_app(app)
-    app.app_context().push() # this does the binding
-    return app
-
-
 from Backend import routes
 from Backend import models
 
