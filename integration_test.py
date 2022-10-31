@@ -10,7 +10,7 @@ class TestApp(flask_testing.TestCase):
     # Setting a in-memory temporary database
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
-    # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['TESTING'] = True
 
@@ -19,10 +19,6 @@ class TestApp(flask_testing.TestCase):
 
     # Run below each test function (method)
     def setUp(self):
-        # self.client = app.test_client()
-        # ctx = app.app_context()
-        # ctx.push()
-        # with ctx:
         db.create_all()
 
     # Destroy after each test function (method)
