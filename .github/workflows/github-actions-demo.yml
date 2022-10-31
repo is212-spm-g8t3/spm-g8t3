@@ -60,7 +60,7 @@ jobs:
       - name: Test Integration test
         #runs the integration test
         run: |
-          python -m unittest integration_test
+          python integration_test.py
         shell: cmd
 
   # integrationtest:
