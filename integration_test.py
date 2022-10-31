@@ -18,7 +18,11 @@ class TestApp(flask_testing.TestCase):
 
     # Run below each test function (method)
     def setUp(self):
-        db.create_all()
+        self.client = app.test_client()
+        ctx = app.app_context()
+        ctx.push()
+        with ctx:
+            db.create_all()
 
     # Destroy after each test function (method)
     def tearDown(self):
