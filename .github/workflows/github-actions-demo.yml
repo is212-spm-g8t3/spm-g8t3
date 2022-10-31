@@ -62,5 +62,5 @@ jobs:
         #runs the integration test
         working-directory: ./Backend
         run: |
-          python -m unittest integration_test
+          python integration_test
       
