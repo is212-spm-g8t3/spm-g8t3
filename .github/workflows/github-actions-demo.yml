@@ -43,13 +43,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
-
-      - name: Test with unittest
-        #runs the integration test
-        working-directory: ./Backend
-        run: |
-          python -m unittest integration_test
-
+    
       - name: Lint with flake8
         #runs flake8 over the code
         run: |
@@ -58,9 +52,15 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       
-      - name: Test with unittest
-        #runs the unittest
-        working-directory: ./Backend
-        run: |
-          python -m unittest unit_test
+      # - name: Test Unittest
+      #   #runs the unittest
+      #   working-directory: ./Backend
+      #   run: |
+      #     python -m unittest unit_test
+
+      # - name: Test Integration test
+      #   #runs the integration test
+      #   working-directory: ./Backend
+      #   run: |
+      #     python -m unittest integration_test
       
