@@ -60,7 +60,7 @@ jobs:
       - name: Test Integration test
         #runs the integration test
         env: 
-        SQLALCHEMY_DATABASE_URI: "sqlite://"
+        SQLALCHEMY_DATABASE_URI: sqlite://
         run: |
           python -m unittest integration_test
 
