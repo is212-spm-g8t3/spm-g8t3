@@ -6,8 +6,7 @@ from ljps import *
 class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
-    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-        'dbURL') or 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://' + db_creds.username + ':' + db_creds.password + '@' + db_creds.hostname + ':3306/ljps_test'
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
     app.config['TESTING'] = True
 
@@ -175,8 +174,92 @@ class TestCourse(TestApp):
         })
 
     def test_get_course_skills_by_course_name(self):
-        pass
 
+        # Uncomment below to see the full response of query
+        # self.maxDiff = None
+
+        course1 = Courses_Catalog(
+            Course_ID="COR001",
+            Course_Name="Systems Thinking and Design",
+            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+            Course_Status="Active",
+            Course_Type="Internal",
+            Course_Category="Core")
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+        )
+
+        skill2 = Skill(
+            Skill_ID='2',
+            Skill_Name='HR',
+            Skill_Description='Human Resources',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+        )
+
+        skill3 = Skill(
+            Skill_ID='3',
+            Skill_Name='Hacking',
+            Skill_Description='Hacking',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+        )
+
+        course_skill1 = course_skills(
+            Course_ID='COR001',
+            Skill_ID='1'
+        )
+
+        course_skill2 = course_skills(
+            Course_ID='COR001',
+            Skill_ID='2'
+        )
+
+        course_skill3 = course_skills(
+            Course_ID='COR001',
+            Skill_ID='3'
+        )
+
+        db.session.add(course1)
+        db.session.add(skill1)
+        db.session.add(skill2)
+        db.session.add(skill3)
+        db.session.add(course_skill1)
+        db.session.add(course_skill2)
+        db.session.add(course_skill3)
+        db.session.commit()
+
+        response = self.client.get("/getCourseSkills/Systems Thinking and Design",
+                                   content_type='application/json')
+    
+        self.assertEqual(response.json, {
+            'code': 200,
+            'data': {
+                'course': 'Systems Thinking and Design',
+                'courseSkills': [
+                    {
+                        "Skill_Description": "Sell", 
+                        "Skill_Name": "Sales"
+                    },
+                    {
+                        "Skill_Description": "Human Resources", 
+                        "Skill_Name": "HR"
+                    },
+                    {
+                        "Skill_Description": "Hacking", 
+                        "Skill_Name": "Hacking"
+                    }
+                ]
+            }   
+        })
 
     def test_get_courses_with_skills(self):
         pass
