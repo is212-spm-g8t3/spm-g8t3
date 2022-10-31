@@ -58,9 +58,9 @@ jobs:
         run: |
           python -m unittest unit_test
 
-      # - name: Test Integration test
-      #   #runs the integration test
-      #   working-directory: ./Backend
-      #   run: |
-      #     python -m unittest integration_test
+      - name: Test Integration test
+        #runs the integration test
+        working-directory: ./Backend
+        run: |
+          python -m unittest integration_test
       
