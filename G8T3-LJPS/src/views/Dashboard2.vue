@@ -47,6 +47,7 @@
 					:titleName="titleName"
 					:data="rolesData"
 					:columns="table1Columns"
+					style="padding-right: 10px;"
 				></CardRoleTableDB2>
 				<!-- / Many Roles Card -->
 				

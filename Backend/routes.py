@@ -474,7 +474,7 @@ def updateSkill():
             ), 400
 
     # Check if the rest is the same, if same return message
-    if data['type'] == dbSkillData.Skill_Type and data['description'] == dbSkillData.Skill_Description and data['status'] == dbSkillData.Status:
+    if data['name'] == dbSkillData.Skill_Name and data['type'] == dbSkillData.Skill_Type and data['description'] == dbSkillData.Skill_Description and data['status'] == dbSkillData.Status:
         return jsonify(
             {
                 "code": 400,
@@ -483,6 +483,9 @@ def updateSkill():
         ), 400
 
     # Do the update
+    if data['name'] != dbSkillData.Skill_Name:
+        dbSkillData.Skill_Name = data['name']
+
     if data['type'] != dbSkillData.Skill_Type:
         dbSkillData.Skill_Type = data['type']
 
