@@ -82,13 +82,26 @@
 
 
 		</a-table>
+		<div class="text-right">
+
+		</div>
 	</a-card>
 	<!-- / Authors Table Card -->
 
 
 </template>
 
+<!-- <template>
+	<a-button type="link" :data-id="row.key">
+		<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path class="fill-gray-7" d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L15.6213 7.20711L12.7929 4.37868L13.5858 3.58579Z"/>
+			<path class="fill-gray-7" d="M11.3787 5.79289L3 14.1716V17H5.82842L14.2071 8.62132L11.3787 5.79289Z"/>
+		</svg>
+	</a-button>
+</template> -->
+
 <script>
+	import axios from 'axios';
 	export default ({
 		props: {
 			data: {
@@ -122,25 +135,7 @@
 
 			selectSkill(skillId){
 
-				//update localStorage variable for skills
-				// localStorage.removeItem('selectedSkills');
-				//TODO: move this to courses
-				let selectedSkills = JSON.parse(localStorage.getItem('selectedSkills'));
-				
-				if (selectedSkills === null){
-					// if selected skills is null then initialise selected skills array.
-					selectedSkills = [skillId]
-					console.log(typeof(selectedSkills))
-				} else if(!selectedSkills.includes(skillId) ){
-					console.log(selectedSkills)
-					console.log(typeof(selectedSkills))
-					selectedSkills.push(skillId)
-				}
-				console.log(selectedSkills)
-				localStorage.setItem('selectedSkills', JSON.stringify(selectedSkills));
-
-
-				this.$route.query.roleId
+				// this.$route.query.roleId
 				this.$router.push({
 						path: '/select-course?roleId=' + this.$route.query.roleId + "&skillId=" + skillId, 
 					});

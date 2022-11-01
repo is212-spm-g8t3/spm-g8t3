@@ -1,0 +1,276 @@
+<html>
+<head>
+    <title>LJPS API Documentation</title>
+</head>
+<body>
+
+    <h1>LJPS API v1.0 - Documentation</h1>
+    <i><font color="red">In the case of local API installation, the exact URL may vary - please check your local setup.</font></i>
+    <ul>
+        <li><a href="#courses">Courses Related</a></li>
+        <li><a href="#roles">Roles Related</a></li>
+        <li><a href="#skills">Skills Related</a></li>
+        <li><a href="#learningJourney">Learning Journey Related</a></li>
+    </ul>
+    <hr>
+    
+    <h1 id="courses">Courses Related</h1>
+
+    <h2>courses</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of courses in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../courses</font>
+        <br>
+    </p>
+    <hr>
+
+    <h2>get active courses by skill_id</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of active courses that fulfil a specific skill in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getCoursesBySkill/&lt;skillID&gt;</font>
+        <br>
+        where <b>skillID</b> is the ID of a specific skill.
+        <br>
+    </p>
+    <hr>
+
+    <h2>get skills satisfied by course</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of skills that is fulfilled a specific course in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getCourseSkills/&lt;course&gt;</font>
+        <br>
+        where <b>course</b> is the course name of a specific course.
+        <br>
+    </p>
+    <hr>
+
+    <h2>get all courses by skill_id</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of courses that fulfil a specific skill in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getCourseSkills/&lt;skill_id&gt;</font>
+        <br>
+        where <b>skill_id</b> is the skill id of a specific skill.
+        <br>
+    </p>
+    <hr>
+
+    <h1 id="roles">Roles Related</h1>
+
+    <h2>get all job roles</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of all job roles in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../roles</font>
+        <br>
+    </p>
+    <hr>
+
+    <h2>get all job roles with their associated skills</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of all job roles and their associated skills in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getRolesWithSkills</font>
+        <br>
+    </p>
+    <hr>
+
+    <h2>create role</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Creates a role in the database
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../createRole</font>
+        <br>
+        where POST data parameter <b>name</b> is the name of the role to be created, <b>description</b> is the description of the role
+        and <b>department</b> is the department the role belongs to.
+    </p>
+    <hr>
+    
+    <h1 id="skills">Skills Related</h1>
+
+    <h2>get all skills</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of all skills in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../skills</font>
+        <br>
+    </p>
+    <hr>
+
+    <h2>get skills by job role ID</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a list of skills base on the provided job role ID in JSON format.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../skills-by-role/&lt;roleId&gt;</font>
+        <br>
+        where <b>roleId</b> is the role ID of the role to be queried.
+    </p>
+    <hr>
+
+    <h2>add new skill</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Creates a skill in the database
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../addNewSkill</font>
+        <br>
+        where POST data parameter <b>name</b> is the name of the skill to be created, <b>description</b> is the description of the skill
+        , <b>type</b> is the type the skill has and <b>status</b> is the status of the skill.
+    <hr>
+
+    <h2>update skill</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Updates a skill in the database
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../skills/updateSkill</font>
+        <br>
+        where POST data parameter <b>id</b> is the id of the skill, <b>name</b> is the name of the skill to be created, <b>description</b> is the description of the skill
+        , <b>type</b> is the type the skill has and <b>status</b> is the status of the skill.
+    <hr>
+
+    <h1 id="learningJourney">Learning Journey Related</h1>
+
+    <h2>View a Learning Journey</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns a specific Learning Joruney based on the Learning Journey ID provided
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../viewLearningJourney/&lt;LJ_ID&gt;</font>
+        <br>
+        where <b>LJ_ID</b> is the ID of the Learning Journey to be viewed.
+    <hr>
+
+    <h2>View a staff's Learning Journeys</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Returns all the Learning Joruneys of a Staff based on the Staff ID provided
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../viewStaffLearningJourneys/&lt;Staff_ID&gt;</font>
+        <br>
+        where <b>Staff_ID</b> is the ID of a Staff member.
+    <hr>
+
+    <h2>Create a Learning Journey</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Creates a Learning Journey in the LJPS system.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../createLearningJourney</font>
+        <br>
+        where POST data parameter <b>staff_id</b> is the id of the staff creating the learning journey and <b>job_role_id</b> is the id of the job role.
+    <hr>
+
+    <h2>Create a Learning Journey Skill Entry</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Creates a skill entry of a Learning Journey in the LJPS system.
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">POST http://../createLearningJourneySkill</font>
+        <br>
+        where POST data parameter <b>lj_id</b> is the ID of the learning journey, <b>staff_id</b> is the id of the staff creating the learning journey and <b>skill_id</b> is the id of the skill.
+    <hr>
+
+    <h2>Get a Learning Journey's Role Details </h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Displays the details of the role the Learning Journey aims to satisfy. 
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getLearningJourneyRole/&lt;LJ_ID&gt;</font>
+        <br>
+        where <b>LJ_ID</b> is the ID of the learning journey.
+    <hr>
+
+    <h2>Get a Learning Journey's Required Skills</h2>
+    <p>
+        <b>Description</b>
+        <br>
+        Displays the details of the skills required by the Learning Journey. 
+    </p>
+    <p>
+        <b>HTTP request</b>
+        <br>
+        <font face="Courier New" color="blue">GET http://../getLearningJourneySkills/&lt;LJ_ID&gt;</font>
+        <br>
+        where <b>LJ_ID</b> is the ID of the learning journey.
+    <hr>
+
+    <footer>&copy; Copyright 2022 LJPS</footer>
+</body>
+</html>

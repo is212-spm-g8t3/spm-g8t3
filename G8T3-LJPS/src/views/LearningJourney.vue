@@ -108,7 +108,9 @@
 			getStaffLearningJourneys() {
 
                 // TODO: Change Staff ID to dynamic
-				const learningJourneyURL = 'http://localhost:5000/learningJourney/viewStaffLearningJourneys/130001' 
+				let staffInfo = JSON.parse(localStorage.getItem('staffInfo'));
+
+				const learningJourneyURL = 'http://localhost:5000/learningJourney/viewStaffLearningJourneys/' + staffInfo['staffId']
 				axios.get(learningJourneyURL)
 					.then((res) => {
 						// console.log(res);
