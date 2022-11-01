@@ -33,7 +33,6 @@
 					<p class="m-0 font-regular text-muted">{{ func.job }}</p>
 				</div>
 			</template>
-
 		</a-table>
 	</a-card>
 	<!-- / Authors Table Card -->
