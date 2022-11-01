@@ -32,6 +32,7 @@ class TestCourse(TestApp):
 
         # Uncomment below to see the full response of query
         # self.maxDiff = None
+        #test
 
         course1 = Courses_Catalog(
             Course_ID="COR001",
