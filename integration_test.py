@@ -484,13 +484,13 @@ class TestCourse(TestApp):
         # db.session.add(course_skill2)
         db.session.commit()
 
-        data = {"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}}
+        data = str({"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}})
         datajson = json.dumps(data)
     
         # print(dict(updateInfo=dict(skillsForUpdate=['Sales', 'HR'],courseId="COR001")))
 
         response = self.client.post("/updateCourseSkills",
-                                    data=datajson,
+                                    data=data,
                                     content_type='application/json')
         
         self.assertEqual(response.json, {
