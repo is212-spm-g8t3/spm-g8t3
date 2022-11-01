@@ -1,7 +1,5 @@
 import unittest
-from datetime import datetime
-from ljps import *
-
+from Backend.models import Courses_Catalog, Skill, course_skills, learning_journey, learning_journey_course, learning_journey_skill, registration, job_role, job_role_skills, system_role, staff
 '''
 Test Done By: Quentin Quek 
 '''
@@ -258,3 +256,5 @@ class TestLearningJourneyCourse(unittest.TestCase):
             'Reg_ID': 6,
         })
 
+if __name__ == "__main__":
+    unittest.main()
