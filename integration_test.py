@@ -1,6 +1,8 @@
 import unittest
 import flask_testing
+# from flask import json
 from Backend import app, db
+import json
 # from app import app
 from Backend.models import Courses_Catalog, Skill, course_skills, learning_journey, learning_journey_course, learning_journey_skill, registration, job_role, job_role_skills, system_role, staff
 from datetime import date, datetime
@@ -479,15 +481,23 @@ class TestCourse(TestApp):
         db.session.add(course1)
         db.session.add(skill1)
         db.session.add(skill2)
-        db.session.add(course_skill1)
-        db.session.add(course_skill2)
+        # db.session.add(course_skill1)
+        # db.session.add(course_skill2)
         db.session.commit()
 
-        response = self.client.post("/updateCourseSkills/",
-                                   content_type='application/json',
-                                    data=json.dumps(dict(updateInfo=dict(skillsForUpdate="",courseId="COR001"))))
-        pass
+        data = {"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}}
+        datajson = json.dumps(data)
+    
+        # print(dict(updateInfo=dict(skillsForUpdate=['Sales', 'HR'],courseId="COR001")))
 
+        response = self.client.post("/updateCourseSkills",
+                                    data=datajson,
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully updated courses.'
+        })
 
 ''' Test Cases for Roles '''
 class TestRoles(TestApp):
