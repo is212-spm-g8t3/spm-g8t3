@@ -1,4 +1,5 @@
 import unittest
+from urllib import response
 import flask_testing
 from flask import json
 from Backend import app, db
@@ -542,7 +543,84 @@ class TestRoles(TestApp):
         })
 
     def test_get_roles_with_skills(self):
-        pass
+        role1 = job_role(
+            Job_Role_ID=2,
+            Job_Role_Name="Engineer",
+            Job_Role_Description="Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
+            Department="Engineering",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        role2 = job_role(
+            Job_Role_ID=17,
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        skill2 = Skill(
+            Skill_ID=2,
+            Skill_Name='Doom',
+            Skill_Description='Inflicts a curse that dispels an enemy Hero and prevents them from casting spells or using items, while taking damage over time',
+            Skill_Type='Hard Skill',
+            Status='Inactive',
+            Created_Date= datetime(2022, 10, 10, 0, 0, 0)
+        )
+
+        job_role_skill1 = job_role_skills(
+            Job_Role_ID=2,
+            Skill_ID=1
+        )
+
+        job_role_skill2 = job_role_skills(
+            Job_Role_ID=17,
+            Skill_ID=2
+        )
+
+        db.session.add(role1)
+        db.session.add(role2)
+        db.session.add(skill1)
+        db.session.add(skill2)
+        db.session.add(job_role_skill1)
+        db.session.add(job_role_skill2)
+        db.session.commit()
+
+        response = self.client.get("/getRolesWithSkills",
+                                   content_type='application/json')
+
+        self.assertEqual(response.json, {
+            'code': 200,
+            'data': [
+                {
+                    "Department": "Engineering",
+                    "Job_Role_Description": "Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
+                    "Job_Role_ID": 2,
+                    "Job_Role_Name": "Engineer",
+                    "Skill_ID": 1,
+                    "Skill_Name": "Plant Rice",
+                    "Status":"Active"
+                },
+                {
+                    "Department": "Technology",
+                    "Job_Role_Description": "Develop software applications",
+                    "Job_Role_ID": 17,
+                    "Job_Role_Name": "Software Developer",
+                    "Skill_ID": 2,
+                    "Skill_Name": "Doom",
+                    "Status":"Active"
+                }
+            ]
+        })
 
     def test_create_role(self):
         pass
