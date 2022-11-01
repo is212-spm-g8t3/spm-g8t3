@@ -87,7 +87,7 @@
 						// Password: adminadmin
 						if (values.email == "Sally.Loh@allinone.com.sg" && values.password == "adminadmin") {
 							let staffData = {
-								"staffId" : "160008",
+								"staffId" : 160008,
 								"role" : "Admin"
 							};
 							localStorage.setItem(
@@ -98,7 +98,17 @@
 						}
 						
 						// Insert User Info
-						else {}
+						else if (values.email == "Susan.Goh@allinone.com.sg" && values.password == "staffstaff") {
+							let staffData = {
+								"staffId": 140002,
+								"role": "User"
+							};
+							localStorage.setItem(
+								'staffInfo',
+								JSON.stringify(staffData)
+							);
+							this.$router.push({ name: 'Home' });
+						}
 					}
 				});
 			},

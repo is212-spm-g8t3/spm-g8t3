@@ -153,9 +153,10 @@
 
 				let roleId = this.$route.query.roleId
 				let skillId = this.$route.query.skillId
-				let staffId = 130001
 
 				let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+				let staffInfo = JSON.parse(localStorage.getItem('staffInfo'));
+				let staffId = staffInfo['staffId'];
 
 				let payload = { job_role_id: roleId, staff_id: staffId };
 				const path = 'http://localhost:5000/learningJourney/createLearningJourney';
