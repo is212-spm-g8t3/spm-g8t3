@@ -488,7 +488,54 @@ class TestCourse(TestApp):
 ''' Test Cases for Roles '''
 class TestRoles(TestApp):
     def test_get_all_roles(self):
-        pass
+        def test_get_all_roles(self):
+            role1 = job_role(
+                Job_Role_ID=2,
+                Job_Role_Name="Engineer",
+                Job_Role_Description="Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
+                Department="Engineering",
+                Status="Active",
+                Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+            role2 = job_role(
+                Job_Role_ID=17,
+                Job_Role_Name="Software Developer",
+                Job_Role_Description="Develop software applications",
+                Department="Technology",
+                Status="Active",
+                Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+
+            db.session.add(role1)
+            db.session.add(role2)
+            db.session.commit()
+
+            response = self.client.get("/roles",
+                                    content_type='application/json')
+
+            self.assertEqual(response.json, {
+                'code': 200,
+                'data': {
+                    'roles': [
+                        {
+                            'Job_Role_ID': 2,
+                            'Job_Role_Name': 'Engineer',
+                            'Job_Role_Description': 'Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo',
+                            'Department': 'Engineering',
+                            'Status': 'Active',
+                            'Created_Date': 'Thu, 27 Oct 2022 00:00:00 GMT'
+                        },
+
+                        {
+                            'Job_Role_ID': 17,
+                            'Job_Role_Name': 'Software Developer',
+                            'Job_Role_Description': 'Develop software applications',
+                            'Department': 'Technology',
+                            'Status': 'Active',
+                            'Created_Date': 'Tue, 18 Oct 2022 00:00:00 GMT'
+                        }
+                    ]
+                }
+            })
 
     def test_get_roles_with_skills(self):
         pass
