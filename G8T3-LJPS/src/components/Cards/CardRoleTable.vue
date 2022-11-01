@@ -194,21 +194,34 @@ export default ({
 	},
 
 	computed: {
-		dataFilteredStatus: function() {
-			if (this.statusRadioBtn != 'All') {
-				if(this.page == "roles"){
-					return this.data.filter(eachData => eachData.Status == this.statusRadioBtn)
-				}
-				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
+		// dataFilteredStatus: function() {
+		// 	if (this.statusRadioBtn != 'All') {
+		// 		if(this.page == "roles"){
+		// 			return this.data.filter(eachData => eachData.Status == this.statusRadioBtn)
+		// 		}
+		// 		return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
 
+		// 	}
+		// 	if (this.search != '') {
+		// 		return this.data.filter(eachData => 
+		// 			eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) 
+		// 			|| eachData.Department.toLowerCase().includes(this.search.toLowerCase())); 
+		// 		}
+		// 	return this.data
+
+		// }
+		dataFilteredStatus: function() {
+			var filteredData = this.data;
+			if (this.statusRadioBtn != 'All') {
+				filteredData = filteredData.filter(eachData => eachData.status == this.statusRadioBtn)
 			}
 			if (this.search != '') {
-				return this.data.filter(eachData => 
-					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) 
-					|| eachData.Department.toLowerCase().includes(this.search.toLowerCase())); 
+				filteredData = filteredData.filter(eachData => 
+				eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) || 
+				eachData.Department.toLowerCase().includes(this.search.toLowerCase()));
 				}
-			return this.data
-
+			console.log(filteredData);
+			return filteredData
 		}
 	},
 
