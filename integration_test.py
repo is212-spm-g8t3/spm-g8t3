@@ -629,7 +629,53 @@ class TestRoles(TestApp):
 ''' Test Cases for Skills '''
 class TestSkills(TestApp):
     def test_get_all_skills(self):
-        pass
+        skill1 = Skill(
+            Skill_ID=2,
+            Skill_Name="Plant Rice",
+            Skill_Description="Gains the ability to plant rice",
+            Skill_Type="Soft Skill",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        skill2 = Skill(
+            Skill_ID=6,
+            Skill_Name="Kimchi Mixing",
+            Skill_Description="Mixing veggies, chillis, sweat and tears.",
+            Skill_Type="Hard Skill",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 10, 0, 0, 0))
+
+        db.session.add(skill1)
+        db.session.add(skill2)
+        db.session.commit()
+
+        response = self.client.get("/skills",
+                                   content_type='application/json')
+
+        self.assertEqual(response.json, {
+            'code': 200,
+            'data': {
+                'skills': [
+                    {
+                        'Skill_ID': 2,
+                        'Skill_Name': 'Plant Rice',
+                        'Skill_Description': 'Gains the ability to plant rice',
+                        'Skill_Type': 'Soft Skill',
+                        'Status': 'Active',
+                        'Created_Date': 'Thu, 27 Oct 2022 00:00:00 GMT'
+                    },
+
+                    {
+                        'Skill_ID': 6,
+                        'Skill_Name': 'Kimchi Mixing',
+                        'Skill_Description': 'Mixing veggies, chillis, sweat and tears.',
+                        'Skill_Type': 'Hard Skill',
+                        'Status': 'Active',
+                        'Created_Date': 'Mon, 10 Oct 2022 00:00:00 GMT'
+                    }
+                ]
+            }
+        })
 
     def test_get_skills_by_role(self):
         pass
