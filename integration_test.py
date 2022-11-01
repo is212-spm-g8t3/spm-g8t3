@@ -192,8 +192,6 @@ class TestCourse(TestApp):
 
 
 ''' Test Cases for Roles '''
-
-
 class TestRoles(TestApp):
     def test_get_all_roles(self):
         role1 = job_role(
@@ -252,8 +250,6 @@ class TestRoles(TestApp):
 
 
 ''' Test Cases for Skills '''
-
-
 class TestSkills(TestApp):
     def test_get_all_skills(self):
         pass
@@ -270,8 +266,6 @@ class TestSkills(TestApp):
 
 
 ''' Test Cases for Learning Journey '''
-
-
 class TestLearningJourney(TestApp):
     def test_view_learning_journey(self):
         pass
