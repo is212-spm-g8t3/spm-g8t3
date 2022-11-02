@@ -525,11 +525,10 @@ def addNewSkill():
 
     # to verify if Skill_ID is unique
     if (Skill.query.filter_by(Skill_Name=data["name"].title()).first()):
-        print("Hey exist la")
         return jsonify(
             {
                 "code": 400,
-                "message": "Skill_ID already exists. Please pick a unique ID."
+                "message": "Skill already exists. Please pick a unique name."
             }
         ), 400
 

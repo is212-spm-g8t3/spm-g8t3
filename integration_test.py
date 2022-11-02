@@ -547,6 +547,9 @@ class TestRoles(TestApp):
     def test_create_role(self):
         pass
 
+    def test_update_role(self):
+        pass
+
 
 ''' Test Cases for Skills '''
 class TestSkills(TestApp):

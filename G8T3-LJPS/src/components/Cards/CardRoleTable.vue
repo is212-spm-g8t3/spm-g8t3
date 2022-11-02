@@ -3,7 +3,7 @@
 	<!-- Authors Table Card -->
 	<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{padding: 0,}">
 		<template #title>
-			<a-row v-if="page == 'Course'"type="flex" align="middle">
+			<a-row v-if="page == 'Course'" type="flex" align="middle">
 				<a-col :span="24" :md="12">
 					<h5 class="font-semibold m-0">{{titleName}}</h5>
 				</a-col>
