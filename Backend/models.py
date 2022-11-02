@@ -186,8 +186,8 @@ class learning_journey_course(db.Model):
     LJ_ID = db.Column(db.Integer, db.ForeignKey(learning_journey_skill.LJ_ID), primary_key=True)
     Staff_ID = db.Column(db.Integer, db.ForeignKey(learning_journey_skill.Staff_ID), primary_key=True)
     Skill_ID = db.Column(db.Integer, db.ForeignKey(learning_journey_skill.Skill_ID), primary_key=True)
-    Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID))
-    Reg_ID = db.Column(db.Integer, db.ForeignKey(registration.Reg_ID))
+    Course_ID = db.Column(db.String(20), db.ForeignKey(Courses_Catalog.Course_ID), primary_key=True)
+    Reg_ID = db.Column(db.Integer, db.ForeignKey(registration.Reg_ID), nullable=True)
 
     def __init__(self, LJ_ID, Staff_ID, Skill_ID, Course_ID, Reg_ID):
         self.LJ_ID = LJ_ID
