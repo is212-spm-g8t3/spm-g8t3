@@ -456,6 +456,31 @@ def updateRole():
             }
         ), 500
 
+@app.route("/deleteRole", methods=['POST'])
+def deleteRole():
+    role_ID = request.get_json()
+
+    rowToUpdate = job_role.query.filter_by(Job_Role_ID=role_ID).first()
+    print(rowToUpdate)
+    rowToUpdate.Status = 'Inactive'
+
+    try:
+        db.session.commit()
+        return jsonify(
+                {
+                    "code": 201,
+                    "message": 'Successfully deleted role.'
+                }
+            ), 201
+
+    except Exception as e:
+        return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while updating the role status. " + str(e)
+                }
+            ), 500
+
 
 # Skills Related Functions
 @app.route("/skills", methods=['GET'])
@@ -617,6 +642,30 @@ def updateSkill():
             "message": 'Updated successfully'
         }
     ), 201
+
+@app.route("/deleteSkill", methods=['POST'])
+def deleteSkill():
+    id = request.get_json()
+
+    rowToUpdate = Skill.query.filter_by(Skill_ID=id).first()
+    rowToUpdate.Status = 'Inactive'
+
+    try:
+        db.session.commit()
+        return jsonify(
+                {
+                    "code": 201,
+                    "message": 'Successfully deleted skill.'
+                }
+            ), 201
+
+    except Exception as e:
+        return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while updating the skill status. " + str(e)
+                }
+            ), 500
 
 # Learning Journey Related Functions
 
