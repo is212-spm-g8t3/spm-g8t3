@@ -79,7 +79,15 @@
                         
                         <template #actions>
                             <a-icon type="check" theme="outlined" />
-                            <a-icon type="delete" theme="outlined" />
+                              <a-popconfirm
+                                title="Are you sure delete this task?"
+                                ok-text="Yes"
+                                cancel-text="No"
+                                @confirm="confirmDelete(course)"
+                                @cancel="cancelDelete"
+                            >
+                                <a-icon type="delete" theme="outlined" />
+                            </a-popconfirm>
                         </template>
                     </a-card>
                 </a-card>
@@ -154,6 +162,7 @@
                 const learningJourneyURL = 'http://localhost:5000/getCoursesBySkillId/' + this.selectedSkill.Skill_ID;
                 axios.get(learningJourneyURL)
                     .then((res) => {
+                        console.log(res);
                         for (let course of res.data.data.courses) {
                             this.courseData.push(course);
                         }
@@ -162,6 +171,40 @@
                         console.error(error);
                         });
             },
+
+            confirmDelete(course) {
+				let staffInfo = JSON.parse(localStorage.getItem('staffInfo'));
+                let deleteInfo = {
+                    'LJ_id': parseInt(this.$route.query.LJId),
+                    'staff_id': staffInfo['staffId'],
+                    'course_id': course.Course_ID
+                    
+                }
+                const learningJourneyURL = 'http://localhost:5000/deleteLearningJourneyCourse';
+
+                axios.post(learningJourneyURL, 
+                {'deleteInfo': JSON.stringify(deleteInfo)})
+                    .then((response) => {
+                        console.log(response);
+
+                        // Happy path, success creation
+                        if (response.data.code == 201) {
+                            message.success(response.data.message, 10);
+                            setTimeout(function (){
+                                window.location.reload();
+                            }, 1000)
+                            location.reload();
+                        }
+
+                    })
+                    .catch((error) => {
+                        message.error(error.data.message);
+                    });
+            },
+
+            cancelDelete(e) {
+                console.log("Deletion cancelled")
+            }
 		},
 		created() {
             this.getLearningJourneyRole();
