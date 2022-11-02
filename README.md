@@ -4,12 +4,12 @@ LJPS is a Web Application designed to enhance the learning experience of employe
 LJPS provides a user friendly interface for employees to the track courses they wish to complete based on the roles they are working towards in the form of Learning Journeys. Employees can explore the various roles avaliable to them, the skills required for those roles and the courses they need to accquire those skills, making it a breeze to plan their Learning Journey goals.
 
 ## Members
-- Chia Yu-En Aloysius
-- Darren Thyng Chuan Sik
-- Ho Zhi Ying
-- Maximilian Tan Yong Xun
-- Quentin Quek Zhen Ming
-- Tan ZhongLi Aaron
+- Chia Yu-En Aloysius (yechia.2020@scis.smu.edu.sg)
+- Darren Thyng Chuan Sik (darrenthyng.2020@scis.smu.edu.sg)
+- Ho Zhi Ying (zhiying.ho.2020@scis.smu.edu.sg)
+- Maximilian Tan Yong Xun (yxtan.2020@scis.smu.edu.sg)
+- Quentin Quek Zhen Ming (quentinquek.2020@scis.smu.edu.sg)
+- Tan ZhongLi Aaron (aaron.tan.2020@scis.smu.edu.sg)
 
 ## Github
 https://github.com/is212-spm-g8t3/spm-g8t3
@@ -21,12 +21,12 @@ https://github.com/is212-spm-g8t3/spm-g8t3
 3. npm install
 4. npm run serve (once install is done)
 
-### Flask Backend - MySQL
+### Flask Backend & MySQL Database
 1. Open MySQL Workbench
 2. Run the database.sql to import the database schema
 3. Run app.py to start the Flask server
 
-### System
+### System Info
 - Web App runs on port 8080
 - Backend for API calls runs on port 5000
 
