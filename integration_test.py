@@ -176,6 +176,7 @@ class TestCourse(TestApp):
             }
         })
 
+    """"Done By Aloysius"""
     def test_get_course_skills_by_course_name(self):
 
         # Uncomment below to see the full response of query
@@ -264,6 +265,7 @@ class TestCourse(TestApp):
             }   
         })
 
+    """"Done By Aloysius"""
     def test_get_courses_with_skills(self):
 
         # Uncomment below to see the full response of query
@@ -346,6 +348,7 @@ class TestCourse(TestApp):
             ]
         })
 
+    """"Done By Aloysius"""
     def test_get_courses_by_skill_id(self):
         # Uncomment below to see the full response of query
         # self.maxDiff = None
@@ -440,6 +443,7 @@ class TestCourse(TestApp):
             }   
         })
 
+    """"Done By Aloysius"""
     def test_update_course_skills(self):
         course1 = Courses_Catalog(
             Course_ID="COR001",
@@ -489,6 +493,54 @@ class TestCourse(TestApp):
                                     data=json.dumps(dict(updateInfo=dict(skillsForUpdate="",courseId="COR001"))))
         pass
 
+        course_skill1 = course_skills(
+            Course_ID='COR001',
+            Skill_ID='1'
+        )
+
+        course_skill2 = course_skills(
+            Course_ID='COR001',
+            Skill_ID='2'
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+        )
+
+        skill2 = Skill(
+            Skill_ID='2',
+            Skill_Name='HR',
+            Skill_Description='Human Resource',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+        )
+
+        db.session.add(course1)
+        db.session.add(skill1)
+        db.session.add(skill2)
+        # db.session.add(course_skill1)
+        # db.session.add(course_skill2)
+        db.session.commit()
+
+        data = str({"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}})
+        datajson = json.dumps(data)
+    
+        # print(dict(updateInfo=dict(skillsForUpdate=['Sales', 'HR'],courseId="COR001")))
+
+        response = self.client.post("/updateCourseSkills",
+                                    data=data,
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully updated courses.'
+        })
 
 ''' Test Cases for Roles '''
 class TestRoles(TestApp):
@@ -825,23 +877,309 @@ class TestSkills(TestApp):
 
 ''' Test Cases for Learning Journey '''
 class TestLearningJourney(TestApp):
+    
+    """"Done By Aloysius"""
     def test_view_learning_journey(self):
-        pass
 
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+
+        job_role_skill1 = job_role_skills(
+            Job_Role_ID=1,
+            Skill_ID=1
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        system_role1 = system_role(
+            Role_ID = '1',
+            Role_Name = "Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID = '130001',
+            Staff_FName = 'John',
+            Staff_LName = 'Cena',
+            Dept = 'WWE',
+            Email = 'johncena@wwe.com',
+            System_Role = '1'
+
+        )
+
+        learning_journey1 = learning_journey(
+            LJ_ID = '1',
+            Staff_ID = '130001',
+            Job_Role_ID = '1'
+        )
+
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(system_role1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.add(job_role_skill1)
+        db.session.commit()
+        db.session.add(learning_journey1)
+        db.session.commit()
+
+        response = self.client.get("/learningJourney/viewLearningJourney/1",
+            content_type='application/json')
+
+        self.assertEqual(response.json, {
+            "code": 200,
+            "data": {
+                "Job_Role_ID":1,
+                "LJ_ID":1,
+                "Staff_ID":130001
+            }
+        })
+
+    """"Done By Aloysius"""
     def test_view_staff_learning_journeys(self):
-        pass
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        job_role_skill1 = job_role_skills(
+            Job_Role_ID=1,
+            Skill_ID=1
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        system_role1 = system_role(
+            Role_ID = '1',
+            Role_Name = "Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID = '130001',
+            Staff_FName = 'John',
+            Staff_LName = 'Cena',
+            Dept = 'WWE',
+            Email = 'johncena@wwe.com',
+            System_Role = '1'
+
+        )
+
+        learning_journey1 = learning_journey(
+            LJ_ID = '1',
+            Staff_ID = '130001',
+            Job_Role_ID = '1'
+        )
+
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(system_role1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.add(job_role_skill1)
+        db.session.commit()
+        db.session.add(learning_journey1)
+        db.session.commit()
+
+        response = self.client.get("/learningJourney/viewStaffLearningJourneys/130001",
+            content_type='application/json')
+
+        self.assertEqual(response.json, {
+            "code": 200,
+            "data": {
+                "learning_journeys" : [
+                    {
+                        "Created_Date": "Thu, 27 Oct 2022 00:00:00 GMT",
+                        "Department": "Technology",
+                        "Job_Role_Description": "Develop software applications",
+                        "Job_Role_ID": 1,
+                        "Job_Role_Name": "Software Developer",
+                        "LJ_ID": 1,
+                        "Staff_ID": 130001
+                    }
+                ]
+            }
+        })
 
     def test_create_learning_journey(self):
         pass
 
+    """"Done By Aloysius"""
     def test_get_learning_journey_by_role_id(self):
-        pass
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        job_role_skill1 = job_role_skills(
+            Job_Role_ID=1,
+            Skill_ID=1
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        system_role1 = system_role(
+            Role_ID = '1',
+            Role_Name = "Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID = '130001',
+            Staff_FName = 'John',
+            Staff_LName = 'Cena',
+            Dept = 'WWE',
+            Email = 'johncena@wwe.com',
+            System_Role = '1'
+
+        )
+
+        learning_journey1 = learning_journey(
+            LJ_ID = '1',
+            Staff_ID = '130001',
+            Job_Role_ID = '1'
+        )
+
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(system_role1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.add(job_role_skill1)
+        db.session.commit()
+        db.session.add(learning_journey1)
+        db.session.commit()
+
+        response = self.client.get("/learningJourney/getLearningJourneyRole/1",
+            content_type='application/json')
+
+        self.assertEqual(response.json, {
+            "code": 200,
+            "data": {
+                "LJ_ID" : "1",
+                "Role" : [
+                    {
+                        "Department": "Technology",
+                        "Job_Role_Description": "Develop software applications",
+                        "Job_Role_ID": 1,
+                        "Job_Role_Name": "Software Developer"
+                    }
+                ]
+            }
+        })
 
     def test_create_learning_journey_skill(self):
         pass
 
+    """"Done By Aloysius"""
     def test_get_learning_journey_skills_by_LJ_ID(self):
-        pass
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        job_role_skill1 = job_role_skills(
+            Job_Role_ID=1,
+            Skill_ID=1
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        system_role1 = system_role(
+            Role_ID = '1',
+            Role_Name = "Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID = '130001',
+            Staff_FName = 'John',
+            Staff_LName = 'Cena',
+            Dept = 'WWE',
+            Email = 'johncena@wwe.com',
+            System_Role = '1'
+
+        )
+
+        learning_journey1 = learning_journey(
+            LJ_ID = '1',
+            Staff_ID = '130001',
+            Job_Role_ID = '1'
+        )
+
+        learning_journey_skill1 = learning_journey_skill(
+            LJ_ID = '1',
+            Staff_ID = '130001',
+            Skill_ID = '1'
+        )
+
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(system_role1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.add(job_role_skill1)
+        db.session.commit()
+        db.session.add(learning_journey1)
+        db.session.commit()
+        db.session.add(learning_journey_skill1)
+        db.session.commit()
+
+        response = self.client.get("/learningJourney/getLearningJourneySkills/1",
+            content_type='application/json')
+
+        self.assertEqual(response.json, {
+            "code": 200,
+            "data": {
+                "LJ_ID" : "1",
+                "Skills" : [
+                    {
+                        "Skill_Description": "Sell",
+                        "Skill_ID": 1,
+                        "Skill_Name": "Sales",
+                        "Skill_Type": "Active"
+                    }
+                ]
+            }
+        })
 
     def test_create_learning_journey_course(self):
         pass
