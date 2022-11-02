@@ -36,12 +36,15 @@
 					<p class="text">
 						{{item.Course_Description}}
 					</p>
-					<br>
-					<a-button v-on:click="selectCourse(item.Course_ID)" onclick="this.disabled = true; this.innerHTML = 'Added'"
-							:disabled="item.isInCart == true ? true : false"
-							:class="item.isInCart == true ? 'ant-tag-mute' : 'ant-tag-primary'">
-						{{ item.isInCart == true ? "Added" : "Add" }}
-					</a-button>
+					<template #actions>
+						<h6 v-on:click="selectCourse(item.Course_ID)"
+						block
+						style='color: black'
+						>
+							{{ item.isInCart == true ? "Remove" : "Add" }}
+						</h6>
+					</template>
+
 					<!-- <template #actions>
 						<a-button type="link" style="width: 90%; margin: 0px; padding: 0px; height: 25px; color: black" size="large">Select</a-button>
 					</template> -->
@@ -50,13 +53,8 @@
 			</a-col>
 			<!-- / Project Column -->
 		</a-row>
-
-
-		<br>
-		<br>
-		<br>
 		<div>
-			<a-button type="dark" onclick="history.back()" style="margin-right: 24px">
+			<a-button type="dark" onclick="history.back()" style="margin-top: 20px;">
 				Back
 			</a-button>
 		</div>
@@ -101,43 +99,48 @@
 					if (course.Course_ID == courseId){
 						course.isInCart = true
 					}
-					
 				}
 
-			
-					
-			console.log(this.courseData)
-			//location.reload()
-			//update localStorage variable for skills
-			//localStorage.removeItem('selectedSkillsAndCourses');
-			let skillId = this.$route.query.skillId
-			console.log(skillId)
-			console.log(courseId)
-			
-			//handle skills selection
-			let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
-			
-			if (selectedSkillsAndCourses === null){
-				selectedSkillsAndCourses = {}
-			}
+				let skillId = this.$route.query.skillId
 
-			if (!(skillId in selectedSkillsAndCourses)){
-				// if selected skills is null then initialise selected skills array.
+				//handle skills selection
+				let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
 				
-				let skillCourse = [courseId] //initialise course list
-				selectedSkillsAndCourses[skillId] = skillCourse
-			} else{
-
-				//check if courseId is in list of courses
-				if (!selectedSkillsAndCourses[skillId].includes(courseId)){
-
-					selectedSkillsAndCourses[skillId].push(courseId) //add skill course object
+				if (selectedSkillsAndCourses === null){
+					selectedSkillsAndCourses = {}
 				}
-			}
 
-			console.log(selectedSkillsAndCourses)
-			localStorage.setItem('selectedSkillsAndCourses', JSON.stringify(selectedSkillsAndCourses));
+				if (!(skillId in selectedSkillsAndCourses)){
+					// if selected skills is null then initialise selected skills array.
+					
+					let skillCourse = [courseId] //initialise course list
+					selectedSkillsAndCourses[skillId] = skillCourse
+				} else{
 
+					//check if courseId is in list of courses
+					if (!selectedSkillsAndCourses[skillId].includes(courseId)){
+
+						selectedSkillsAndCourses[skillId].push(courseId) //add skill course object
+					} else {
+						const index = selectedSkillsAndCourses[skillId].indexOf(courseId);
+						if (index > -1) { // only splice array when item is found
+							selectedSkillsAndCourses[skillId].splice(index, 1); // 2nd parameter means remove one item only
+
+							for (let course of this.courseData){
+								if (course.Course_ID == courseId){
+									course.isInCart = false
+								}
+							}
+						}
+
+						if (selectedSkillsAndCourses[skillId].length == 0) {
+							delete selectedSkillsAndCourses[skillId]
+						}
+					}
+				}
+
+				localStorage.setItem('selectedSkillsAndCourses', JSON.stringify(selectedSkillsAndCourses));
+				location.reload()
 			},
 		},
 		computed: {

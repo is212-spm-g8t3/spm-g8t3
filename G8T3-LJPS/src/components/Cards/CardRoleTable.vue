@@ -3,7 +3,7 @@
 	<!-- Authors Table Card -->
 	<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{padding: 0,}">
 		<template #title>
-			<a-row v-if="page == 'Course'"type="flex" align="middle">
+			<a-row v-if="page == 'Course'" type="flex" align="middle">
 				<a-col :span="24" :md="12">
 					<h5 class="font-semibold m-0">{{titleName}}</h5>
 				</a-col>
@@ -63,7 +63,7 @@
 				</div>
 			</template>
 
-			<template  slot="Department" slot-scope="Department">
+			<template slot="Department" slot-scope="Department">
 				<div class="author-info">
 					<h6 class="m-0">{{ Department }}</h6>
 					<!-- <h6 class="m-0">{{ func.type }}</h6>
@@ -97,11 +97,11 @@
 				</div>
 			</template>
 
-			<template slot="Type" slot-scope="type">
+			<!-- <template slot="Type" slot-scope="type">
 				<div class="author-info">
 					<h6 class="m-0">{{ Skills.length }}</h6>
 				</div>
-			</template>
+			</template> -->
 
 			<!-- Skill.vue -->
 			<template slot="actionSkill" slot-scope="row">
@@ -114,20 +114,24 @@
 			<!-- Skill.vue -->
 
 			<template slot="action" slot-scope="row">
-				<span>
+				<!-- <span>
 					<a-icon type="eye" :style="{ color: '#87d068' }"/>
 					<a-icon type="edit" :style="{ color: '#1890FF' }"/>
 					<a-icon type="delete" :style="{color: '#F5222D'}" />
-				</span>
+				</span> -->
 				<!-- <span>
 					<a-button shape="circle"  icon="edit"/>
 					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
 				</span> -->
 
-
-				<a-button type="default" :data-id="row.key" @click="updateRoles(data[row.key])">
-					Edit
-				</a-button>
+				<div :style="{'display': 'flex'}">
+					<a-button type="default" :data-id="row.key" @click="updateRoles(row)">
+						Edit
+					</a-button>
+					<a-button class="deleteBtn" :style="{'border-color': '#ff4d4f', 'color': '#ff4d4f', 'margin-left': '10px'}" :data-id="row.key" @click="deleteRole(data[row.key])">
+						Delete
+					</a-button>
+				</div>
 			</template>
 
 			<!-- Courses.vue -->
@@ -177,9 +181,8 @@ export default ({
 			default: ""
 		}
 	},
-	create(){
-		console.log(this.page)
-		console.log(page)
+	created(){
+		console.log(this.data)
 	},
 	data() {
 		return {
@@ -191,15 +194,34 @@ export default ({
 	},
 
 	computed: {
+		// dataFilteredStatus: function() {
+		// 	if (this.statusRadioBtn != 'All') {
+		// 		if(this.page == "roles"){
+		// 			return this.data.filter(eachData => eachData.Status == this.statusRadioBtn)
+		// 		}
+		// 		return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
+
+		// 	}
+		// 	if (this.search != '') {
+		// 		return this.data.filter(eachData => 
+		// 			eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) 
+		// 			|| eachData.Department.toLowerCase().includes(this.search.toLowerCase())); 
+		// 		}
+		// 	return this.data
+
+		// }
 		dataFilteredStatus: function() {
+			var filteredData = this.data;
 			if (this.statusRadioBtn != 'All') {
-				return this.data.filter(eachData => eachData.status == this.statusRadioBtn)
+				filteredData = filteredData.filter(eachData => eachData.status == this.statusRadioBtn)
 			}
 			if (this.search != '') {
-				return this.data.filter(eachData => 
-					eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()));
+				filteredData = filteredData.filter(eachData => 
+				eachData.Job_Role_Name.toLowerCase().includes(this.search.toLowerCase()) || 
+				eachData.Department.toLowerCase().includes(this.search.toLowerCase()));
 				}
-			return this.data
+			console.log(filteredData);
+			return filteredData
 		}
 	},
 
@@ -216,6 +238,11 @@ export default ({
 		// For Skill.vue
 		deleteSkill(currentRowData) {
 			console.log(currentRowData);
+		},
+
+		// For Roles.vue
+		deleteRole(currentRowData) {
+			console.log(currentRowData);
 		}
 	},
 })
@@ -223,6 +250,11 @@ export default ({
 </script>
 
 <style scoped>
+	.deleteBtn :hover {
+		background-color: #ff4d4f;
+		color: white;
+	}
+
 	.editIcon :hover {
 		color: #1890FF;
 		cursor: pointer;
