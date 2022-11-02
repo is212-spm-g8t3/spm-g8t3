@@ -27,39 +27,6 @@ def get_all_courses():
         }
     )
 
-
-@app.route("/learningJourney/createLearningJourneyCourse", methods=['POST'])
-def createLearningJourneyCourse():
-    data = request.get_json()
-
-    # Initialize LearningJourney class
-    newLearningJourneyCourse = learning_journey_course(
-        LJ_ID=data['lj_id'],
-        Staff_ID=data['staff_id'],
-        Skill_ID=data['skill_id'],
-        Course_ID=data['course_id'],
-        Reg_ID=data['reg_id']
-    )
-
-    try:
-        db.session.add(newLearningJourneyCourse)
-        db.session.commit()
-
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while creating a new learning journey. " + str(e)
-            }
-        ), 500
-
-    return jsonify(
-        {
-            "code": 201,
-            "message": 'Successfully added a new learning journey!'
-        }
-    ), 201
-
 # Get courses based on selected skill
 @app.route("/getCoursesBySkill/<skillID>", methods=['GET'])
 def get_courses_by_skill(skillID):
@@ -485,10 +452,10 @@ def get_skills_by_role():
     roleId = request.args.get('roleId')
 
     skills = db.session.query(Skill
-                              ).join(job_role_skills
-                                     ).filter(job_role_skills.Job_Role_ID == roleId
-                                              ).filter(job_role_skills.Skill_ID == Skill.Skill_ID
-                                                       ).all()
+                ).join(job_role_skills
+                        ).filter(job_role_skills.Job_Role_ID == roleId
+                                ).filter(job_role_skills.Skill_ID == Skill.Skill_ID
+                                        ).all()
 
     if len(skills):
 
@@ -619,8 +586,6 @@ def updateSkill():
     ), 201
 
 # Learning Journey Related Functions
-
-
 @app.route("/learningJourney/viewLearningJourney/<LJ_ID>", methods=['GET'])
 def viewLearningJourney(LJ_ID):
     learningJourney = learning_journey.query.filter_by(LJ_ID=LJ_ID).first()
@@ -707,6 +672,37 @@ def createLearningJourney():
         }
     ), 201
 
+@app.route("/learningJourney/createLearningJourneyCourse", methods=['POST'])
+def createLearningJourneyCourse():
+    data = request.get_json()
+
+    # Initialize LearningJourney class
+    newLearningJourneyCourse = learning_journey_course(
+        LJ_ID=data['lj_id'],
+        Staff_ID=data['staff_id'],
+        Skill_ID=data['skill_id'],
+        Course_ID=data['course_id'],
+        Reg_ID=data['reg_id']
+    )
+
+    try:
+        db.session.add(newLearningJourneyCourse)
+        db.session.commit()
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new learning journey. " + str(e)
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        }
+    ), 201
 # @app.route("/learningJourney/createLearningJourneySkill", methods=['POST'])
 # def createLearningJourneySkill():
 #     data = request.form
@@ -856,9 +852,6 @@ def delete_existing_learning_journey_course():
 
     # Convert JSON to object
     data = json.loads(request.get_json()['deleteInfo'])
-    print("-----------------")
-    print(data)
-    print("-----------------")
 
     # Remove all courses currently assigned to staff learning journey
     existing_course = db.session.query(learning_journey_course).filter(
