@@ -61,17 +61,10 @@ def createLearningJourneyCourse():
     ), 201
 
 # Get courses based on selected skill
-
-
 @app.route("/getCoursesBySkill/<skillID>", methods=['GET'])
 def get_courses_by_skill(skillID):
 
-    courses = db.session.query(Courses_Catalog
-                               ).join(course_skills
-                                      ).filter(course_skills.Skill_ID == skillID
-                                               ).filter(course_skills.Course_ID == Courses_Catalog.Course_ID
-                                                        ).filter(Courses_Catalog.Course_Status == "Active"
-                                                                 ).all()
+    courses = db.session.query(Courses_Catalog).join(course_skills).filter(course_skills.Skill_ID == skillID).filter(course_skills.Course_ID == Courses_Catalog.Course_ID).filter(Courses_Catalog.Course_Status == "Active").all()
 
     if len(courses):
         return jsonify(
@@ -656,29 +649,6 @@ def getLearningJourneyRole(LJ_ID):
         }
     )
 
-# @app.route("/learningJourney/getLearningJourneySkills/<LJ_ID>", methods=['GET'])
-# def getLearningJourneySkill(LJ_ID):
-#     learningJourneySkills = db.session.query(learning_journey_skill, Skill
-#         ).filter(learning_journey_skill.Skill_ID == Skill.Skill_ID,
-#                 learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_ID, Skill.Skill_Name, Skill.Skill_Description, Skill.Skill_Type)
-#     if learningJourneySkills.count() > 0:
-#         return  jsonify(
-#             {
-#                 "code":200,
-#                 "data": {
-#                     "LJ_ID" : LJ_ID,
-#                     "Skills" : [dict(row) for row in learningJourneySkills]
-#                 }
-#             }
-#         )
-
-#     return jsonify(
-#         {
-#             "code": 404,
-#             "message": "Skills not found."
-#         }
-#     )
-
 # @app.route("/skills/addNewSkill", methods=['POST'])
 # def addnNewSkill():
 #     # Convert JSON string into JSON object
@@ -746,19 +716,18 @@ def createLearningJourneySkill():
         }
     ), 201
 
-
 @app.route("/learningJourney/getLearningJourneySkills/<LJ_ID>", methods=['GET'])
 def getLearningJourneySkill(LJ_ID):
     learningJourneySkills = db.session.query(learning_journey_skill, Skill
-                                             ).filter(learning_journey_skill.Skill_ID == Skill.Skill_ID,
-                                                      learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_Name)
+        ).filter(learning_journey_skill.Skill_ID == Skill.Skill_ID,
+                learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_ID, Skill.Skill_Name, Skill.Skill_Description, Skill.Skill_Type)
     if learningJourneySkills.count() > 0:
-        return jsonify(
+        return  jsonify(
             {
-                "code": 200,
+                "code":200,
                 "data": {
-                    "LJ_ID": LJ_ID,
-                    "Skills": [dict(row) for row in learningJourneySkills]
+                    "LJ_ID" : LJ_ID,
+                    "Skills" : [dict(row) for row in learningJourneySkills]
                 }
             }
         )
@@ -769,3 +738,75 @@ def getLearningJourneySkill(LJ_ID):
             "message": "Skills not found."
         }
     )
+
+@app.route("/deleteLearningJourneyCourse", methods=['POST'])
+def delete_existing_learning_journey_course():
+
+    # Convert JSON to object
+    data = json.loads(request.get_json()['deleteInfo'])
+    print("-----------------")
+    print(data)
+    print("-----------------")
+
+    # Remove all courses currently assigned to staff learning journey
+    existing_course = db.session.query(learning_journey_course).filter(
+    learning_journey_course.LJ_ID == data['LJ_id'],
+    learning_journey_course.Staff_ID == data['staff_id'],
+    learning_journey_course.Course_ID == data['course_id']
+    ).first()
+
+    print(existing_course)
+    # If there is assigned existing courses, delete
+    if existing_course:
+        try:
+            db.session.delete(existing_course)
+            db.session.commit()
+
+            return jsonify(
+                {
+                    "code": 201,
+                    "message": 'Successfully delete courses.'
+                }
+            ), 201
+
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while delete course" + str(e)
+                }
+            ), 500
+
+
+    return jsonify(
+        {
+            "code": 500,
+            "message": "An error occurred while delete course" + str(e)
+        }
+    ), 500
+
+""" Remove if no one use """
+# @app.route("/learningJourney/getLearningJourneySkills/<LJ_ID>", methods=['GET'])
+# def getLearningJourneySkill(LJ_ID):
+#     learningJourneySkills = db.session.query(learning_journey_skill, Skill
+#         ).filter(learning_journey_skill.Skill_ID == Skill.Skill_ID,
+#                 learning_journey_skill.LJ_ID == LJ_ID).with_entities(Skill.Skill_Name)
+#     if learningJourneySkills.count() > 0:
+#         return jsonify(
+#             {
+#                 "code": 200,
+#                 "data": {
+#                     "LJ_ID": LJ_ID,
+#                     "Skills": [dict(row) for row in learningJourneySkills]
+#                 }
+#             }
+#         )
+
+#     return jsonify(
+#         {
+#             "code": 404,
+#             "message": "Skills not found."
+#         }
+#     )
+
+
