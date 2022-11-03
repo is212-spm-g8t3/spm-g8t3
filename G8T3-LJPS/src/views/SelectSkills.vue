@@ -256,7 +256,9 @@ import { SlowBuffer } from 'buffer';
 
 				alert("Learning Journey successfully created")
 				localStorage.removeItem('selectedSkillsAndCourses');
-				
+				this.$router.push({
+                    path: '/learning-journey'
+                });
 			},
 
 		},
