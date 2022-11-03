@@ -445,6 +445,7 @@ class TestCourse(TestApp):
 
     """"Done By Aloysius"""
     def test_update_course_skills(self):
+        
         course1 = Courses_Catalog(
             Course_ID="COR001",
             Course_Name="Systems Thinking and Design",

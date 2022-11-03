@@ -1,5 +1,5 @@
 <template>
-	<a-card hoverable class="card-info" @click="selectRole">
+	<a-card hoverable class="card-info" @click="selectRole" style="height: 370px">
 		<template #cover>
 			<img alt="example" :src="imageURl" style="height:200px; border-bottom: 1px solid #ededed; border-radius: 10px 10px 0px 0px"/>
 		</template>
