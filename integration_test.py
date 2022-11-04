@@ -445,7 +445,6 @@ class TestCourse(TestApp):
 
     """"Done By Aloysius"""
     def test_update_course_skills(self):
-        
         course1 = Courses_Catalog(
             Course_ID="COR001",
             Course_Name="Systems Thinking and Design",
@@ -505,54 +504,6 @@ class TestCourse(TestApp):
             "message": 'Successfully updated courses.'
         })
 
-        course_skill1 = course_skills(
-            Course_ID='COR001',
-            Skill_ID='1'
-        )
-
-        course_skill2 = course_skills(
-            Course_ID='COR001',
-            Skill_ID='2'
-        )
-
-        skill1 = Skill(
-            Skill_ID='1',
-            Skill_Name='Sales',
-            Skill_Description='Sell',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        skill2 = Skill(
-            Skill_ID='2',
-            Skill_Name='HR',
-            Skill_Description='Human Resource',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        db.session.add(course1)
-        db.session.add(skill1)
-        db.session.add(skill2)
-        # db.session.add(course_skill1)
-        # db.session.add(course_skill2)
-        db.session.commit()
-
-        data = str({"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}})
-        datajson = json.dumps(data)
-    
-        # print(dict(updateInfo=dict(skillsForUpdate=['Sales', 'HR'],courseId="COR001")))
-
-        response = self.client.post("/updateCourseSkills",
-                                    data=data,
-                                    content_type='application/json')
-        
-        self.assertEqual(response.json, {
-            "code": 201,
-            "message": 'Successfully updated courses.'
-        })
 
 ''' Test Cases for Roles '''
 class TestRoles(TestApp):
