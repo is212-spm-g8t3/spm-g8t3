@@ -33,10 +33,21 @@ https://github.com/is212-spm-g8t3/spm-g8t3
 ## Learning Journey Planning System
 LJPS can be browsed to locally at localhost:8080
 ### Core Function 1 - View Skills Required By Selected role
-1. Upon loading the system webpage, click on "Roles" located in the navigation bar on the left.
-2. Click on the "+" icon to display the list of skills required for the selected role
+1. Upon loading the system webpage, click login located on the top right in the navigation bar.
+2. Sign in with the email: "Susan.Goh@allinone.com.sg" and password: "staffstaff".
+3. Upon loading the system webpage, click on "Roles" located in the navigation bar on the left.
+4. Click on the "+" icon to display the list of skills required for the selected role
 ### Core Function 2 - View/Add/Remove Courses on Learning Journey
-1. 
+1. Upon loading the system webpage, click login located on the top right in the navigation bar.
+2. Sign in with the email: "Susan.Goh@allinone.com.sg" and password: "staffstaff".
+3. Navigate to attainable Roles by clicking on "Browse" located in the navigation bar on the left.
+4. Select a Role to start a learning journey for.
+5. You will be able to view the Skills necessary for the selected Role.
+6. Click on the "Select" button next to the Skill to view the Courses to attain the skill.
+7. Click on "Add" to add the courses you want to take to attain the selected Skill.
+    1. Click on "Remove" to remove courses
+8. Click "Confirm" to confirm your selection
+9. Click "Save" to save the Learning Journey.
 ### Core Function 3 - CRUD For Roles
 1. Upon loading the system webpage, click login located on the top right in the navigation bar.
 2. Sign in with the email: "Sally.Loh@allinone.com.sg" and password: "adminadmin".
