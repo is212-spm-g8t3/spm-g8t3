@@ -12,7 +12,7 @@ let routes = [
 	{
 		path: '/',
 		name: 'Home',
-		redirect: '/learning-journey',
+		redirect: '/sign-in',
 	},
 	{
 		path: '/learning-journey',
