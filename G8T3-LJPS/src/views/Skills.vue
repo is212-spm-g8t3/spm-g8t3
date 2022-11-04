@@ -417,8 +417,11 @@ export default ({
 				{headers:{"Content-Type" : "application/json"}})
 			.then((res) => {
 				console.log(res)
-				this.getSkills();
+				// this.getSkills();
 				this.$message.success('Skill status changed to inactive successfully!');
+				location.reload();
+				// this.$forceUpdate();
+
 			})
 			.catch((error) => {
 				this.$message.error('Error in changing skill status!');

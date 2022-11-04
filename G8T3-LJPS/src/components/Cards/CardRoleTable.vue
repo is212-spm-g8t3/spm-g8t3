@@ -276,6 +276,8 @@ export default ({
 		// },
 
 		emitDeleteRole(currentRowData){
+			console.log(currentRowData);
+
 			const self = this;
 			this.$confirm({
 				title: 'Confirm delete?',
@@ -284,11 +286,10 @@ export default ({
 				okType: 'danger',
 				cancelText: 'Cancel',
 				onOk() {
-					console.log(currentRowData);
 					// emitDeleteRole(currentRowData.Job_Role_ID)
-					if(this.page == "roles"){
+					if(self.page == "roles"){
 						self.$emit('deleteRole', currentRowData.Job_Role_ID);
-					} else if(this.page == "skills"){
+					} else if(self.page == "skills"){
 						self.$emit('deleteSkill', currentRowData.skillID);
 					}
 				},

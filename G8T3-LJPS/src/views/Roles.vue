@@ -441,15 +441,21 @@
 						})
 						.catch((error) => {
 							// eslint-disable-next-line
+							this.$message.error('Error updating role. Please contact support!');
 							console.log(error);
 							console.error(error.response.data);
-							this.updateErrorVisible = true;
-							if(error.hasOwnProperty("response")){
-								// this.$message.error('Error updating role. Please contact support.');
-								this.updateErrorMessage = error.response.data.message;
-							} else {
-								this.updateErrorMessage = 'Error updating role. Please contact support.';
-							}
+							// this.updateErrorVisible = true;
+							// this.updateErrorMessage = 'Error updating role. Please contact support.';
+
+							// if(error.hasOwnProperty("response")){
+							// 	// this.$message.error('Error updating role. Please contact support.');
+							// 	console.log("in if")
+							// 	this.updateErrorMessage = error.response.data.message;
+							// } else {
+							// 	console.log("in else")
+
+							// 	this.updateErrorMessage = 'Error updating role. Please contact support.';
+							// }
 
 						});
 						this.loading = false;
