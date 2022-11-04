@@ -175,15 +175,17 @@
             confirmDelete(course) {
 				let staffInfo = JSON.parse(localStorage.getItem('staffInfo'));
                 let deleteInfo = {
-                    'LJ_id': parseInt(this.$route.query.LJId),
-                    'staff_id': staffInfo['staffId'],
-                    'course_id': course.Course_ID
+                    'deleteInfo' : {
+                        'LJ_id': parseInt(this.$route.query.LJId),
+                        'staff_id': staffInfo['staffId'],
+                        'course_id': course.Course_ID
+                    }
                     
                 }
                 const learningJourneyURL = 'http://localhost:5000/deleteLearningJourneyCourse';
 
                 axios.post(learningJourneyURL, 
-                {'deleteInfo': JSON.stringify(deleteInfo)})
+                deleteInfo, {headers:{"Content-Type" : "application/json"}})
                     .then((response) => {
                         console.log(response);
 

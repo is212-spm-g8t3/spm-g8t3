@@ -1462,8 +1462,106 @@ class TestLearningJourney(TestApp):
         })
 
     def test_delete_existing_learning_journey_course(self):
-        pass
+        registration1 = registration(
+            Reg_ID=1,
+            Course_ID='COR001',
+            Staff_ID='130001',
+            Reg_Status='Test',
+            Completion_Status='test'
+        )
 
+        system_role1 = system_role(
+            Role_ID = '1',
+            Role_Name = "Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID = '130001',
+            Staff_FName = 'John',
+            Staff_LName = 'Cena',
+            Dept = 'WWE',
+            Email = 'johncena@wwe.com',
+            System_Role = '1'
+
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        learning_journey1 = learning_journey(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Job_Role_ID=1
+        )
+
+        learning_journey_skill1 = learning_journey_skill(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Skill_ID=1
+        )
+
+        course1 = Courses_Catalog(
+            Course_ID="COR001",
+            Course_Name="Systems Thinking and Design",
+            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+            Course_Status="Active",
+            Course_Type="Internal",
+            Course_Category="Core"
+        )
+
+        learning_journey_course1 = learning_journey_course(
+            LJ_ID = 1,
+            Staff_ID = '130001',
+            Skill_ID = 1,
+            Course_ID = 'COR001',
+            Reg_ID = 1         
+        )
+
+        db.session.add(system_role1)
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(course1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.commit()
+        db.session.add(registration1)
+        db.session.add(learning_journey1)
+        db.session.commit()
+        db.session.add(learning_journey_skill1)
+        db.session.commit()
+        db.session.add(learning_journey_course1)
+        db.session.commit()
+
+        formData = {
+            'deleteInfo' : {
+                'LJ_id': 1,
+                'staff_id': '130001',
+                'course_id': 'COR001'    
+            }
+        }
+
+        response = self.client.post("/deleteLearningJourneyCourse",
+            content_type='application/json',
+            data=json.dumps(formData))
+        
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully delete courses.'
+        })
 
 if __name__ == "__main__":
     unittest.main()
