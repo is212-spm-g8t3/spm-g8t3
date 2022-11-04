@@ -880,7 +880,7 @@ def getLearningJourneyCourse(LJ_ID):
 def delete_existing_learning_journey_course():
 
     # Convert JSON to object
-    data = json.loads(request.get_json()['deleteInfo'])
+    data = request.get_json()['deleteInfo']
 
     # Remove all courses currently assigned to staff learning journey
     existing_course = db.session.query(learning_journey_course).filter(
