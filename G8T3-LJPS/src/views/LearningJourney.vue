@@ -28,33 +28,6 @@
 		</a-row>
 
 		<!-- Learning Journeys -->
-
-		<!-- Title -->
-		<a-row :gutter="24">
-			<a-col :span="24" class="mb-12">
-				<h3 style="margin-left: 12px">Statistics</h3>
-			</a-col>
-		</a-row>
-		<!-- Title -->
-
-		<!-- Charts -->
-		<a-row :gutter="24" type="flex" align="stretch" style="margin:0px">
-			<a-col :span="24" :lg="10" class="mb-24">
-
-				<!-- Active Users Card -->
-				<CardBarChart></CardBarChart>
-				<!-- Active Users Card -->
-
-			</a-col>
-			<a-col :span="24" :lg="14" class="mb-24">
-				
-				<!-- Sales Overview Card -->
-				<CardLineChart></CardLineChart>
-				<!-- / Sales Overview Card -->
-
-			</a-col>
-		</a-row>
-		<!-- / Charts -->
 	</div>
 </template>
 

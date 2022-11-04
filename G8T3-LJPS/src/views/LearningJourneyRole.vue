@@ -142,10 +142,10 @@
                 const learningJourneyURL = 'http://localhost:5000/learningJourney/getLearningJourneySkills/' + this.$route.query.LJId
 				axios.get(learningJourneyURL)
 					.then((res) => {
+                        console.log(res);
                         for (let skill of res.data.data.Skills) {
                             this.skillsData.push(skill);
                         }
-
 
                         // First time load, display first skill courses
                         this.selectedSkill = this.skillsData[0];
@@ -210,7 +210,7 @@
             redirectToAddCourse() {
                 console.log(this.selectedSkill);
                 this.$router.push({
-                    path: '/select-course?roleId=' + this.$route.query.roleId + "&skillId=" + this.selectedSkill.Skill_ID + "&type=addToLJ", 
+                    path: '/select-course?LJId=' + this.$route.query.LJId + "&skillId=" + this.selectedSkill.Skill_ID + "&type=addToLJ", 
                 });
             }
 		},

@@ -88,26 +88,28 @@
 						if (values.email == "Sally.Loh@allinone.com.sg" && values.password == "adminadmin") {
 							let staffData = {
 								"staffId" : 160008,
-								"role" : "Admin"
+								"role" : "Admin",
+								"name": "Sally"
 							};
 							localStorage.setItem(
 								'staffInfo',
 								JSON.stringify(staffData)
 							);
-							this.$router.push({ name: 'Home' });
+							this.$router.push({ name: 'Learning-Journey' });
 						}
 						
 						// Insert User Info
 						else if (values.email == "Susan.Goh@allinone.com.sg" && values.password == "staffstaff") {
 							let staffData = {
 								"staffId": 140002,
-								"role": "User"
+								"role": "User",
+								"name": "Susan"
 							};
 							localStorage.setItem(
 								'staffInfo',
 								JSON.stringify(staffData)
 							);
-							this.$router.push({ name: 'Home' });
+							this.$router.push({ name: 'Learning-Journey' });
 						}
 					}
 				});
