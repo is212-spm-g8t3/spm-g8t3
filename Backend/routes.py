@@ -52,7 +52,7 @@ def get_courses_by_skill(skillID):
 
 @app.route("/getCourseSkills/<course>", methods=['GET'])
 def get_farming(course):
-    print(course)
+    # print(course)
     query = db.session.query(course_skills, Skill, Courses_Catalog
                              ).filter(Courses_Catalog.Course_ID == course_skills.Course_ID,
                                       course_skills.Skill_ID == Skill.Skill_ID,
@@ -129,7 +129,7 @@ def getCoursesBySkill(skill_id):
 def update_course_skills():
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["updateInfo"])
+    data = request.get_json()["updateInfo"]
     skills_data = data['skillsForUpdate']
     course_id = data['courseId']
 
@@ -219,7 +219,7 @@ def getRolesWithSkills():
                                       job_role_skills.Skill_ID == Skill.Skill_ID).with_entities(job_role.Job_Role_ID, job_role.Job_Role_Name, job_role.Job_Role_Description, job_role.Department, job_role.Status, Skill.Skill_ID, Skill.Skill_Name)
     # query= ["test"]
 
-    print(query)
+    # print(query)
 
     return jsonify(
         {
@@ -265,7 +265,7 @@ def create_role():
         Job_Role_Description=data['description'],
         Department=data['department'],
         Status=data['status'],
-        Created_Date=datetime.today().strftime('%Y-%m-%d')
+        Created_Date=datetime.today()#.strftime('%Y-%m-%d')
     )
 
     try:
@@ -286,7 +286,7 @@ def create_role():
         newRoleID = newRoleID_row[0]
 
         newSkills = data['skills']
-        print(newSkills)
+        # print(newSkills)
         for eachSkill in newSkills:
             newJobRoleSkill = job_role_skills(
                 Job_Role_ID=newRoleID,
@@ -360,25 +360,25 @@ def updateRole():
             existing_assigned_role_skills = db.session.query(job_role_skills
                 ).filter(job_role_skills.Job_Role_ID == role_ID).all()
             
-            print(existing_assigned_role_skills)
+            # print(existing_assigned_role_skills)
 
             # If there is assigned Skills, delete all
             if len(existing_assigned_role_skills) > 0:
                 for eachSkill in existing_assigned_role_skills:
-                    print(eachSkill)
+                    # print(eachSkill)
                     db.session.delete(eachSkill)
-                    print("Successful db.session.delete")
+                    # print("Successful db.session.delete")
 
-                print("outside for loop")
+                # print("outside for loop")
                 db.session.commit()
-                print("Successful after commit")
+                # print("Successful after commit")
 
             # db.session.query(job_role_skills).filter(job_role_skills.Job_Role_ID == role_ID).delete()
             # db.session.commit()
 
             # Add updated skills
             newSkills = data['skills']
-            print(newSkills)
+            # print(newSkills)
             for eachSkill in newSkills:
                 newJobRoleSkill = job_role_skills(
                     Job_Role_ID=role_ID,
@@ -506,7 +506,7 @@ def addNewSkill():
     # data = json.loads(request.get_json())
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
+    data = request.get_json()["skillFormData"]
 
     # to verify if Skill_ID is unique
     if (Skill.query.filter_by(Skill_Name=data["name"].title()).first()):
@@ -524,7 +524,7 @@ def addNewSkill():
         Skill_Description=data['description'],
         Skill_Type=data['type'],
         Status=data['status'],
-        Created_Date=datetime.today().strftime('%Y-%m-%d'),
+        Created_Date=datetime.today()#.strftime('%Y-%m-%d'),
     )
 
     try:
@@ -553,8 +553,8 @@ def updateSkill():
     # data = json.loads(request.get_json())
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
-    print(data)
+    data = request.get_json()["skillFormData"]
+    # print(data)
 
     # Get existing data
     dbSkillData = Skill.query.get(data["id"])
@@ -697,7 +697,7 @@ def createLearningJourney():
 
     # Initialize LearningJourney class
     newLearningJourney = learning_journey(
-        LJ_ID=13,
+        LJ_ID=0,
         Staff_ID=data['staff_id'],
         Job_Role_ID=data['job_role_id']
     )
@@ -714,10 +714,15 @@ def createLearningJourney():
             }
         ), 500
 
+    created_learning_journey = db.session.query(learning_journey).filter(
+        learning_journey.Job_Role_ID == data['job_role_id'],
+        learning_journey.Staff_ID == data['staff_id']
+        ).with_entities(learning_journey.LJ_ID)
+
     return jsonify(
         {
             "code": 201,
-            "message": 'Successfully added a new learning journey!'
+            "data": [dict(row) for row in created_learning_journey]
         }
     ), 201
 
@@ -752,36 +757,52 @@ def createLearningJourneyCourse():
             "message": 'Successfully added a new learning journey!'
         }
     ), 201
-# @app.route("/learningJourney/createLearningJourneySkill", methods=['POST'])
-# def createLearningJourneySkill():
-#     data = request.form
 
-#     # Initialize LearningJourney class
-#     newLearningJourneySkill = learning_journey_skill(
-#         LJ_ID = data['lj_id'],
-#         Staff_ID = data['staff_id'],
-#         Skill_ID = data['skill_id']
-#     )
+@app.route("/learningJourney/addLearningJourneyCourse", methods=['POST'])
+def addLearningJourneyCourse():
+    data = request.get_json()
 
-#     try:
-#         db.session.add(learning_journey_skill)
-#         db.session.commit()
+    # Check if course already added
+    is_course_exist = db.session.query(learning_journey_course).filter(
+        learning_journey_course.LJ_ID == data['lj_id'], 
+        learning_journey_course.Staff_ID == data['staff_id'], learning_journey_course.Skill_ID == data['skill_id'], learning_journey_course.Course_ID == data['course_id']
+        ).first()
 
-#     except Exception as e:
-#         return jsonify(
-#             {
-#                 "code": 500,
-#                 "message": "An error occurred while creating a new learning journey. " + str(e)
-#             }
-#         ), 500
+    if (is_course_exist):
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Course already exists"
+            }
+        ), 500
 
-#     return jsonify(
-#         {
-#             "code": 201,
-#             "message": 'Successfully added a new learning journey!'
-#         }
-#     ), 201
+    # Initialize LearningJourney class
+    newLearningJourneyCourse = learning_journey_course(
+        LJ_ID=data['lj_id'],
+        Staff_ID=data['staff_id'],
+        Skill_ID=data['skill_id'],
+        Course_ID=data['course_id'],
+        Reg_ID=data['reg_id']
+    )
 
+    try:
+        db.session.add(newLearningJourneyCourse)
+        db.session.commit()
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating a new learning journey. " + str(e)
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        }
+    ), 201
 
 @app.route("/learningJourney/getLearningJourneyRole/<LJ_ID>", methods=['GET'])
 def getLearningJourneyRole(LJ_ID):
@@ -896,11 +917,40 @@ def getLearningJourneySkill(LJ_ID):
         }
     )
 
+@app.route("/learningJourney/getLearningJourneyCourses/<LJ_ID>", methods=['POST'])
+def getLearningJourneyCourse(LJ_ID):
+
+    # Convert JSON to object
+    skill_id = json.loads(request.get_json()['skill_id'])
+
+    learningJourneyCourses = db.session.query(learning_journey_course, Courses_Catalog
+        ).filter(learning_journey_course.Course_ID == Courses_Catalog.Course_ID,
+                learning_journey_course.Skill_ID == skill_id,
+                learning_journey_course.LJ_ID == LJ_ID
+                ).with_entities(Courses_Catalog.Course_ID, Courses_Catalog.Course_Name,Courses_Catalog.Course_Description,Courses_Catalog.Course_Status,Courses_Catalog.Course_Type, Courses_Catalog.Course_Category)
+
+    if learningJourneyCourses.count() > 0:
+        return  jsonify(
+            {
+                "code":200,
+                "data": {
+                    "courses" : [dict(row) for row in learningJourneyCourses]
+                }
+            }
+        )
+
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Skills not found."
+        }
+    )
+
 @app.route("/deleteLearningJourneyCourse", methods=['POST'])
 def delete_existing_learning_journey_course():
 
     # Convert JSON to object
-    data = json.loads(request.get_json()['deleteInfo'])
+    data = request.get_json()['deleteInfo']
 
     # Remove all courses currently assigned to staff learning journey
     existing_course = db.session.query(learning_journey_course).filter(
@@ -909,7 +959,7 @@ def delete_existing_learning_journey_course():
     learning_journey_course.Course_ID == data['course_id']
     ).first()
 
-    print(existing_course)
+    # print(existing_course)
     # If there is assigned existing courses, delete
     if existing_course:
         try:

@@ -309,11 +309,18 @@ export default ({
 
 					const path = 'http://localhost:5000/skills/addNewSkill';
 
-					let formData = JSON.stringify(this.form);
-
-					axios.post(path, {
-						"skillFormData": formData,
-					})
+					let formData = {
+						"skillFormData":{
+							"name": this.form.name,
+							"type": this.form.type,
+							"description": this.form.description,
+							"status": this.form.status
+						}
+					};
+					
+					console.log(formData);
+					axios.post(path, formData,
+						{headers:{"Content-Type" : "application/json"}})
 						.then((response) => {
 							console.log(response);
 
@@ -372,11 +379,19 @@ export default ({
 
 					const path = 'http://localhost:5000/skills/updateSkill';
 
-					let formData = JSON.stringify(this.updateForm);
-
-					axios.post(path, {
-						"skillFormData": formData,
-					})
+					let formData = {
+						"skillFormData":{
+							"id": this.updateForm.id,
+							"name": this.updateForm.name,
+							"type": this.updateForm.type,
+							"description": this.updateForm.description,
+							"status": this.updateForm.status
+						}
+					};
+					
+					console.log(formData);
+					axios.post(path, formData,
+						{headers:{"Content-Type" : "application/json"}})
 						.then((response) => {
 							console.log(response);
 

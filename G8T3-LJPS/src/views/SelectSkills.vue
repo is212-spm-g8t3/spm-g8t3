@@ -104,6 +104,7 @@ import { SlowBuffer } from 'buffer';
 				visible: false,
 				titleName: "Skills",
 				roleName: "",
+				createdLJID: 0,
 
 				
 			}
@@ -199,30 +200,49 @@ import { SlowBuffer } from 'buffer';
 				const path = 'http://localhost:5000/learningJourney/createLearningJourney';
 				axios.post(path, payload)
 					.then((res) => {
-						console.log(res)
-						//console.log("Learning Journey Successfully created")
-						
-						
+						this.createLearningJourneySkillandCourses(selectedSkillsAndCourses, staffId, res.data.data[0]['LJ_ID'])
 					})
 					.catch((error) => {
 					// eslint-disable-next-line
 					console.error(error);
 					});
 
-				//send data to save learning endpoint
+				alert("Learning Journey successfully created")
+				localStorage.removeItem('selectedSkillsAndCourses');
+				this.$router.push({
+                    path: '/learning-journey'
+                });
+			},
 
-				// this.$router.push({
-				// 		path: '/save-learning-journey', 
-				// 	});
-
+			createLearningJourneySkillandCourses(selectedSkillsAndCourses, staffId, LJ_ID) {
 				//save learning journey skills
 				for (let skill in selectedSkillsAndCourses){
-					console.log(skill)
-					let skillPayload = { skill_id: skill, staff_id: staffId, lj_id: 13 };
+					let skillPayload = { skill_id: skill, staff_id: staffId, lj_id: LJ_ID };
 					let skillPath = 'http://localhost:5000/learningJourney/createLearningJourneySkill';
 					axios.post(skillPath, skillPayload)
 						.then((res) => {
 							console.log("Learning Journey skill Successfully saved")
+							//save learning journey courses
+							for (let skillId in selectedSkillsAndCourses){
+								for (let course of selectedSkillsAndCourses[skillId]){
+									let coursePayload = { skill_id: skillId, 
+										staff_id: staffId, 
+										reg_id: 1, 
+										course_id: course, 
+										lj_id: LJ_ID
+									};
+									let coursePath = 'http://localhost:5000/learningJourney/createLearningJourneyCourse';
+									axios.post(coursePath, coursePayload)
+										.then((res) => {
+											console.log("Learning Journey course Successfully saved")
+											
+										})
+										.catch((error) => {
+										// eslint-disable-next-line
+										console.error(error);
+										});
+								}
+							}
 							
 						})
 						.catch((error) => {
@@ -230,35 +250,7 @@ import { SlowBuffer } from 'buffer';
 						console.error(error);
 						});
 				}
-
-				//save learning journey courses
-				for (let skillId in selectedSkillsAndCourses){
-					for (let course of selectedSkillsAndCourses[skillId]){
-						let coursePayload = { skill_id: skillId, 
-							staff_id: staffId, 
-							reg_id: 1, 
-							course_id: course, 
-							lj_id: 13
-						};
-						let coursePath = 'http://localhost:5000/learningJourney/createLearningJourneyCourse';
-						axios.post(coursePath, coursePayload)
-							.then((res) => {
-								console.log("Learning Journey course Successfully saved")
-								
-							})
-							.catch((error) => {
-							// eslint-disable-next-line
-							console.error(error);
-							});
-					}
-					
-				}
-
-				alert("Learning Journey successfully created")
-				localStorage.removeItem('selectedSkillsAndCourses');
-				
 			},
-
 		},
 	created() {
     	this.getSkillsByRole();

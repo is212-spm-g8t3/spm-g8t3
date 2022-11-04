@@ -31,11 +31,11 @@
                                 Skills
                             </h5>
                         </a-col>
-                        <a-col :md="12" style="text-align: right">
+                        <!-- <a-col :md="12" style="text-align: right">
                             <a-button size="small">
                                 <a-icon type="plus" theme="outlined" />Add Skill
                             </a-button>
-                        </a-col>
+                        </a-col> -->
                     </a-row>
                     <a-card hoverable v-for="(skill, index) in skillsData" :key="index" @click="viewCourse(skill)" :style="selectedSkill == skill ? 'background-color: #ebf9ff; border: 1px #dedede solid;margin-bottom: 15px;' : 'margin-bottom: 15px;'">
                         <h6>{{skill.Skill_Name}}
@@ -59,7 +59,7 @@
                             </h5>
                         </a-col>
                         <a-col :md="12" style="text-align: right">
-                            <a-button size="small">
+                            <a-button size="small" @click="redirectToAddCourse()">
                                 <a-icon type="plus" theme="outlined" />Add Course
                             </a-button>
                         </a-col>
@@ -95,15 +95,14 @@
             <!-- Right Info -->
 		</a-row>
 		<!-- Title -->
-        <template>
-            
-        </template>
+
 	</div>
 </template>
 
 <script>
 
 	import axios from 'axios';
+    import { message } from 'ant-design-vue';
 
 	export default ({
 		components: {
@@ -119,6 +118,7 @@
 
                 // Course Data
                 courseData: [],
+                modal2Visible: false,
 			}
 		},
 		methods: {
@@ -142,10 +142,10 @@
                 const learningJourneyURL = 'http://localhost:5000/learningJourney/getLearningJourneySkills/' + this.$route.query.LJId
 				axios.get(learningJourneyURL)
 					.then((res) => {
+                        console.log(res);
                         for (let skill of res.data.data.Skills) {
                             this.skillsData.push(skill);
                         }
-
 
                         // First time load, display first skill courses
                         this.selectedSkill = this.skillsData[0];
@@ -159,10 +159,10 @@
             viewCourse(skill) {
                 this.selectedSkill = skill;
                 this.courseData = [];
-                const learningJourneyURL = 'http://localhost:5000/getCoursesBySkillId/' + this.selectedSkill.Skill_ID;
-                axios.get(learningJourneyURL)
+                const learningJourneyURL = 'http://localhost:5000/learningJourney/getLearningJourneyCourses/' + this.$route.query.LJId;
+
+                axios.post(learningJourneyURL, {'skill_id': JSON.stringify(this.selectedSkill['Skill_ID'])})
                     .then((res) => {
-                        console.log(res);
                         for (let course of res.data.data.courses) {
                             this.courseData.push(course);
                         }
@@ -175,15 +175,17 @@
             confirmDelete(course) {
 				let staffInfo = JSON.parse(localStorage.getItem('staffInfo'));
                 let deleteInfo = {
-                    'LJ_id': parseInt(this.$route.query.LJId),
-                    'staff_id': staffInfo['staffId'],
-                    'course_id': course.Course_ID
+                    'deleteInfo' : {
+                        'LJ_id': parseInt(this.$route.query.LJId),
+                        'staff_id': staffInfo['staffId'],
+                        'course_id': course.Course_ID
+                    }
                     
                 }
                 const learningJourneyURL = 'http://localhost:5000/deleteLearningJourneyCourse';
 
                 axios.post(learningJourneyURL, 
-                {'deleteInfo': JSON.stringify(deleteInfo)})
+                deleteInfo, {headers:{"Content-Type" : "application/json"}})
                     .then((response) => {
                         console.log(response);
 
@@ -193,7 +195,6 @@
                             setTimeout(function (){
                                 window.location.reload();
                             }, 1000)
-                            location.reload();
                         }
 
                     })
@@ -204,6 +205,13 @@
 
             cancelDelete(e) {
                 console.log("Deletion cancelled")
+            },
+
+            redirectToAddCourse() {
+                console.log(this.selectedSkill);
+                this.$router.push({
+                    path: '/select-course?LJId=' + this.$route.query.LJId + "&skillId=" + this.selectedSkill.Skill_ID + "&type=addToLJ", 
+                });
             }
 		},
 		created() {

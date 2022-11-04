@@ -13,7 +13,7 @@
 		:class="['ant-layout-sider-' + sidebarColor, 'ant-layout-sider-' + sidebarTheme]"
 		theme="white"
 		:style="{ backgroundColor: 'transparent', margin: '0px', height: '100vh', borderRadius: '0px'}">
-			<div class="brand"><img src="images/logo-ct-black.png" alt=""> <span>Muse Dashboard</span></div>
+			<div class="brand"><img src="images/logo-ct-black.png" alt=""> <span>G8T3 Learning System</span></div>
 			<hr>
 
 			<!-- Sidebar Navigation Menu -->
@@ -67,10 +67,10 @@
 						<span class="label">Billing</span>
 					</router-link>
 				</a-menu-item> -->
-				<a-menu-item class="menu-item-header">
+				<a-menu-item v-if="role['role'] == 'Admin'" class="menu-item-header">
 					Management
 				</a-menu-item>
-				<a-menu-item>
+				<a-menu-item v-if="role['role'] == 'Admin'">
 					<router-link to="/roles">
 						<span class="icon">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,7 +81,7 @@
 						<span class="label">Roles</span>
 					</router-link>
 				</a-menu-item>
-				<a-menu-item>
+				<a-menu-item v-if="role['role'] == 'Admin'">
 					<router-link to="/skills">
 						<span class="icon">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,7 +92,7 @@
 						<span class="label">Skills</span>
 					</router-link>
 				</a-menu-item>
-				<a-menu-item>
+				<a-menu-item v-if="role['role'] == 'Admin'">
 					<router-link to="/courses">
 						<span class="icon">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -196,7 +196,7 @@
 		},
 		data() {
 			return {
-				// sidebarCollapsedModel: this.sidebarCollapsed,
+				role: JSON.parse(localStorage.getItem('staffInfo'))
 			}
 		},
 	})

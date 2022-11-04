@@ -54,9 +54,24 @@
 			<!-- / Project Column -->
 		</a-row>
 		<div>
-			<a-button type="dark" onclick="history.back()" style="margin-top: 20px;">
-				Back
-			</a-button>
+			<a-row type="flex" style="margin-bottom: 10px;">
+				<a-col :span="24" :md="12" style="text-align: left;">
+					<a-button type="dark" @click="backToSkill()" style="margin-top: 20px;">
+						Back
+					</a-button>
+				</a-col>
+				<a-col :span="24" :md="12" style="text-align: right;">
+					<a-button v-if="this.$route.query.type == 'addToLJ'" @click="checkout()" type="dark" style="margin-top: 20px; margin-left: 20px;">
+						Save
+					</a-button>
+					<a-button v-else type="dark" onclick="history.back()" style="margin-top: 20px;">
+						Confirm
+					</a-button>
+				</a-col>
+			</a-row>
+			
+			
+
 		</div>
 
 
@@ -68,6 +83,8 @@
 
 
 <script>
+
+	import axios from 'axios';
 
 	export default ({
 		props: {
@@ -142,6 +159,63 @@
 				localStorage.setItem('selectedSkillsAndCourses', JSON.stringify(selectedSkillsAndCourses));
 				location.reload()
 			},
+
+			checkout(){
+				//checkout skills and courses
+				let sendData = confirm("You are about to save a learning journey. Proceed?");
+
+				if (sendData == false){
+					return
+				}
+
+				let skillId = this.$route.query.skillId
+				let selectedSkillsAndCourses = JSON.parse(localStorage.getItem('selectedSkillsAndCourses'));
+				let staffInfo = JSON.parse(localStorage.getItem('staffInfo'));
+				let staffId = staffInfo['staffId'];
+				
+				//save learning journey courses
+				for (let course of selectedSkillsAndCourses[skillId]){
+					let coursePayload = { skill_id: skillId, 
+						staff_id: staffId, 
+						reg_id: 1, 
+						course_id: course, 
+						lj_id: this.$route.query.LJId
+					};
+					let coursePath = 'http://localhost:5000/learningJourney/addLearningJourneyCourse';
+					axios.post(coursePath, coursePayload)
+						.then((res) => {
+							console.log("Learning Journey course Successfully saved")
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+				}
+
+				alert("Learning Journey successfully created")
+				localStorage.removeItem('selectedSkillsAndCourses');
+				history.back()
+			
+				//save learning journey skills
+				// for (let skill in selectedSkillsAndCourses){
+				// 	console.log(skill)
+				// 	let skillPayload = { skill_id: skill, staff_id: staffId, lj_id: 13 };
+				// 	let skillPath = 'http://localhost:5000/learningJourney/createLearningJourneySkill';
+				// 	axios.post(skillPath, skillPayload)
+				// 		.then((res) => {
+				// 			console.log("Learning Journey skill Successfully saved")
+							
+				// 		})
+				// 		.catch((error) => {
+				// 		// eslint-disable-next-line
+				// 		console.error(error);
+				// 		});
+				// }
+			},
+
+			backToSkill() {
+				localStorage.removeItem('selectedSkillsAndCourses');
+				history.back()
+			}
 		},
 		computed: {
 			dataFilteredStatus: function() {

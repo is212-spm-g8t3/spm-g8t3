@@ -262,15 +262,16 @@ export default ({
 			this.loading = true;
 			const path = 'http://localhost:5000/updateCourseSkills';
 
-			let formData = JSON.stringify({
-				"skillsForUpdate": this.existingSkills,
-				"courseId": this.selectedCourseId
-			});
+			let formData = {
+				"updateInfo": {
+					"skillsForUpdate": this.existingSkills,
+					"courseId": this.selectedCourseId
+				}
+			};
 			console.log(formData);
 
-			axios.post(path, {
-				"updateInfo": formData,
-			})
+			axios.post(path, formData,
+				{headers:{"Content-Type" : "application/json"}})
 				.then((response) => {
 					console.log(response);
 

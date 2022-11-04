@@ -7,6 +7,7 @@ from Backend.models import Courses_Catalog, Skill, course_skills, learning_journ
 from datetime import date, datetime
 from Backend import db_creds
 
+
 class TestApp(flask_testing.TestCase):
 
     # Setting a in-memory temporary database
@@ -26,7 +27,10 @@ class TestApp(flask_testing.TestCase):
         db.session.remove()
         db.drop_all()
 
+
 ''' Test Cases for Courses '''
+
+
 class TestCourse(TestApp):
     def test_get_all_courses(self):
 
@@ -103,12 +107,12 @@ class TestCourse(TestApp):
             Course_Category='Core')
 
         course3 = Courses_Catalog(
-            Course_ID= 'SAL003',
-            Course_Name= 'Optimising Your Brand For The Digital Spaces',
-            Course_Description= 'Digital has fundamentally shifted communication between brands and their consumers from a one-way broadcast to a two-way dialogue. In a hastened bid to transform their businesses to be digital market-ready,',
-            Course_Status= 'Active',
-            Course_Type= 'External',
-            Course_Category= 'Sales')
+            Course_ID='SAL003',
+            Course_Name='Optimising Your Brand For The Digital Spaces',
+            Course_Description='Digital has fundamentally shifted communication between brands and their consumers from a one-way broadcast to a two-way dialogue. In a hastened bid to transform their businesses to be digital market-ready,',
+            Course_Status='Active',
+            Course_Type='External',
+            Course_Category='Sales')
 
         skill1 = Skill(
             Skill_ID='1',
@@ -177,6 +181,7 @@ class TestCourse(TestApp):
         })
 
     """"Done By Aloysius"""
+
     def test_get_course_skills_by_course_name(self):
 
         # Uncomment below to see the full response of query
@@ -196,7 +201,7 @@ class TestCourse(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+            Created_Date=datetime(2012, 3, 3, 10, 10, 10)
         )
 
         skill2 = Skill(
@@ -205,7 +210,7 @@ class TestCourse(TestApp):
             Skill_Description='Human Resources',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+            Created_Date=datetime(2012, 3, 3, 10, 10, 10)
         )
 
         skill3 = Skill(
@@ -214,7 +219,7 @@ class TestCourse(TestApp):
             Skill_Description='Hacking',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+            Created_Date=datetime(2012, 3, 3, 10, 10, 10)
         )
 
         course_skill1 = course_skills(
@@ -243,29 +248,30 @@ class TestCourse(TestApp):
 
         response = self.client.get("/getCourseSkills/Systems Thinking and Design",
                                    content_type='application/json')
-    
+
         self.assertEqual(response.json, {
             'code': 200,
             'data': {
                 'course': 'Systems Thinking and Design',
                 'courseSkills': [
                     {
-                        "Skill_Description": "Sell", 
+                        "Skill_Description": "Sell",
                         "Skill_Name": "Sales"
                     },
                     {
-                        "Skill_Description": "Human Resources", 
+                        "Skill_Description": "Human Resources",
                         "Skill_Name": "HR"
                     },
                     {
-                        "Skill_Description": "Hacking", 
+                        "Skill_Description": "Hacking",
                         "Skill_Name": "Hacking"
                     }
                 ]
-            }   
+            }
         })
 
     """"Done By Aloysius"""
+
     def test_get_courses_with_skills(self):
 
         # Uncomment below to see the full response of query
@@ -280,11 +286,11 @@ class TestCourse(TestApp):
             Course_Category="Core")
 
         course2 = Courses_Catalog(
-            Course_ID= 'COR002',
-            Course_Name= 'Lean Six Sigma Green Belt Certification',
+            Course_ID='COR002',
+            Course_Name='Lean Six Sigma Green Belt Certification',
             Course_Description='Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics',
-            Course_Status= 'Active',
-            Course_Type= 'Internal',
+            Course_Status='Active',
+            Course_Type='Internal',
             Course_Category='Core')
 
         skill1 = Skill(
@@ -293,7 +299,7 @@ class TestCourse(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+            Created_Date=datetime(2012, 3, 3, 10, 10, 10)
         )
 
         skill2 = Skill(
@@ -302,7 +308,7 @@ class TestCourse(TestApp):
             Skill_Description='Human Resources',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+            Created_Date=datetime(2012, 3, 3, 10, 10, 10)
         )
 
         course_skill1 = course_skills(
@@ -325,7 +331,7 @@ class TestCourse(TestApp):
 
         response = self.client.get("/getCoursesWithSkills",
                                    content_type='application/json')
-    
+
         self.assertEqual(response.json, {
             'code': 200,
             'data': [
@@ -349,6 +355,7 @@ class TestCourse(TestApp):
         })
 
     """"Done By Aloysius"""
+
     def test_get_courses_by_skill_id(self):
         # Uncomment below to see the full response of query
         # self.maxDiff = None
@@ -362,20 +369,20 @@ class TestCourse(TestApp):
             Course_Category="Core")
 
         course2 = Courses_Catalog(
-            Course_ID= 'COR002',
-            Course_Name= 'Lean Six Sigma Green Belt Certification',
+            Course_ID='COR002',
+            Course_Name='Lean Six Sigma Green Belt Certification',
             Course_Description='Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics',
-            Course_Status= 'Active',
-            Course_Type= 'Internal',
+            Course_Status='Active',
+            Course_Type='Internal',
             Course_Category='Core')
 
         course3 = Courses_Catalog(
-            Course_ID= 'SAL003',
-            Course_Name= 'Optimising Your Brand For The Digital Spaces',
-            Course_Description= 'Digital has fundamentally shifted communication between brands and their consumers from a one-way broadcast to a two-way dialogue. In a hastened bid to transform their businesses to be digital market-ready,',
-            Course_Status= 'Active',
-            Course_Type= 'External',
-            Course_Category= 'Sales')
+            Course_ID='SAL003',
+            Course_Name='Optimising Your Brand For The Digital Spaces',
+            Course_Description='Digital has fundamentally shifted communication between brands and their consumers from a one-way broadcast to a two-way dialogue. In a hastened bid to transform their businesses to be digital market-ready,',
+            Course_Status='Active',
+            Course_Type='External',
+            Course_Category='Sales')
 
         skill1 = Skill(
             Skill_ID='1',
@@ -383,9 +390,9 @@ class TestCourse(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
+            Created_Date=datetime(2012, 3, 3, 10, 10, 10)
         )
-        
+
         course_skill1 = course_skills(
             Course_ID='COR001',
             Skill_ID='1'
@@ -410,7 +417,7 @@ class TestCourse(TestApp):
 
         response = self.client.get("/getCoursesBySkill/1",
                                    content_type='application/json')
-    
+
         self.assertEqual(response.json, {
             'code': 200,
             'data': {
@@ -440,11 +447,13 @@ class TestCourse(TestApp):
                         'Course_Category': 'Sales'
                     }
                 ]
-            }   
+            }
         })
 
     """"Done By Aloysius"""
+
     def test_update_course_skills(self):
+
         course1 = Courses_Catalog(
             Course_ID="COR001",
             Course_Name="Systems Thinking and Design",
@@ -452,6 +461,24 @@ class TestCourse(TestApp):
             Course_Status="Active",
             Course_Type="Internal",
             Course_Category="Core")
+
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        skill2 = Skill(
+            Skill_ID=2,
+            Skill_Name='Plant Rice2',
+            Skill_Description='Gains the ability to plant rice2',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
 
         course_skill1 = course_skills(
             Course_ID='COR001',
@@ -461,24 +488,6 @@ class TestCourse(TestApp):
         course_skill2 = course_skills(
             Course_ID='COR001',
             Skill_ID='2'
-        )
-
-        skill1 = Skill(
-            Skill_ID='1',
-            Skill_Name='Sales',
-            Skill_Description='Sell',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        skill2 = Skill(
-            Skill_ID='2',
-            Skill_Name='HR',
-            Skill_Description='Human Resource',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
         )
 
         db.session.add(course1)
@@ -488,63 +497,28 @@ class TestCourse(TestApp):
         db.session.add(course_skill2)
         db.session.commit()
 
-        response = self.client.post("/updateCourseSkills/",
-                                   content_type='application/json',
-                                    data=json.dumps(dict(updateInfo=dict(skillsForUpdate="",courseId="COR001"))))
-        pass
-
-        course_skill1 = course_skills(
-            Course_ID='COR001',
-            Skill_ID='1'
-        )
-
-        course_skill2 = course_skills(
-            Course_ID='COR001',
-            Skill_ID='2'
-        )
-
-        skill1 = Skill(
-            Skill_ID='1',
-            Skill_Name='Sales',
-            Skill_Description='Sell',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        skill2 = Skill(
-            Skill_ID='2',
-            Skill_Name='HR',
-            Skill_Description='Human Resource',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        db.session.add(course1)
-        db.session.add(skill1)
-        db.session.add(skill2)
-        # db.session.add(course_skill1)
-        # db.session.add(course_skill2)
-        db.session.commit()
-
-        data = str({"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}})
-        datajson = json.dumps(data)
-    
-        # print(dict(updateInfo=dict(skillsForUpdate=['Sales', 'HR'],courseId="COR001")))
+        updateForm = {
+            'updateInfo': {
+                'skillsForUpdate': ['Plant Rice'],
+                'courseId': 'COR001'
+            }
+        }
 
         response = self.client.post("/updateCourseSkills",
-                                    data=data,
-                                    content_type='application/json')
-        
+                                    content_type='application/json',
+                                    data=json.dumps(updateForm))
+
         self.assertEqual(response.json, {
             "code": 201,
             "message": 'Successfully updated courses.'
         })
 
+
 ''' Test Cases for Roles '''
+
+
 class TestRoles(TestApp):
-    #Done by: max
+    # Done by: max
     def test_get_all_roles(self):
         role1 = job_role(
             Job_Role_ID=2,
@@ -552,7 +526,7 @@ class TestRoles(TestApp):
             Job_Role_Description="Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
             Department="Engineering",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         role2 = job_role(
             Job_Role_ID=17,
@@ -560,7 +534,7 @@ class TestRoles(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 18, 0, 0, 0))
 
         db.session.add(role1)
         db.session.add(role2)
@@ -594,15 +568,15 @@ class TestRoles(TestApp):
             }
         })
 
-    #Done by: max
-    def test_get_roles_with_skills(self): 
+    # Done by: max
+    def test_get_roles_with_skills(self):
         role1 = job_role(
             Job_Role_ID=2,
             Job_Role_Name="Engineer",
             Job_Role_Description="Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
             Department="Engineering",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         role2 = job_role(
             Job_Role_ID=17,
@@ -610,7 +584,7 @@ class TestRoles(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 18, 0, 0, 0))
 
         skill1 = Skill(
             Skill_ID=1,
@@ -618,7 +592,7 @@ class TestRoles(TestApp):
             Skill_Description='Gains the ability to plant rice',
             Skill_Type='Soft Skill',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
 
         skill2 = Skill(
@@ -627,7 +601,7 @@ class TestRoles(TestApp):
             Skill_Description='Inflicts a curse that dispels an enemy Hero and prevents them from casting spells or using items, while taking damage over time',
             Skill_Type='Hard Skill',
             Status='Inactive',
-            Created_Date= datetime(2022, 10, 10, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 10, 0, 0, 0)
         )
 
         job_role_skill1 = job_role_skills(
@@ -661,7 +635,7 @@ class TestRoles(TestApp):
                     "Job_Role_Name": "Engineer",
                     "Skill_ID": 1,
                     "Skill_Name": "Plant Rice",
-                    "Status":"Active"
+                    "Status": "Active"
                 },
                 {
                     "Department": "Technology",
@@ -670,24 +644,56 @@ class TestRoles(TestApp):
                     "Job_Role_Name": "Software Developer",
                     "Skill_ID": 2,
                     "Skill_Name": "Doom",
-                    "Status":"Active"
+                    "Status": "Active"
                 }
             ]
         })
 
+    """ Done by: Aloysius"""
+
     def test_create_role(self):
-        pass
+        self.maxDiff = None
+
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        db.session.add(skill1)
+        db.session.commit()
+
+        formData = {
+            'name': 'Test Role',
+            'department': 'HR',
+            'description': 'This is a test role',
+            'skills': [1],
+            'status': "Active"
+        }
+
+        response = self.client.post("/createRole",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new role!'
+        })
 
     """ Done by: Ho Zhi Ying """
+
     def test_update_role(self):
-     
+
         role1 = job_role(
             Job_Role_ID=2,
             Job_Role_Name="Engineer",
             Job_Role_Description="Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
             Department="Engineering",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         role2 = job_role(
             Job_Role_ID=17,
@@ -695,8 +701,26 @@ class TestRoles(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
-        
+            Created_Date=datetime(2022, 10, 18, 0, 0, 0))
+
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        skill2 = Skill(
+            Skill_ID=2,
+            Skill_Name='Plant Rice2',
+            Skill_Description='Gains the ability to plant rice2',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
         job_role_skill1 = job_role_skills(
             Job_Role_ID=17,
             Skill_ID=1
@@ -709,23 +733,25 @@ class TestRoles(TestApp):
 
         db.session.add(role1)
         db.session.add(role2)
+        db.session.add(skill1)
+        db.session.add(skill2)
         db.session.add(job_role_skill1)
         db.session.add(job_role_skill2)
         db.session.commit()
 
         # Change the name (Happy path)
         updateForm = {
-        	'id': 17,
-        	'name': 'Full Stack Developer',
-        	'description': 'Work on both front-end and back-end application.',
-        	'department': 'Technology',
-        	'status': 'Active',
-        	'skills': [3, 4]
+            'id': 17,
+            'name': 'Full Stack Developer',
+            'description': 'Work on both front-end and back-end application.',
+            'department': 'Technology',
+            'status': 'Active',
+            'skills': [1, 2]
         }
 
         response = self.client.post("/updateRole",
-            content_type='application/json',
-            data=json.dumps(updateForm))
+                                    content_type='application/json',
+                                    data=json.dumps(updateForm))
 
         self.assertEqual(response.json, {
             "code": 201,
@@ -734,17 +760,17 @@ class TestRoles(TestApp):
 
         # Change to exact name of another role (Negative Case)
         updateForm = {
-        	'id': 17,
-        	'name': 'Engineer',
-        	'description': 'Develop software applications',
-        	'department': 'Technology',
-        	'status': 'Active',
-        	'skills': [3, 4]
+            'id': 17,
+            'name': 'Engineer',
+            'description': 'Develop software applications',
+            'department': 'Technology',
+            'status': 'Active',
+            'skills': [1, 2]
         }
 
         response = self.client.post("/updateRole",
-            content_type='application/json',
-            data=json.dumps(updateForm))
+                                    content_type='application/json',
+                                    data=json.dumps(updateForm))
 
         self.assertEqual(response.json, {
             "code": 400,
@@ -776,9 +802,12 @@ class TestRoles(TestApp):
         })
         pass
 
+
 ''' Test Cases for Skills '''
+
+
 class TestSkills(TestApp):
-    #Done by: max
+    # Done by: max
     def test_get_all_skills(self):
         skill1 = Skill(
             Skill_ID=2,
@@ -786,7 +815,7 @@ class TestSkills(TestApp):
             Skill_Description="Gains the ability to plant rice",
             Skill_Type="Soft Skill",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         skill2 = Skill(
             Skill_ID=6,
@@ -794,7 +823,7 @@ class TestSkills(TestApp):
             Skill_Description="Mixing veggies, chillis, sweat and tears.",
             Skill_Type="Hard Skill",
             Status="Active",
-            Created_Date= datetime(2022, 10, 10, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 10, 0, 0, 0))
 
         db.session.add(skill1)
         db.session.add(skill2)
@@ -829,15 +858,16 @@ class TestSkills(TestApp):
         })
 
     """ Done by: Quentin """
+
     def test_get_skills_by_role(self):
-        
+
         skill1 = Skill(
             Skill_ID='1',
             Skill_Name='Sales',
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
 
         skill2 = Skill(
@@ -846,8 +876,16 @@ class TestSkills(TestApp):
             Skill_Description='Human Resource',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
+
+        role1 = job_role(
+            Job_Role_ID=17,
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date=datetime(2022, 10, 18, 0, 0, 0))
 
         job_role_skill1 = job_role_skills(
             Job_Role_ID=17,
@@ -861,12 +899,13 @@ class TestSkills(TestApp):
 
         db.session.add(skill1)
         db.session.add(skill2)
+        db.session.add(role1)
         db.session.add(job_role_skill1)
         db.session.add(job_role_skill2)
         db.session.commit()
 
         response = self.client.get("/skills-by-role?roleId=17",
-            content_type='application/json')
+                                   content_type='application/json')
 
         self.assertEqual(response.json, {
             "code": 200,
@@ -918,18 +957,82 @@ class TestSkills(TestApp):
         })
         pass
 
+    """Done By Aloysius"""
     # '/skills/AddNewSkill
+
     def test_create_skill(self):
-        pass
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        db.session.add(skill1)
+        db.session.commit()
+
+        formData = {
+            'skillFormData': {
+                'name': 'Test Skill',
+                'type': 'Soft Skill',
+                'description': 'This is a test role',
+                'status': "Active"
+            }
+        }
+
+        response = self.client.post("/skills/addNewSkill",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new skill!'
+        })
+
+    """Done By Aloysius"""
 
     def test_update_skill(self):
-        pass
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        db.session.add(skill1)
+        db.session.commit()
+
+        formData = {
+            'skillFormData': {
+                'id': 1,
+                'name': 'Test Skill',
+                'type': 'Soft Skill',
+                'description': 'This is a test role',
+                'status': "Active"
+            }
+        }
+
+        response = self.client.post("/skills/updateSkill",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Updated successfully'
+        })
 
 
 ''' Test Cases for Learning Journey '''
+
+
 class TestLearningJourney(TestApp):
-    
+
     """"Done By Aloysius"""
+
     def test_view_learning_journey(self):
 
         role1 = job_role(
@@ -938,7 +1041,7 @@ class TestLearningJourney(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 18, 0, 0, 0))
 
         job_role_skill1 = job_role_skills(
             Job_Role_ID=1,
@@ -951,28 +1054,28 @@ class TestLearningJourney(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
 
         system_role1 = system_role(
-            Role_ID = '1',
-            Role_Name = "Anything"
+            Role_ID='1',
+            Role_Name="Anything"
         )
 
         staff1 = staff(
-            Staff_ID = '130001',
-            Staff_FName = 'John',
-            Staff_LName = 'Cena',
-            Dept = 'WWE',
-            Email = 'johncena@wwe.com',
-            System_Role = '1'
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
 
         )
 
         learning_journey1 = learning_journey(
-            LJ_ID = '1',
-            Staff_ID = '130001',
-            Job_Role_ID = '1'
+            LJ_ID='1',
+            Staff_ID='130001',
+            Job_Role_ID='1'
         )
 
         db.session.add(role1)
@@ -986,18 +1089,19 @@ class TestLearningJourney(TestApp):
         db.session.commit()
 
         response = self.client.get("/learningJourney/viewLearningJourney/1",
-            content_type='application/json')
+                                   content_type='application/json')
 
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "Job_Role_ID":1,
-                "LJ_ID":1,
-                "Staff_ID":130001
+                "Job_Role_ID": 1,
+                "LJ_ID": 1,
+                "Staff_ID": 130001
             }
         })
 
     """"Done By Aloysius"""
+
     def test_view_staff_learning_journeys(self):
         role1 = job_role(
             Job_Role_ID='1',
@@ -1005,7 +1109,7 @@ class TestLearningJourney(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         job_role_skill1 = job_role_skills(
             Job_Role_ID=1,
@@ -1018,28 +1122,28 @@ class TestLearningJourney(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
 
         system_role1 = system_role(
-            Role_ID = '1',
-            Role_Name = "Anything"
+            Role_ID='1',
+            Role_Name="Anything"
         )
 
         staff1 = staff(
-            Staff_ID = '130001',
-            Staff_FName = 'John',
-            Staff_LName = 'Cena',
-            Dept = 'WWE',
-            Email = 'johncena@wwe.com',
-            System_Role = '1'
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
 
         )
 
         learning_journey1 = learning_journey(
-            LJ_ID = '1',
-            Staff_ID = '130001',
-            Job_Role_ID = '1'
+            LJ_ID='1',
+            Staff_ID='130001',
+            Job_Role_ID='1'
         )
 
         db.session.add(role1)
@@ -1053,12 +1157,12 @@ class TestLearningJourney(TestApp):
         db.session.commit()
 
         response = self.client.get("/learningJourney/viewStaffLearningJourneys/130001",
-            content_type='application/json')
+                                   content_type='application/json')
 
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "learning_journeys" : [
+                "learning_journeys": [
                     {
                         "Created_Date": "Thu, 27 Oct 2022 00:00:00 GMT",
                         "Department": "Technology",
@@ -1073,9 +1177,58 @@ class TestLearningJourney(TestApp):
         })
 
     def test_create_learning_journey(self):
-        pass
+        self.maxDiff = None
+
+        system_role1 = system_role(
+            Role_ID='1',
+            Role_Name="Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
+
+        )
+
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
+
+        formData = {
+            'staff_id': '130001',
+            'job_role_id': 1
+        }
+
+        db.session.add(system_role1)
+        db.session.add(role1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.commit()
+
+        created_learning_journey = db.session.query(learning_journey).filter(
+            learning_journey.Job_Role_ID == 1,
+            learning_journey.Staff_ID == '130001'
+        ).with_entities(learning_journey.LJ_ID)
+
+        response = self.client.post("/learningJourney/createLearningJourney",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "data": [dict(row) for row in created_learning_journey]
+        })
 
     """"Done By Aloysius"""
+
     def test_get_learning_journey_by_role_id(self):
         role1 = job_role(
             Job_Role_ID='1',
@@ -1083,7 +1236,7 @@ class TestLearningJourney(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         job_role_skill1 = job_role_skills(
             Job_Role_ID=1,
@@ -1096,28 +1249,28 @@ class TestLearningJourney(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
 
         system_role1 = system_role(
-            Role_ID = '1',
-            Role_Name = "Anything"
+            Role_ID='1',
+            Role_Name="Anything"
         )
 
         staff1 = staff(
-            Staff_ID = '130001',
-            Staff_FName = 'John',
-            Staff_LName = 'Cena',
-            Dept = 'WWE',
-            Email = 'johncena@wwe.com',
-            System_Role = '1'
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
 
         )
 
         learning_journey1 = learning_journey(
-            LJ_ID = '1',
-            Staff_ID = '130001',
-            Job_Role_ID = '1'
+            LJ_ID='1',
+            Staff_ID='130001',
+            Job_Role_ID='1'
         )
 
         db.session.add(role1)
@@ -1131,13 +1284,13 @@ class TestLearningJourney(TestApp):
         db.session.commit()
 
         response = self.client.get("/learningJourney/getLearningJourneyRole/1",
-            content_type='application/json')
+                                   content_type='application/json')
 
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "LJ_ID" : "1",
-                "Role" : [
+                "LJ_ID": "1",
+                "Role": [
                     {
                         "Department": "Technology",
                         "Job_Role_Description": "Develop software applications",
@@ -1149,9 +1302,72 @@ class TestLearningJourney(TestApp):
         })
 
     def test_create_learning_journey_skill(self):
-        pass
+        self.maxDiff = None
+
+        system_role1 = system_role(
+            Role_ID='1',
+            Role_Name="Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
+
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
+
+        learning_journey1 = learning_journey(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Job_Role_ID=1
+        )
+
+        formData = {
+            'lj_id': 1,
+            'staff_id': '130001',
+            'skill_id': 1
+        }
+
+        db.session.add(system_role1)
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.commit()
+        db.session.add(learning_journey1)
+        db.session.commit()
+
+        response = self.client.post("/learningJourney/createLearningJourneySkill",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        })
 
     """"Done By Aloysius"""
+
     def test_get_learning_journey_skills_by_LJ_ID(self):
         role1 = job_role(
             Job_Role_ID='1',
@@ -1159,7 +1375,7 @@ class TestLearningJourney(TestApp):
             Job_Role_Description="Develop software applications",
             Department="Technology",
             Status="Active",
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
 
         job_role_skill1 = job_role_skills(
             Job_Role_ID=1,
@@ -1172,34 +1388,34 @@ class TestLearningJourney(TestApp):
             Skill_Description='Sell',
             Skill_Type='Active',
             Status='Active',
-            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
         )
 
         system_role1 = system_role(
-            Role_ID = '1',
-            Role_Name = "Anything"
+            Role_ID='1',
+            Role_Name="Anything"
         )
 
         staff1 = staff(
-            Staff_ID = '130001',
-            Staff_FName = 'John',
-            Staff_LName = 'Cena',
-            Dept = 'WWE',
-            Email = 'johncena@wwe.com',
-            System_Role = '1'
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
 
         )
 
         learning_journey1 = learning_journey(
-            LJ_ID = '1',
-            Staff_ID = '130001',
-            Job_Role_ID = '1'
+            LJ_ID='1',
+            Staff_ID='130001',
+            Job_Role_ID='1'
         )
 
         learning_journey_skill1 = learning_journey_skill(
-            LJ_ID = '1',
-            Staff_ID = '130001',
-            Skill_ID = '1'
+            LJ_ID='1',
+            Staff_ID='130001',
+            Skill_ID='1'
         )
 
         db.session.add(role1)
@@ -1215,13 +1431,13 @@ class TestLearningJourney(TestApp):
         db.session.commit()
 
         response = self.client.get("/learningJourney/getLearningJourneySkills/1",
-            content_type='application/json')
+                                   content_type='application/json')
 
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "LJ_ID" : "1",
-                "Skills" : [
+                "LJ_ID": "1",
+                "Skills": [
                     {
                         "Skill_Description": "Sell",
                         "Skill_ID": 1,
@@ -1233,12 +1449,294 @@ class TestLearningJourney(TestApp):
         })
 
     def test_create_learning_journey_course(self):
-        pass
+        self.maxDiff = None
+
+        registration1 = registration(
+            Reg_ID=1,
+            Course_ID='COR001',
+            Staff_ID='130001',
+            Reg_Status='Test',
+            Completion_Status='test'
+        )
+
+        system_role1 = system_role(
+            Role_ID='1',
+            Role_Name="Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
+
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
+
+        learning_journey1 = learning_journey(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Job_Role_ID=1
+        )
+
+        learning_journey_skill1 = learning_journey_skill(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Skill_ID=1
+        )
+
+        course1 = Courses_Catalog(
+            Course_ID="COR001",
+            Course_Name="Systems Thinking and Design",
+            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+            Course_Status="Active",
+            Course_Type="Internal",
+            Course_Category="Core"
+        )
+
+        db.session.add(system_role1)
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(course1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.commit()
+        db.session.add(registration1)
+        db.session.add(learning_journey1)
+        db.session.commit()
+        db.session.add(learning_journey_skill1)
+        db.session.commit()
+
+        formData = {
+            'lj_id': 1,
+            'staff_id': '130001',
+            'skill_id': 1,
+            'course_id': 'COR001',
+            'reg_id': 1
+        }
+
+        response = self.client.post("/learningJourney/createLearningJourneyCourse",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        })
+
+    def test_add_learning_journey_course(self):
+
+        registration1 = registration(
+            Reg_ID=1,
+            Course_ID='COR001',
+            Staff_ID='130001',
+            Reg_Status='Test',
+            Completion_Status='test'
+        )
+
+        system_role1 = system_role(
+            Role_ID='1',
+            Role_Name="Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
+
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
+
+        learning_journey1 = learning_journey(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Job_Role_ID=1
+        )
+
+        learning_journey_skill1 = learning_journey_skill(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Skill_ID=1
+        )
+
+        course1 = Courses_Catalog(
+            Course_ID="COR001",
+            Course_Name="Systems Thinking and Design",
+            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+            Course_Status="Active",
+            Course_Type="Internal",
+            Course_Category="Core"
+        )
+
+        db.session.add(system_role1)
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(course1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.commit()
+        db.session.add(registration1)
+        db.session.add(learning_journey1)
+        db.session.commit()
+        db.session.add(learning_journey_skill1)
+        db.session.commit()
+
+        formData = {
+            'lj_id': 1,
+            'staff_id': '130001',
+            'skill_id': 1,
+            'course_id': 'COR002',
+            'reg_id': 1
+        }
+
+        response = self.client.post("/learningJourney/createLearningJourneyCourse",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new learning journey!'
+        })
 
     def test_delete_existing_learning_journey_course(self):
-        pass
+        registration1 = registration(
+            Reg_ID=1,
+            Course_ID='COR001',
+            Staff_ID='130001',
+            Reg_Status='Test',
+            Completion_Status='test'
+        )
+
+        system_role1 = system_role(
+            Role_ID='1',
+            Role_Name="Anything"
+        )
+
+        staff1 = staff(
+            Staff_ID='130001',
+            Staff_FName='John',
+            Staff_LName='Cena',
+            Dept='WWE',
+            Email='johncena@wwe.com',
+            System_Role='1'
+
+        )
+
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        role1 = job_role(
+            Job_Role_ID='1',
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date=datetime(2022, 10, 27, 0, 0, 0))
+
+        learning_journey1 = learning_journey(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Job_Role_ID=1
+        )
+
+        learning_journey_skill1 = learning_journey_skill(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Skill_ID=1
+        )
+
+        course1 = Courses_Catalog(
+            Course_ID="COR001",
+            Course_Name="Systems Thinking and Design",
+            Course_Description="This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking",
+            Course_Status="Active",
+            Course_Type="Internal",
+            Course_Category="Core"
+        )
+
+        learning_journey_course1 = learning_journey_course(
+            LJ_ID=1,
+            Staff_ID='130001',
+            Skill_ID=1,
+            Course_ID='COR001',
+            Reg_ID=1
+        )
+
+        db.session.add(system_role1)
+        db.session.add(role1)
+        db.session.add(skill1)
+        db.session.add(course1)
+        db.session.commit()
+        db.session.add(staff1)
+        db.session.commit()
+        db.session.add(registration1)
+        db.session.add(learning_journey1)
+        db.session.commit()
+        db.session.add(learning_journey_skill1)
+        db.session.commit()
+        db.session.add(learning_journey_course1)
+        db.session.commit()
+
+        formData = {
+            'deleteInfo': {
+                'LJ_id': 1,
+                'staff_id': '130001',
+                'course_id': 'COR001'
+            }
+        }
+
+        response = self.client.post("/deleteLearningJourneyCourse",
+                                    content_type='application/json',
+                                    data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully delete courses.'
+        })
 
 
 if __name__ == "__main__":
     unittest.main()
-
