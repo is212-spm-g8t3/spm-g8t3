@@ -265,7 +265,7 @@ def create_role():
         Job_Role_Description=data['description'],
         Department=data['department'],
         Status=data['status'],
-        Created_Date=datetime.today().strftime('%Y-%m-%d')
+        Created_Date=datetime.today()#.strftime('%Y-%m-%d')
     )
 
     try:
@@ -499,7 +499,7 @@ def addNewSkill():
         Skill_Description=data['description'],
         Skill_Type=data['type'],
         Status=data['status'],
-        Created_Date=datetime.today().strftime('%Y-%m-%d'),
+        Created_Date=datetime.today()#.strftime('%Y-%m-%d'),
     )
 
     try:

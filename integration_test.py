@@ -640,7 +640,7 @@ class TestRoles(TestApp):
 
     """ Done by: Aloysius"""
     def test_create_role(self):
-        # self.maxDiff = None
+        self.maxDiff = None
         
         skill1 = Skill(
             Skill_ID=1,
