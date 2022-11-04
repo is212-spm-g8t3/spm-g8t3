@@ -481,7 +481,7 @@ def addNewSkill():
     # data = json.loads(request.get_json())
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
+    data = request.get_json()["skillFormData"]
 
     # to verify if Skill_ID is unique
     if (Skill.query.filter_by(Skill_Name=data["name"].title()).first()):
@@ -528,7 +528,7 @@ def updateSkill():
     # data = json.loads(request.get_json())
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
+    data = request.get_json()["skillFormData"]
     print(data)
 
     # Get existing data

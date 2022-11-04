@@ -488,7 +488,6 @@ class TestCourse(TestApp):
         db.session.add(course_skill2)
         db.session.commit()
 
-        # Change the name (Happy path)
         updateForm = {
             'updateInfo': {
                 'skillsForUpdate': ['Plant Rice'],
@@ -639,8 +638,38 @@ class TestRoles(TestApp):
             ]
         })
 
+    """ Done by: Aloysius"""
     def test_create_role(self):
-        pass
+        # self.maxDiff = None
+        
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        db.session.add(skill1)
+        db.session.commit()
+
+        formData = {
+                    'name': 'Test Role',
+					'department': 'HR',
+					'description': 'This is a test role',
+					'skills': [1],
+					'status': "Active"
+        }
+
+        response = self.client.post("/createRole",
+            content_type='application/json',
+            data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new role!'
+        })
 
     """ Done by: Ho Zhi Ying """
     def test_update_role(self):
@@ -860,12 +889,71 @@ class TestSkills(TestApp):
             }
         })
 
+    """Done By Aloysius"""
     # '/skills/AddNewSkill
     def test_create_skill(self):
-        pass
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
 
+        db.session.add(skill1)
+        db.session.commit()
+
+        formData = {
+            'skillFormData': {
+                    'name': 'Test Skill',
+                    'type': 'Soft Skill',
+					'description': 'This is a test role',
+					'status': "Active"
+                }
+        }
+
+        response = self.client.post("/skills/addNewSkill",
+            content_type='application/json',
+            data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully added a new skill!'
+        })
+
+    """Done By Aloysius"""
     def test_update_skill(self):
-        pass
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        db.session.add(skill1)
+        db.session.commit()
+
+        formData = {
+            'skillFormData': {
+                    'id': 1,
+                    'name': 'Test Skill',
+                    'type': 'Soft Skill',
+					'description': 'This is a test role',
+					'status': "Active"
+                }
+        }
+
+        response = self.client.post("/skills/updateSkill",
+            content_type='application/json',
+            data=json.dumps(formData))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Updated successfully'
+        })
 
 
 ''' Test Cases for Learning Journey '''
