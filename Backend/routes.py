@@ -129,7 +129,7 @@ def getCoursesBySkill(skill_id):
 def update_course_skills():
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["updateInfo"])
+    data = request.get_json()["updateInfo"]
     skills_data = data['skillsForUpdate']
     course_id = data['courseId']
 

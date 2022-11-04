@@ -445,7 +445,6 @@ class TestCourse(TestApp):
 
     """"Done By Aloysius"""
     def test_update_course_skills(self):
-        
         course1 = Courses_Catalog(
             Course_ID="COR001",
             Course_Name="Systems Thinking and Design",
@@ -454,6 +453,24 @@ class TestCourse(TestApp):
             Course_Type="Internal",
             Course_Category="Core")
 
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        skill2 = Skill(
+            Skill_ID=2,
+            Skill_Name='Plant Rice2',
+            Skill_Description='Gains the ability to plant rice2',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+        
         course_skill1 = course_skills(
             Course_ID='COR001',
             Skill_ID='1'
@@ -462,24 +479,6 @@ class TestCourse(TestApp):
         course_skill2 = course_skills(
             Course_ID='COR001',
             Skill_ID='2'
-        )
-
-        skill1 = Skill(
-            Skill_ID='1',
-            Skill_Name='Sales',
-            Skill_Description='Sell',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        skill2 = Skill(
-            Skill_ID='2',
-            Skill_Name='HR',
-            Skill_Description='Human Resource',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
         )
 
         db.session.add(course1)
@@ -489,59 +488,23 @@ class TestCourse(TestApp):
         db.session.add(course_skill2)
         db.session.commit()
 
-        response = self.client.post("/updateCourseSkills/",
-                                   content_type='application/json',
-                                    data=json.dumps(dict(updateInfo=dict(skillsForUpdate="",courseId="COR001"))))
-        pass
-
-        course_skill1 = course_skills(
-            Course_ID='COR001',
-            Skill_ID='1'
-        )
-
-        course_skill2 = course_skills(
-            Course_ID='COR001',
-            Skill_ID='2'
-        )
-
-        skill1 = Skill(
-            Skill_ID='1',
-            Skill_Name='Sales',
-            Skill_Description='Sell',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        skill2 = Skill(
-            Skill_ID='2',
-            Skill_Name='HR',
-            Skill_Description='Human Resource',
-            Skill_Type='Active',
-            Status='Active',
-            Created_Date= datetime(2012, 3, 3, 10, 10, 10)
-        )
-
-        db.session.add(course1)
-        db.session.add(skill1)
-        db.session.add(skill2)
-        # db.session.add(course_skill1)
-        # db.session.add(course_skill2)
-        db.session.commit()
-
-        data = str({"updateInfo":{"skillsForUpdate":["Sales","HR"],"courseId":"COR001"}})
-        datajson = json.dumps(data)
-    
-        # print(dict(updateInfo=dict(skillsForUpdate=['Sales', 'HR'],courseId="COR001")))
+        # Change the name (Happy path)
+        updateForm = {
+            'updateInfo': {
+                'skillsForUpdate': ['Plant Rice'],
+                'courseId': 'COR001'
+            }
+        }
 
         response = self.client.post("/updateCourseSkills",
-                                    data=data,
-                                    content_type='application/json')
-        
+            content_type='application/json',
+            data=json.dumps(updateForm))
+
         self.assertEqual(response.json, {
             "code": 201,
             "message": 'Successfully updated courses.'
         })
+
 
 ''' Test Cases for Roles '''
 class TestRoles(TestApp):
