@@ -648,7 +648,7 @@ def createLearningJourney():
 
     # Initialize LearningJourney class
     newLearningJourney = learning_journey(
-        LJ_ID=13,
+        LJ_ID=0,
         Staff_ID=data['staff_id'],
         Job_Role_ID=data['job_role_id']
     )
