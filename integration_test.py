@@ -776,6 +776,31 @@ class TestRoles(TestApp):
             "code": 400,
             "message": "Role already exists. Please use another role name."
         })
+    
+    '''Done by: Ho Zhi Ying'''
+    def test_delete_role(self):
+        role1 = job_role(
+            Job_Role_ID=2,
+            Job_Role_Name="Engineer",
+            Job_Role_Description="Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill functional objectives and requirements while considering the limitations impo",
+            Department="Engineering",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0))
+
+        db.session.add(role1)
+        db.session.commit()
+
+        role_ID_to_update = 2
+
+        response = self.client.post("/deleteRole",
+                                   content_type='application/json',
+                                   data=json.dumps(role_ID_to_update))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully deleted role.'
+        })
+        pass
 
 
 ''' Test Cases for Skills '''
@@ -905,6 +930,32 @@ class TestSkills(TestApp):
                 ]
             }
         })
+
+    '''Done by: Ho Zhi Ying'''
+    def test_delete_skill(self):
+        skill1 = Skill(
+            Skill_ID='1',
+            Skill_Name='Sales',
+            Skill_Description='Sell',
+            Skill_Type='Active',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        db.session.add(skill1)
+        db.session.commit()
+
+        skill_ID_to_update = 1
+
+        response = self.client.post("/deleteSkill",
+                                   content_type='application/json',
+                                   data=json.dumps(skill_ID_to_update))
+
+        self.assertEqual(response.json, {
+            "code": 201,
+            "message": 'Successfully deleted skill.'
+        })
+        pass
 
     """Done By Aloysius"""
     # '/skills/AddNewSkill

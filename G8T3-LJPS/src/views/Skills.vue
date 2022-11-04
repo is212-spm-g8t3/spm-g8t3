@@ -30,6 +30,7 @@
 					:data="table1Data"
 					:columns="table1Columns"
 					@updateRecord="updateModalRecord"
+					@deleteSkill="deleteSkillRecord"
 					page="skills"
 				></CardRoleTable>
 				<!-- / Authors Table Card -->
@@ -189,7 +190,7 @@ const table1Columns = [
 	},
 	{
 		title: 'ACTIONS',
-		scopedSlots: { customRender: 'actionSkill' },
+		scopedSlots: { customRender: 'action' },
 		width: 50,
 	},
 ];
@@ -423,6 +424,24 @@ export default ({
 		handleUpdateCancel(e) {
 			this.isVisibleUpdate = false;
 		},
+
+		deleteSkillRecord(id){
+			console.log(id)
+			const path = 'http://localhost:5000/deleteSkill';
+			axios.post(path, id, 
+				{headers:{"Content-Type" : "application/json"}})
+			.then((res) => {
+				console.log(res)
+				// this.getSkills();
+				this.$message.success('Skill status changed to inactive successfully!');
+				location.reload();
+				// this.$forceUpdate();
+
+			})
+			.catch((error) => {
+				this.$message.error('Error in changing skill status!');
+			})
+		}
 
 	},
 	

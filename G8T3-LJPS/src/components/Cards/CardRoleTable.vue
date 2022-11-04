@@ -114,25 +114,28 @@
 			<!-- Skill.vue -->
 
 			<template slot="action" slot-scope="row">
-				<!-- <span>
-					<a-icon type="eye" :style="{ color: '#87d068' }"/>
-					<a-icon type="edit" :style="{ color: '#1890FF' }"/>
-					<a-icon type="delete" :style="{color: '#F5222D'}" />
-				</span> -->
-				<!-- <span>
-					<a-button shape="circle"  icon="edit"/>
-					<a-button shape="circle"  icon="delete"  :style="{color: '#F5222D'}"/>
-				</span> -->
-
 				<div :style="{'display': 'flex'}">
 					<a-button type="default" :data-id="row.key" @click="updateRoles(row)">
 						Edit
 					</a-button>
-					<a-button class="deleteBtn" :style="{'border-color': '#ff4d4f', 'color': '#ff4d4f', 'margin-left': '10px'}" :data-id="row.key" @click="deleteRole(data[row.key])">
+					<a-button class="deleteBtn" :style="{'border-color': '#ff4d4f', 'color': '#ff4d4f', 'margin-left': '10px'}" :data-id="row.key" @click="emitDeleteRole(row)">
 						Delete
 					</a-button>
 				</div>
 			</template>
+
+			<!-- Delete Modal -->
+			<!-- <a-modal v-model="deleteVisible" title="Confirm delete?" on-ok="emitDeleteRole">
+				<p><strong>NOTE:</strong> This will only change to the status to <strong>INACTIVE</strong>.</p>
+				<template slot="footer">
+					<a-button key="back" @click="cancelDeleteRole">
+						Cancel
+					</a-button>
+					<a-button key="submit" type="error" @click="emitDeleteRole">
+						Delete
+					</a-button>
+				</template>
+			</a-modal> -->
 
 			<!-- Courses.vue -->
 			<template slot="courseAction" slot-scope="row">
@@ -190,6 +193,8 @@ export default ({
 			statusRadioBtn: 'All',
 			colorList: [],
 			search: '',
+			deleteVisible: false,
+			idToDelete: 0
 		}
 	},
 
@@ -213,7 +218,11 @@ export default ({
 		dataFilteredStatus: function() {
 			var filteredData = this.data;
 			if (this.statusRadioBtn != 'All') {
-				filteredData = filteredData.filter(eachData => eachData.status == this.statusRadioBtn)
+				if(this.page == "roles"){
+					filteredData = filteredData.filter(eachData => eachData.Status == this.statusRadioBtn)
+				} else {
+					filteredData = filteredData.filter(eachData => eachData.status == this.statusRadioBtn)
+				}
 			}
 			if (this.search != '') {
 				filteredData = filteredData.filter(eachData => 
@@ -241,8 +250,55 @@ export default ({
 		},
 
 		// For Roles.vue
-		deleteRole(currentRowData) {
+		deleteRecord(currentRowData) {
 			console.log(currentRowData);
+
+			this.deleteVisible = true;
+			this.idToDelete = currentRowData.Job_Role_ID;
+			// this.$confirm({
+			// 	title: 'Are you sure to delete this role?',
+			// 	content: 'This will only change the status of the role to INACTIVE.',
+			// 	okText: 'Delete',
+			// 	okType: 'danger',
+			// 	cancelText: 'Cancel',
+			// 	onOk() {
+			// 		console.log('OK');
+			// 		emitDeleteRole(currentRowData.Job_Role_ID)
+			// 	},
+			// 	onCancel() {
+			// 		console.log('Cancel');
+			// 	},
+			// });
+		},
+
+		// cancelDeleteRole(){
+		// 	this.deleteVisible = false;
+		// },
+
+		emitDeleteRole(currentRowData){
+			console.log(currentRowData);
+
+			const self = this;
+			this.$confirm({
+				title: 'Confirm delete?',
+				content: 'This will only change the status to INACTIVE.',
+				okText: 'Delete',
+				okType: 'danger',
+				cancelText: 'Cancel',
+				onOk() {
+					// emitDeleteRole(currentRowData.Job_Role_ID)
+					if(self.page == "roles"){
+						self.$emit('deleteRole', currentRowData.Job_Role_ID);
+					} else if(self.page == "skills"){
+						self.$emit('deleteSkill', currentRowData.skillID);
+					}
+				},
+				onCancel() {
+					console.log('Cancel');
+				},
+			});
+			// this.$emit('deleteRole', this.idToDelete);
+
 		}
 	},
 })

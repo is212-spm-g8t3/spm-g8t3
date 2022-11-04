@@ -34,6 +34,7 @@
 					:columns="tableColumns"
 					page="roles"
 					@updateRecord="updateModalRecord"
+					@deleteRole="deleteRoleRecord"
 				>
 				</CardRoleTable>
 			</a-col>
@@ -203,6 +204,20 @@
 			</div>
 		</template>
 		<!-- / Update Role Modal Pop up -->
+
+		<!-- Delete Role Modal Pop Up -->
+		<!-- <a-modal v-model="deleteVisible" title="Confirm delete?" on-ok="emitDeleteRole">
+			<p><strong>NOTE:</strong> This will only change to the status to <strong>INACTIVE</strong>.</p>
+			<template slot="footer">
+				<a-button key="back" @click="cancelDeleteRole">
+					Cancel
+				</a-button>
+				<a-button key="submit" type="error" @click="emitDeleteRole">
+					Delete
+				</a-button>
+			</template>
+		</a-modal> -->
+		<!--/ Delete Role Modal Pop Up -->
 
 	</div>
 </template>
@@ -426,15 +441,21 @@
 						})
 						.catch((error) => {
 							// eslint-disable-next-line
+							this.$message.error('Error updating role. Please contact support!');
 							console.log(error);
 							console.error(error.response.data);
-							this.updateErrorVisible = true;
-							if(error.hasOwnProperty("response")){
-								// this.$message.error('Error updating role. Please contact support.');
-								this.updateErrorMessage = error.response.data.message;
-							} else {
-								this.updateErrorMessage = 'Error updating role. Please contact support.';
-							}
+							// this.updateErrorVisible = true;
+							// this.updateErrorMessage = 'Error updating role. Please contact support.';
+
+							// if(error.hasOwnProperty("response")){
+							// 	// this.$message.error('Error updating role. Please contact support.');
+							// 	console.log("in if")
+							// 	this.updateErrorMessage = error.response.data.message;
+							// } else {
+							// 	console.log("in else")
+
+							// 	this.updateErrorMessage = 'Error updating role. Please contact support.';
+							// }
 
 						});
 						this.loading = false;
@@ -499,6 +520,21 @@
 				this.updateForm.status = value.Status
 				this.isVisibleUpdate = true;
 			},
+
+			deleteRoleRecord(id){
+				console.log(id)
+				const path = 'http://localhost:5000/deleteRole';
+				axios.post(path, id, 
+					{headers:{"Content-Type" : "application/json"}})
+				.then((res) => {
+					console.log(res)
+					this.getRolesData();
+					this.$message.success('Role status changed to inactive successfully!');
+				})
+				.catch((error) => {
+					this.$message.error('Error in changing role status!');
+				})
+			}
 
 			// handleDeselect(value) {
 			// const index = this.updateForm.skills.indexOf(value);
