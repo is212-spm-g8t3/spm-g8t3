@@ -129,7 +129,7 @@ def getCoursesBySkill(skill_id):
 def update_course_skills():
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["updateInfo"])
+    data = request.get_json()["updateInfo"]
     skills_data = data['skillsForUpdate']
     course_id = data['courseId']
 
@@ -481,7 +481,7 @@ def addNewSkill():
     # data = json.loads(request.get_json())
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
+    data = request.get_json()["skillFormData"]
 
     # to verify if Skill_ID is unique
     if (Skill.query.filter_by(Skill_Name=data["name"].title()).first()):
@@ -528,7 +528,7 @@ def updateSkill():
     # data = json.loads(request.get_json())
 
     # Convert JSON to object
-    data = json.loads(request.get_json()["skillFormData"])
+    data = request.get_json()["skillFormData"]
     print(data)
 
     # Get existing data
@@ -648,7 +648,7 @@ def createLearningJourney():
 
     # Initialize LearningJourney class
     newLearningJourney = learning_journey(
-        LJ_ID=13,
+        LJ_ID=0,
         Staff_ID=data['staff_id'],
         Job_Role_ID=data['job_role_id']
     )
