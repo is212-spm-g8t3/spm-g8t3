@@ -847,6 +847,35 @@ def getLearningJourneySkill(LJ_ID):
         }
     )
 
+@app.route("/learningJourney/getLearningJourneyCourses/<LJ_ID>", methods=['POST'])
+def getLearningJourneyCourse(LJ_ID):
+
+    # Convert JSON to object
+    skill_id = json.loads(request.get_json()['skill_id'])
+
+    learningJourneyCourses = db.session.query(learning_journey_course, Courses_Catalog
+        ).filter(learning_journey_course.Course_ID == Courses_Catalog.Course_ID,
+                learning_journey_course.Skill_ID == skill_id,
+                learning_journey_course.LJ_ID == LJ_ID
+                ).with_entities(Courses_Catalog.Course_ID, Courses_Catalog.Course_Name,Courses_Catalog.Course_Description,Courses_Catalog.Course_Status,Courses_Catalog.Course_Type, Courses_Catalog.Course_Category)
+
+    if learningJourneyCourses.count() > 0:
+        return  jsonify(
+            {
+                "code":200,
+                "data": {
+                    "courses" : [dict(row) for row in learningJourneyCourses]
+                }
+            }
+        )
+
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Skills not found."
+        }
+    )
+
 @app.route("/deleteLearningJourneyCourse", methods=['POST'])
 def delete_existing_learning_journey_course():
 
