@@ -696,6 +696,24 @@ class TestRoles(TestApp):
             Department="Technology",
             Status="Active",
             Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+
+        skill1 = Skill(
+            Skill_ID=1,
+            Skill_Name='Plant Rice',
+            Skill_Description='Gains the ability to plant rice',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
+
+        skill2 = Skill(
+            Skill_ID=2,
+            Skill_Name='Plant Rice2',
+            Skill_Description='Gains the ability to plant rice2',
+            Skill_Type='Soft Skill',
+            Status='Active',
+            Created_Date= datetime(2022, 10, 27, 0, 0, 0)
+        )
         
         job_role_skill1 = job_role_skills(
             Job_Role_ID=17,
@@ -709,6 +727,8 @@ class TestRoles(TestApp):
 
         db.session.add(role1)
         db.session.add(role2)
+        db.session.add(skill1)
+        db.session.add(skill2)
         db.session.add(job_role_skill1)
         db.session.add(job_role_skill2)
         db.session.commit()
@@ -720,7 +740,7 @@ class TestRoles(TestApp):
         	'description': 'Work on both front-end and back-end application.',
         	'department': 'Technology',
         	'status': 'Active',
-        	'skills': [3, 4]
+        	'skills': [1, 2]
         }
 
         response = self.client.post("/updateRole",
@@ -739,7 +759,7 @@ class TestRoles(TestApp):
         	'description': 'Develop software applications',
         	'department': 'Technology',
         	'status': 'Active',
-        	'skills': [3, 4]
+        	'skills': [1, 2]
         }
 
         response = self.client.post("/updateRole",
@@ -824,6 +844,14 @@ class TestSkills(TestApp):
             Created_Date= datetime(2022, 10, 27, 0, 0, 0)
         )
 
+        role1 = job_role(
+            Job_Role_ID=17,
+            Job_Role_Name="Software Developer",
+            Job_Role_Description="Develop software applications",
+            Department="Technology",
+            Status="Active",
+            Created_Date= datetime(2022, 10, 18, 0, 0, 0))
+
         job_role_skill1 = job_role_skills(
             Job_Role_ID=17,
             Skill_ID=1
@@ -836,6 +864,7 @@ class TestSkills(TestApp):
 
         db.session.add(skill1)
         db.session.add(skill2)
+        db.session.add(role1)
         db.session.add(job_role_skill1)
         db.session.add(job_role_skill2)
         db.session.commit()
